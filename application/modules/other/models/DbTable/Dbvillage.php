@@ -19,6 +19,7 @@ class Other_Model_DbTable_DbVillage extends Zend_Db_Table_Abstract
 				'status'	  => $_data['status'],
 				'modify_date' => Zend_Date::now(),
 				'user_id'	  => $this->getUserId()
+				
 		);
 		if(!empty($_data['id'])){
 			
