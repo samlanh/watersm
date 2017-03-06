@@ -10,76 +10,17 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
     	 
     }
 	public function addClient($_data){
-		
-		
+	//	print_r($_data);exit();		
 		try{
-			if(!empty($_data['id'])){
-				$oldClient_Code = $this->getClientById($_data['id']);
-				$client_code = $oldClient_Code['client_number'];
-			}else{
-				$db = new Application_Model_DbTable_DbGlobal();
-				$client_code = $db->getNewClientIdByBranch($_data['branch_id']);
-			}
-			
-			$photoname = str_replace(" ", "_", $client_code) . '.jpg';
-			$upload = new Zend_File_Transfer();
-			$upload->addFilter('Rename',
-					array('target' => PUBLIC_PATH . '/images/'. $photoname, 'overwrite' => true) ,'photo');
-			$receive = $upload->receive();
-			if($receive)
-			{
-				$_data['photo'] = $photoname;
-			}
-			else{
-				$_data['photo']="";
-			}
-			if (empty($_data['photo'])){
-				$photo = @$_data['old_photo'];
-			}else{
-				$photo = $_data['photo'];
-			}
-			
 		    $_arr=array(
-				'client_number'=> $client_code,//$_data['client_no'],
 				'name_kh'	  => $_data['name_kh'],
-				//'name_en'	  => $_data['name_en'],
 				'sex'	      => $_data['sex'],
-				'dob'			=>$_data['dob_client'],
-				'pro_id'      => $_data['province'],
-				'dis_id'      => $_data['district'],
-				'com_id'      => $_data['commune'],
-				'village_id'  => $_data['village'],
-				'street'	  => $_data['street'],
-				'house'	      => $_data['house'],
-				'photo_name'  =>$photo,
-				'nation_id'=>$_data['national_id'],
-		    	'nationality'=>$_data['nationality'],
-				'phone'	      => $_data['phone'],
-		    	'email'	      => $_data['email'],
-				'create_date' => date("Y-m-d"), 
+		    	'phone'	      => $_data['phone'],
+				'village_id'  => $_data['village_1'],
 				'remark'	  => $_data['desc'],
 				'status'      => $_data['status'],
-				'client_d_type'      => $_data['client_d_type'],
-				'user_id'	  => $this->getUserId(),
-		    	'hname_kh'      => $_data['hname_kh'],
-		    	//'bname_kh'      => $_data['bname_kh'],
-		    	'p_nationality'      => $_data['p_nationality'],
-		    	'ghouse'      => $_data['ghouse'],
-		    	'ksex'      => $_data['ksex'],
-		    	'adistrict'      => $_data['adistrict'],
-		    	'lphone'      => $_data['lphone'],
-		    	'cprovince'      => $_data['cprovince'],
-		    	'dcommune'      => $_data['dcommune'],
-		    	'qvillage'      => $_data['qvillage'],
-		    	'dstreet'      => $_data['dstreet'],
-		    	'rid_no'      => $_data['rid_no'],
-		    	'arid_no'      => $_data['arid_no'],
-		    	'edesc'      => $_data['edesc'],
-		    	'branch_id'      => $_data['branch_id'],
-		    	'joint_doc_type'      => $_data['join_d_type'],
-		    	'refe_nation_id'      => $_data['reference_national_id'],
-		    	'join_type'      => $_data['join_type'],
-		    		
+		    	'date_cus_start'=>$_data['date_cus_start']	
+				
 		);
 		if(!empty($_data['id'])){
 			$where = 'client_id = '.$_data['id'];
@@ -95,7 +36,7 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 	}
 	public function getClientById($id){
 		$db = $this->getAdapter();
-		$sql = "SELECT * FROM $this->_name WHERE client_id = ".$db->quote($id);
+		$sql = "SELECT client_id,name_kh,sex,village_id,phone,remark,status,date_cus_start FROM $this->_name WHERE client_id = ".$db->quote($id);
 		$sql.=" LIMIT 1 ";
 		$row=$db->fetchRow($sql);
 		return $row;
@@ -138,20 +79,13 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
     }
 	function getAllClients($search = null){		
 		try{	
+	
+
 			$db = $this->getAdapter();
-			$from_date =(empty($search['start_date']))? '1': "create_date >= '".$search['start_date']." 00:00:00'";
-			$to_date = (empty($search['end_date']))? '1': "create_date <= '".$search['end_date']." 23:59:59'";
-			$where = " WHERE  ".$from_date." AND ".$to_date;		
-			$sql = "
-			SELECT client_id,
-			(SELECT p.project_name FROM `ln_project` AS p WHERE p.br_id = branch_id limit 1) AS branch_name,
-			client_number,name_kh,
-			(SELECT name_en FROM `ln_view` WHERE TYPE =11 AND sex=key_code LIMIT 1) AS sex
-			,phone,house,street,
-				(SELECT village_name FROM `ln_village` WHERE vill_id= village_id) AS village_name,
-			    create_date,
-			    (SELECT  CONCAT(first_name) FROM rms_users WHERE id=user_id ) AS user_name,
-				status,'View' FROM $this->_name ";
+			$sql="SELECT client_id,name_kh,sex,
+(SELECT v.village_name FROM ln_village AS v WHERE v.vill_id = village_id LIMIT 1)
+village_id,phone,status,date_cus_start FROM ln_client";
+			$where=" where 1";
 			if(!empty($search['adv_search'])){
 				$s_where = array();
 				$s_search = addslashes(trim($search['adv_search']));
@@ -163,7 +97,7 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 				$s_where[] = " street LIKE '%{$s_search}%'";
 				$where .=' AND ('.implode(' OR ',$s_where).')';
 			}
-			if($search['status']>-1){
+			/* if($search['status']>-1){
 				$where.= " AND status = ".$search['status'];
 			}
 			if($search['branch_id']>-1){
@@ -184,7 +118,7 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 			}
 			if(!empty($search['village'])){
 				$where.=" AND village_id= ".$search['village'];
-			}
+			} */
 			$order=" ORDER BY client_id DESC ";
 			return $db->fetchAll($sql.$where.$order);
 		}catch (Exception $e){
@@ -298,7 +232,46 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 		return $number+1;
 	}
 	
+	function getVillagOpt(){
+		$db =$this->getAdapter();
+		$sql ="SELECT v.`vill_id` AS id, v.`village_name` AS NAME FROM ln_village AS v WHERE	v.`status`=1";
+		return $db->fetchAll($sql);
+	}
+	function getVillageByAjax($vid){
+		$db = $this->getAdapter();
+		$sql="SELECT v.`code` FROM `ln_village`AS v WHERE v.`vill_id`=".$vid;
+		return $db->fetchRow($sql);
+	}
+	function getClientInforByAjax($village_id){
+		$db = $this->getAdapter();
+		$sql="
+		SELECT c.`name_kh`,c.`client_id`,u.`stat_use` FROM `ln_client` AS c ,tb_used AS u WHERE c.`village_id`=$village_id
+		";
+		return  $db->fetchAll($sql);
+	}
 	
+	function addused($data){
+	
+	 $db = $this->getAdapter();
+     $db->beginTransaction();
+     try{
+      $arr = array(
+        'client_id'=>$data['price'],
+        'stat_use'=>$data['date'],
+        'end_use'=>$data['note'],
+        'user_id'=>$this->getUserId(),
+       );
+      $this->_name='tb_used';
+         $this->insert($arr);
+      $db->commit();
+      
+     }catch(exception $e){
+      //echo $e->getMessage();exit();
+      Application_Form_FrmMessage::message("Application Error");
+      Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+      $db->rollBack();
+     }
+	}
 	
 	
 	
