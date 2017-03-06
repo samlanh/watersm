@@ -11,46 +11,30 @@ class Group_indexController extends Zend_Controller_Action {
 			$db = new Group_Model_DbTable_DbClient();
 			if($this->getRequest()->isPost()){
 				$formdata=$this->getRequest()->getPost();
-				$search = array(
-						'branch_id'=>$formdata['branch_id'],
-						'adv_search' => $formdata['adv_search'],
-						'province_id'=>$formdata['province'],
-						'comm_id'=>$formdata['commune'],
-						'district_id'=>$formdata['district'],
-						'village'=>$formdata['village'],
-						'status'=>$formdata['status'],
-						'start_date'=> $formdata['start_date'],
-						'end_date'=>$formdata['end_date'],
-						'customer_id'=>$formdata['customer_id']
-						);
-			}
-			else{
+		
+			}else{
 				$search = array(
 						'branch_id'=>-1,
 						'adv_search' => '',
-						'status' => -1,
-						'province_id'=>0,
-						'district_id'=>'',
-						'comm_id'=>'',
-						'village'=>'',
-						'start_date'=> date('Y-m-d'),
-						'customer_id'=>-1,
-						'end_date'=>date('Y-m-d'));
+						);
 			}
 			
+		
 			$rs_rows= $db->getAllClients($search);
+			//print_r($rs_rows);
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","CUSTOMER_CODE","CUSTOMER_NAME","SEX","PHONE","HOUSE","STREET","VILLAGE",
-					"DATE","BY_USER","STATUS","VIEW");
+			$collumns = array("CUSTOMER_NAME","SEX","VILLAGE","PHONE","STATUS",
+					"CUS_START_DATE");
 			$link=array(
 					'module'=>'group','controller'=>'index','action'=>'edit',
 			);
 			$link1=array(
 					'module'=>'group','controller'=>'index','action'=>'view',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('View'=>$link1,'branch_name'=>$link1,'client_number'=>$link,'name_kh'=>$link,'name_en'=>$link1));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('View'=>$link1,'client_number'=>$link,'name_kh'=>$link));
+			//print_r($this->view->list);
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -74,18 +58,19 @@ class Group_indexController extends Zend_Controller_Action {
 		$this->view->result=$search;	
 	}
 	public function addAction(){
+		$db = new Group_Model_DbTable_DbClient();
 		if($this->getRequest()->isPost()){
 				$data = $this->getRequest()->getPost();
 				$data['old_photo']=null;
-				$db = new Group_Model_DbTable_DbClient();
+				
 				try{
 				 if(isset($data['save_new'])){
 					$id= $db->addClient($data);
-					Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
+					Application_Form_FrmMessage::message("រក្សាទុក និង បង្កើតថ្មី !");
 				}
 				else if (isset($data['save_close'])){
 					$id= $db->addClient($data);
-					Application_Form_FrmMessage::message("ការ​បញ្ចូល​ជោគ​ជ័យ !");
+					Application_Form_FrmMessage::message("រក្សាទុក និង បិទ !");
 					Application_Form_FrmMessage::redirectUrl("/group/index");
 				}
 			}catch (Exception $e){
@@ -93,11 +78,13 @@ class Group_indexController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
+		$this->view->villsge = $db->getVillagOpt();
 		$db = new Application_Model_DbTable_DbGlobal();
 		$client_type = $db->getclientdtype();
-		array_unshift($client_type,array('id' => -1,'name' => '--- បន្ថែមថ្មី ---',));
+		array_unshift($client_type,array('id' => -1,'name' => '--- áž”áž“áŸ’áž�áŸ‚áž˜áž�áŸ’áž˜áž¸ ---',));
 		array_unshift($client_type,array('id' => 0,'name' => '---Please Select ---',));
 		$this->view->clienttype = $client_type;
+	
 		
 		$fm = new Group_Form_FrmClient();
 		
@@ -111,7 +98,9 @@ class Group_indexController extends Zend_Controller_Action {
 		$this->view->frm_popup_district = $dbpop->frmPopupDistrict();
 		$this->view->frm_popup_clienttype = $dbpop->frmPopupclienttype();
 		
+		
 	}
+
 	public function editAction(){
 		$db = new Group_Model_DbTable_DbClient();
 		$id = $this->getRequest()->getParam("id");
@@ -120,7 +109,8 @@ class Group_indexController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$data['id'] = $id;
 				$db->addClient($data);
-				Application_Form_FrmMessage::Sucessfull('EDIT_SUCCESS',"/group/index");
+			
+				Application_Form_FrmMessage::Sucessfull('_SUCCESS',"/group/index");
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("EDIT_FAILE");
 				echo $e->getMessage();
@@ -129,8 +119,9 @@ class Group_indexController extends Zend_Controller_Action {
 		}
 		$id = $this->getRequest()->getParam("id");
 		$row = $db->getClientById($id);
+		//print_r($row);exit();
 	        $this->view->row=$row;
-		$this->view->photo = $row['photo_name'];
+		
 		if(empty($row)){
 			$this->_redirect("/group/client");
 		}
@@ -310,6 +301,23 @@ class Group_indexController extends Zend_Controller_Action {
 			exit();
 		}
 	}
-	
+	function getCodeVillageAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Group_Model_DbTable_DbClient();
+			$dataclient=$db->getVillageByAjax($data['vllage']);
+			print_r(Zend_Json::encode($dataclient));
+			exit();
+		}
+	}
+	function getCustomerByVillageAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Group_Model_DbTable_DbClient();
+			$dataclient=$db->getClientInforByAjax($data['vllage']);
+			print_r(Zend_Json::encode($dataclient));
+			exit();
+		}
+	}
 }
 
