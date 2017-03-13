@@ -127,7 +127,7 @@ function getAllcustomer(){
 			  				         }
 			  				   temp='<td style="width:30px !important;text-align:center;" ><img style="cursor:pointer" onclick="deleteRecord('+r+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			  				   temp+='<td>'+r+'</td>';
-			  				   temp+='<td><input style=" width:100px" value="'+'BH000'+data[i].client_id+'" name="client_id'+r+'" type="text" required="true" readonly="true"  id="client_id'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
+			  				   temp+='<td><input style=" width:100px" value="'+data[i].client_id+'" name="client_id'+r+'" type="text" required="true" readonly="true"  id="client_id'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
 			  				   temp+='<td><input style=" width:90%; readonly="true" readonly="true" font-size:12px;" type="text" value="'+data[i].name_kh+'"   name="name_kh'+r+'" required="true"  id="toowner_name'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
 			  				   temp+='<td><input type="text" readonly="true" style="width:110px" required="true" value="'+data[i].sat_use+'"  name="start_use'+r+'" id="start_use'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
 			  				   temp+='<td><input type="text" style="width:110px"  required="true"  onkeyup="calculate('+r+')"  name="new_num'+r+'" id="new_num'+r+'" dojoType="dijit.form.ValidationTextBox"/><input type="hidden" name="price_setting'+r+'" id="price_setting'+r+'" value="'+data[i].price+'" dojoType="dijit.form.TextBox" /></td>';
@@ -179,7 +179,7 @@ function calculate(r){
 	total_price=total*price_stting;
 	if(new_num > old_num){
 		
-		dijit.byId("tonote"+r).attr('value',total);
+		dijit.byId("toatal_water"+r).attr('value',total);
 		dijit.byId("total_price_id"+r).attr('value',total_price+'៛');
 	}else{
 		dijit.byId("total_price_id"+r).attr('value','0៛');
