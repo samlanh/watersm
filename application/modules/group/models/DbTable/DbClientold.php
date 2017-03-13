@@ -118,14 +118,13 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 			$s_where = array();
 			$s_search = addslashes(trim($search['adv_search']));
 			$s_where[] = "client_number LIKE '%{$s_search}%'";
-			$s_where[] = " name_en LIKE '%{$s_search}%'";
 			$s_where[] = " name_kh LIKE '%{$s_search}%'";
 			$s_where[] = " phone LIKE '%{$s_search}%'";
-			$s_where[] = " house LIKE '%{$s_search}%'";
-			$s_where[] = " street LIKE '%{$s_search}%'";
+			$s_where[] = " phone LIKE '%{$s_search}%'";
+
 			$where .=' AND ('.implode(' OR ',$s_where).')';
 		}
-		if($search['status']>-1){
+		/*if($search['status']>-1){
 			$where.= " AND status = ".$search['status'];
 		}
 		if($search['province_id']>0){
@@ -139,7 +138,7 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 		}
 		if(!empty($search['village'])){
 			$where.=" AND village_id= ".$search['village'];
-		}
+		}*/
 		$order=" ORDER BY client_id DESC ";
 		return $db->fetchAll($sql.$where.$order);	
 	}

@@ -11,17 +11,21 @@ class Group_indexController extends Zend_Controller_Action {
 			$db = new Group_Model_DbTable_DbClient();
 			if($this->getRequest()->isPost()){
 				$formdata=$this->getRequest()->getPost();
-		
+				$search=array(
+						'adv_search' => $formdata['adv_search'],
+						'village_id' => $formdata['search_village'],
+						);
 			}else{
 				$search = array(
-						'branch_id'=>-1,
+						
 						'adv_search' => '',
 						);
 			}
 			
 		
 			$rs_rows= $db->getAllClients($search);
-			//print_r($rs_rows);
+			//print_r($rs_rows);exit();
+			
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
@@ -79,6 +83,8 @@ class Group_indexController extends Zend_Controller_Action {
 			}
 		}
 		$this->view->villsge = $db->getVillagOpt();
+		
+		
 		$db = new Application_Model_DbTable_DbGlobal();
 		$client_type = $db->getclientdtype();
 		array_unshift($client_type,array('id' => -1,'name' => '--- áž”áž“áŸ’áž�áŸ‚áž˜áž�áŸ’áž˜áž¸ ---',));
@@ -319,5 +325,14 @@ class Group_indexController extends Zend_Controller_Action {
 			exit();
 		}
 	}
+	function getInfoCustomAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Group_Model_DbTable_DbClient();
+			$dataclient=$db->getClientInfo($data['vllage']);
+			print_r(Zend_Json::encode($dataclient));
+			exit();
+		}
+}
 }
 

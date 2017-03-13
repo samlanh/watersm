@@ -243,6 +243,159 @@ class Report_LoanController extends Zend_Controller_Action {
   	Application_Model_Decorator::removeAllDecorator($fm);
   	$this->view->frm_search = $fm;
   }
+  
+//   function rptClientAction(){
+  	 
+//   	if($this->getRequest()->isPost()){
+//   		$search = $this->getRequest()->getPost();
+//   	}else{
+//   		$search = array(
+//   				'adv_search' => '',
+//   				'client_name' => -1,
+//   				'start_date'=> date('Y-m-d'),
+//   				'end_date'=>date('Y-m-d'),
+//   				'branch_id'		=>	-1,
+//   				'co_id'		=> -1,
+//   				'paymnet_type'	=> -1,
+//   				'status'=>"",);
+  			
+//   	}
+//   	$db  = new Report_Model_DbTable_DbLandreport();
+//   	$key = new Application_Model_DbTable_DbKeycode();
+//   	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+  
+//   	$this->view->LoanCollectionco_list =$db->getAllcilent($search);
+//   	$this->view->date_show=$search['end_date'];
+//   	$this->view->start_date=$search['start_date'];
+//   	$frm = new Loan_Form_FrmSearchGroupPayment();
+//   	$fm = $frm->AdvanceSearch();
+//   	Application_Model_Decorator::removeAllDecorator($fm);
+//   	$this->view->rows =$db->getAllrtpclient();
+//   	//$this->view->frm_search = $frm;
+//   }
+  
+  
+  public function rptClientAction(){
+  	$db = new Report_Model_DbTable_DbLandreport();
+  	
+  	if($this->getRequest()->isPost()){
+  		$search = $this->getRequest()->getPost();
+  		if(isset($search['btn_search'])){
+  			$this->view->rpt_income_permonth=$db->getAllrtpclient($search);
+  		}
+  	}else {
+  		$search = array(
+  				'adv_search' => '',
+  				'village_name' => '',
+  				'client_name' =>-1,
+  				
+  		);
+  		$this->view->rpt_income_permonth =$rs=$db->getAllrtpclient($search);
+  	}
+  	//$this->view->list_end_date=$search;
+  	$this->view->rows =$db->getAllrtpclient($search);
+  	$frm = new Loan_Form_FrmSearchLoan();
+  	$frm = $frm->AdvanceSearch();
+  	Application_Model_Decorator::removeAllDecorator($frm);
+  	$this->view->frm_search = $frm;
+  	
+  	
+  	
+  }
+  
+  
+  public function rptClientWaterAction(){
+  	$db = new Report_Model_DbTable_DbLandreport();
+  	 
+  	if($this->getRequest()->isPost()){
+  		$search = $this->getRequest()->getPost();
+  		if(isset($search['btn_search'])){
+  			$this->view->rpt_income_permonth=$db->getAllrtpclientwater($search);
+  		}
+  	}else {
+  		$search = array(
+  				'adv_search' => '',
+  				'village_name' => '',
+  				'client_name' =>-1,
+  
+  		);
+  		$this->view->rpt_income_permonth =$rs=$db->getAllrtpclientwater($search);
+  	}
+  	//$this->view->list_end_date=$search;
+  	$this->view->rows =$db->getAllrtpclientwater($search);
+  	$frm = new Loan_Form_FrmSearchLoan();
+  	$frm = $frm->AdvanceSearch();
+  	Application_Model_Decorator::removeAllDecorator($frm);
+  	$this->view->frm_search = $frm;
+  	 
+  	 
+  	 
+  }
+  
+  public function rptOfVillageAction(){
+  	$db = new Report_Model_DbTable_DbLandreport();
+  
+  	if($this->getRequest()->isPost()){
+  		$search = $this->getRequest()->getPost();
+  		if(isset($search['btn_search'])){
+  			$this->view->rpt_income_permonth=$db->getAllRptofvillage($search);
+  		}
+  	}else {
+  		$search = array(
+  				'adv_search' => '',
+  				'village_name' => '',
+  				'client_name' =>-1,
+  
+  		);
+  		$this->view->rpt_income_permonth =$rs=$db->getAllRptofvillage($search);
+  	}
+  	//$this->view->list_end_date=$search;
+  	$this->view->rows =$db->getAllRptofvillage($search);
+  	
+  
+  	$frm = new Loan_Form_FrmSearchLoan();
+  	$frm = $frm->AdvanceSearch();
+  	Application_Model_Decorator::removeAllDecorator($frm);
+  	$this->view->frm_search = $frm;
+  
+  
+  
+  }
+  
+  public function rptWaterMonthAction(){
+  	$db = new Report_Model_DbTable_DbLandreport();
+  
+  	if($this->getRequest()->isPost()){
+  		$search = $this->getRequest()->getPost();
+  		if(isset($search['btn_search'])){
+  			$this->view->rpt_income_permonth=$db->getAllCustomuse($search);
+  		}
+  	}else {
+  		$search = array(
+  				'adv_search' => '',
+  				'village_name' => '',
+  				'client_name' =>-1,
+  
+  		);
+  		$this->view->rpt_income_permonth =$rs=$db->getAllCustomuse($search);
+  	}
+  	//$this->view->list_end_date=$search;
+  	$this->view->rows =$db->getAllCustomuse($search);
+  	$frm = new Loan_Form_FrmSearchLoan();
+  	$frm = $frm->AdvanceSearch();
+  	Application_Model_Decorator::removeAllDecorator($frm);
+  	$this->view->frm_search = $frm;
+
+  
+  }
+  
+
+  
+  /*end of my code*/
+  
+  
+  
+  
 function rptLoanTotalCollectAction(){
 	$db  = new Report_Model_DbTable_DbLandreport();	
 	$key = new Application_Model_DbTable_DbKeycode();
@@ -827,6 +980,21 @@ public function exportFileToExcel($table,$data,$thead){
   	$this->view->customer =  $db->getIndividuleClient();
   
   }
+
+  
+	  public function getTotalPriceAction(){  
+	  	if($this->getRequest()->isPost()){
+	  		
+	  		$data=$this->getRequest()->isPost();
+	  		$data=$this->getRequest()->getPost();
+	  		$db = new Report_Model_DbTable_DbLandreport();
+	  		 $this->view->rows1=$db->getSumTotalPriceVillage(); 		 
+	  		print_r($this->view->rows1);exit();
+	  	  		
+	 	 	}
+	 	  
+	  }
+  
  
 }
 

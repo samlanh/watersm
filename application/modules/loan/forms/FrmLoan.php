@@ -27,7 +27,28 @@ public function init()
 		));
 		$options = $db->getAllBranchName(null,1);
 		$_to_branch_id->setMultiOptions($options);
-								
+
+
+		$village = new Zend_Dojo_Form_Element_FilteringSelect('village_1');
+		$village->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'onchange'=>'getvillagecode();',
+		));
+		
+		$village_ed = new Zend_Dojo_Form_Element_FilteringSelect('village_1_ed');
+		$village_ed->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'onchange'=>'getAllcustomer();',
+		));
+		
+		$rows_ed =  $db->getVillage();
+		$options_villag_ed=array($this->tr->translate("SELECT_VILLAGE")); //array(''=>"------Village------",-1=>"Add New");
+		if(!empty($rows_ed))foreach($rows_ed AS $row1) $options_villag_ed[$row1['id']]=$row1['village_name'];
+		$village_ed->setMultiOptions($options_villag_ed);
+		
+		
 		
 		$_loan_code = new Zend_Dojo_Form_Element_TextBox('sale_code');
 		$_loan_code->setAttribs(array(
@@ -130,7 +151,7 @@ public function init()
 		$options = $db->getAllCOName(1);
 		$staff_id->setMultiOptions($options);
 		
-		$receivedopt = array(0=>"បង់បញ្ចាប់ពេលប្រគល់ផ្ទះ",1=>"យកតាមកាលបរិច្ឆេទបង់");
+		$receivedopt = array(0=>"áž”áž„áŸ‹áž”áž‰áŸ’áž…áž¶áž”áŸ‹áž–áŸ�áž›áž”áŸ’ážšáž‚áž›áŸ‹áž•áŸ’áž‘áŸ‡",1=>"áž™áž€áž�áž¶áž˜áž€áž¶áž›áž”ážšáž·áž…áŸ’áž†áŸ�áž‘áž”áž„áŸ‹");
 		$paid_receivehouse = new Zend_Dojo_Form_Element_FilteringSelect('paid_receivehouse');
 		$paid_receivehouse->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
@@ -198,7 +219,7 @@ public function init()
 				'name':'interest_rate',
 				'class':'fullside',
 				'onkeyup':'checkScheduleOption();',
-				'invalidMessage':'អាចបញ្ជូលពី 1 ដល់'
+				'invalidMessage':'áž¢áž¶áž…áž”áž‰áŸ’áž‡áž¼áž›áž–áž¸ 1 ážŠáž›áŸ‹'
 				"));
 				
 		$_period = new Zend_Dojo_Form_Element_NumberTextBox('period');
@@ -246,7 +267,7 @@ public function init()
 // 				'name':'interest_rate',
 // 				'value':1.6,
 // 				'class':'fullside',
-// 				'invalidMessage':'អាចបញ្ជូលពី 1 ដល់'
+// 				'invalidMessage':'áž¢áž¶áž…áž”áž‰áŸ’áž‡áž¼áž›áž–áž¸ 1 ážŠáž›áŸ‹'
 // 				"));
 
 		$s_date = date('Y-m-d');
@@ -275,11 +296,11 @@ public function init()
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'onKeyup'=>'calculateDiscount();',
 				'class'=>'fullside50 fullside',
-				'placeHolder'=>'ជាតម្លៃ',
-				'invalidMessage'=>'អាចបញ្ជូលពី 1 ដល់ 99'		
+				'placeHolder'=>'áž‡áž¶áž�áž˜áŸ’áž›áŸƒ',
+				'invalidMessage'=>'áž¢áž¶áž…áž”áž‰áŸ’áž‡áž¼áž›áž–áž¸ 1 ážŠáž›áŸ‹ 99'		
 		));
 // 		$discount->setValue(0);
-// 		$discount->pl("ភាគរយ");
+// 		$discount->pl("áž—áž¶áž‚ážšáž™");
 // 		$discount->setValue(0);
 		
 		$discount_percent = new Zend_Dojo_Form_Element_NumberTextBox('discount_percent');
@@ -290,8 +311,8 @@ public function init()
 				'id':'discount_percent',
 				'onKeyup':'calculateDiscount();',
 				'class':'fullside fullside50',
-				'placeHolder':'ភាគរយ%',
-				'invalidMessage':'អាចបញ្ជូលពី 1 ដល់ 99'"
+				'placeHolder':'áž—áž¶áž‚ážšáž™%',
+				'invalidMessage':'áž¢áž¶áž…áž”áž‰áŸ’áž‡áž¼áž›áž–áž¸ 1 ážŠáž›áŸ‹ 99'"
 		));
 		
 		
@@ -382,7 +403,7 @@ public function init()
 				'class'=>'fullside',
 				'required' =>'true'
 		));
-		$options= array(1=>"ប្រើប្រាស់",0=>"បោះបង់");
+		$options= array(1=>"áž”áŸ’ážšáž¾áž”áŸ’ážšáž¶ážŸáŸ‹",0=>"áž”áŸ„áŸ‡áž”áž„áŸ‹");
 		$_status->setMultiOptions($options);
 		
 		$_interest = new Zend_Dojo_Form_Element_TextBox("interest");
@@ -465,7 +486,7 @@ public function init()
 			
 			
 		}
-		$this->addElements(array($paid_receivehouse,$agreementdate,$discount_percent,$cheque,$paid_before,$balance_before,$receipt,$fixedpayment,$note,$other_fee,$_branch_id,$_date_buy,
+		$this->addElements(array($village_ed,$village,$paid_receivehouse,$agreementdate,$discount_percent,$cheque,$paid_before,$balance_before,$receipt,$fixedpayment,$note,$other_fee,$_branch_id,$_date_buy,
 				$_interest,$_service_charge,$schedule_opt,$_to_total_sold,$_total_sold,$_house_price,$balance,$paid,//$_loan_type,
 // 				$_client_code,$_time_collect,$_paybefore,$staff_ids,$_pay_late,$_payterm,$_every_payamount,
 // 				$_time,$_time_collect_pri,$_customer_code,$_repayment_method,$_pay_every,$_collect_term,
@@ -474,4 +495,5 @@ public function init()
 		return $this;
 		
 	}	
+	
 }

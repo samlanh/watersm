@@ -53,8 +53,218 @@ class Report_Model_DbTable_DbLandreport extends Zend_Db_Table_Abstract
       	 	$where.=" AND v_soldreport.payment_id = ".$search['schedule_opt'];
       	 }
       	 $order = " ORDER BY payment_id DESC ";
+      	 echo $sql.$where.$order;
       	 return $db->fetchAll($sql.$where.$order);
       }
+      
+      public function getAllcilent($search = null){
+      	//rpt-loan-released/
+      	$db = $this->getAdapter();
+      	$sql="select * from ln_client";
+//       	$sql = " SELECT * ,
+//       	(SELECT COUNT(id) FROM `ln_saleschedule` WHERE sale_id=v_soldreport.id ) AS times,
+//       	(SELECT name_en FROM `ln_view` WHERE key_code =v_soldreport.payment_id AND type = 25 limit 1) AS paymenttype
+//       	FROM v_soldreport WHERE 1 ";
+      
+         	$where ='';
+//       	$str = 'buy_date';
+//       	if($search['buy_type']>0 AND $search['buy_type']!=2){
+//       		$str = ' agreement_date ';
+//       	}
+//       	if($search['buy_type']==2){
+//       		$where.=" AND v_soldreport.payment_id = 1";
+//       	}
+//       	if($search['buy_type']==1){
+      
+//       		$where.=" AND v_soldreport.payment_id != 1";
+//       	}
+//       	$from_date =(empty($search['start_date']))? '1': " $str >= '".$search['start_date']." 00:00:00'";
+//       	$to_date = (empty($search['end_date']))? '1': " $str <= '".$search['end_date']." 23:59:59'";
+//       	$where.= " AND ".$from_date." AND ".$to_date;
+//       	// echo $where ;exit();
+//       	if(!empty($search['adv_search'])){
+//       		$s_where = array();
+//       		$s_search = addslashes(trim($search['adv_search']));
+//       		$s_where[] = " receipt_no LIKE '%{$s_search}%'";
+//       		$s_where[] = " land_code LIKE '%{$s_search}%'";
+//       		$s_where[] = " land_address LIKE '%{$s_search}%'";
+//       		$s_where[] = " client_number LIKE '%{$s_search}%'";
+//       		$s_where[] = " name_en LIKE '%{$s_search}%'";
+//       		$s_where[] = " name_kh LIKE '%{$s_search}%'";
+//       		$s_where[] = " staff_name LIKE '%{$s_search}%'";
+//       		$s_where[] = " price_sold LIKE '%{$s_search}%'";
+//       		$s_where[] = " comission LIKE '%{$s_search}%'";
+//       		$s_where[] = " total_duration LIKE '%{$s_search}%'";
+//       		$s_where[] = " street LIKE '%{$s_search}%'";
+//       		$where .=' AND ( '.implode(' OR ',$s_where).')';
+//       	}
+//       	if($search['branch_id']>0){
+//       		$where.=" AND branch_id = ".$search['branch_id'];
+//       	}
+//       	if($search['property_type']>0 AND $search['property_type']>0){
+//       		$where.=" AND v_soldreport.property_type = ".$search['property_type'];
+//       	}
+//       	if($search['client_name']!='' AND $search['client_name']>0){
+//       		$where.=" AND client_id = ".$search['client_name'];
+//       	}
+//       	if($search['schedule_opt']>0){
+//       		$where.=" AND v_soldreport.payment_id = ".$search['schedule_opt'];
+//       	}
+      	$order = " ORDER BY client_id DESC ";
+      	return $db->fetchAll($sql.$order);
+      }
+      
+      
+      
+function getAllrtpclient($search=null){
+      	$db=$this->getAdapter();
+      	$sql=" SELECT c.name_kh ,c.name_en ,c.phone,c.village_id, u.stat_use,u.end_use	,s.price
+			   FROM ln_client AS c,tb_used AS u,tb_settingprice as s
+			   WHERE u.user_id=c.client_id AND u.user_id=s.setId AND c.status=1	
+					
+			   ";
+      	$where=" ";
+      	if(!empty($search['adv_search'])){
+      		$s_where=array();
+      		$s_search=$search['adv_search'];
+      		//$b=trim($s_search," ");
+      		$s_where[]="name_kh  LIKE'%{$s_search}%'";
+      		$s_where[]="name_en  LIKE'%{$s_search}%'";
+      		$s_where[]="phone  LIKE'%{$s_search}%'";
+      		$where .=' AND ('.implode(' OR ',$s_where).')';
+      	}
+//       	client_name
+//       print_r($search);exit();
+      if($search['client_name']>0){
+      	$where.=" AND c.client_id= ".$search['client_name'];
+      }
+      if($search['village_name']>0){
+      	$where.=" AND c.village_id= ".$search['village_name'];
+      }
+      	$order = " ";
+     //echo $sql.$where.$order;
+      	return $db->fetchAll($sql.$where.$order);
+      }
+
+      
+      function getAllrtpclientwater($search=null){
+      	$db=$this->getAdapter();
+      	$sql=" SELECT c.name_kh ,c.name_en,c.client_number ,c.phone,c.village_id, u.stat_use,u.end_use,u.client_id,u.village_id	,s.price
+      		   FROM ln_client AS c,tb_used AS u,tb_settingprice as s
+      		   WHERE c.client_id=u.client_id AND c.village_id=u.village_id AND u.statust=1 AND c.status=1
+      		
+      	";
+      	$where=" ";
+      	if(!empty($search['adv_search'])){
+      		$s_where=array();
+      		$s_search=$search['adv_search'];
+      		//$b=trim($s_search," ");
+      		$s_where[]="name_kh  LIKE'%{$s_search}%'";
+      		$s_where[]="name_en  LIKE'%{$s_search}%'";
+      		$s_where[]="phone  LIKE'%{$s_search}%'";
+      		$s_where[]="client_number  LIKE'%{$s_search}%'";
+      		
+      		$where .=' AND ('.implode(' OR ',$s_where).')';
+      	}
+      	//       	client_name
+      	//       print_r($search);exit();
+      	if($search['client_name']>0){
+      		$where.=" AND c.client_id= ".$search['client_name'];
+      	}
+      	if($search['village_name']>0){
+      		$where.=" AND c.village_id= ".$search['village_name'];
+      	}
+      	$order = " ";
+      	//echo $sql.$where.$order;
+      	return $db->fetchAll($sql.$where.$order);
+      }     
+      
+      function getAllRptofvillage($search=null){
+      	$db=$this->getAdapter();
+      	/* $sql=" SELECT c.name_kh ,c.name_en,c.client_number ,c.phone,c.village_id, u.stat_use,u.end_use	,s.price
+      	FROM
+      	ln_client AS c,tb_used AS u,tb_settingprice as s
+      
+      	WHERE u.user_id=c.client_id AND u.user_id=s.setId AND c.status=1
+      
+      	"; */
+      	$sql=" SELECT  c.client_id,c.name_kh , u.client_id as client_id,u.end_use,u.total_use,u.total_price 
+      			FROM ln_client  AS c INNER JOIN tb_used AS u ON c.client_id=u.client_id
+				WHERE c.village_id=u.village_id";
+      	$where=" ";
+      	//$sumtotalprice="SELECT SUM(total_price) AS Mysum  FROM tb_used ";
+      	if(!empty($search['adv_search'])){
+      		$s_where=array();
+      		$s_search=$search['adv_search'];
+      		//$b=trim($s_search," ");
+      		$s_where[]="name_kh  LIKE'%{$s_search}%'";
+      		$s_where[]="name_en  LIKE'%{$s_search}%'";
+      		$s_where[]="phone  LIKE'%{$s_search}%'";
+      		$s_where[]="client_number  LIKE'%{$s_search}%'";
+      
+      		$where .=' AND ('.implode(' OR ',$s_where).')';
+      	}
+      	//       	client_name
+      	//       print_r($search);exit();
+      	if($search['client_name']>0){
+      		$where.=" AND c.client_id= ".$search['client_name'];
+      	}
+      	if($search['village_name']>0){
+      		$where.=" AND c.village_id= ".$search['village_name'];
+      	}
+      	$order = " ";
+      	//echo $sql.$where.$order;
+      	return $db->fetchAll($sql.$where.$order);
+      }
+      function getSumTotalPriceVillage(){
+      	$db=$this->getAdapter();
+      	$sumtotalprice="SELECT SUM(total_price) AS Mysum  FROM tb_used ";
+      	return $db->fetchAll($sumtotalprice);
+      }
+      
+      
+      function getAllCustomuse($search=null){
+      	$db=$this->getAdapter();
+      	$sql=" SELECT c.name_kh ,c.name_en,c.client_number ,c.phone,c.village_id, u.stat_use,
+      				  u.end_use, u.date,u.end_date,u.ohter_fee,s.price
+      	FROM
+      	ln_client AS c,tb_used AS u,tb_settingprice as s
+      
+      	WHERE u.user_id=c.client_id AND u.user_id=s.setId AND c.status=1
+      
+      	";
+      	$where=" ";
+      	if(!empty($search['adv_search'])){
+      		$s_where=array();
+      		$s_search=$search['adv_search'];
+      		//$b=trim($s_search," ");
+      		$s_where[]="name_kh  LIKE'%{$s_search}%'";
+      		$s_where[]="name_en  LIKE'%{$s_search}%'";
+      		$s_where[]="phone  LIKE'%{$s_search}%'";
+      		$s_where[]="client_number  LIKE'%{$s_search}%'";
+      
+      		$where .=' AND ('.implode(' OR ',$s_where).')';
+      	}
+      	//       	client_name
+      	//       print_r($search);exit();
+      	if($search['client_name']>0){
+      		$where.=" AND c.client_id= ".$search['client_name'];
+      	}
+      	if($search['village_name']>0){
+      		$where.=" AND c.village_id= ".$search['village_name'];
+      	}
+      	$order = " ";
+      	//echo $sql.$where.$order;
+      	return $db->fetchAll($sql.$where.$order);
+      }
+
+      
+    
+      
+      
+      /*end my code*/
+
+      
       public function getAllLoanCo($search = null){//rpt-loan-released
       	$db = $this->getAdapter();
 
@@ -119,6 +329,8 @@ public function getAllOutstadingLoan($search=null){
       	}
       	return $db->fetchAll($sql.$where);
 }
+
+
       function getAmountReceiveByLoanNumber($land_id,$client_id){
       	 $db = $this->getAdapter();
       	 $sql="

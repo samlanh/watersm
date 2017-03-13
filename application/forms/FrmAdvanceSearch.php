@@ -77,7 +77,7 @@ class Application_Form_FrmAdvanceSearch extends Zend_Dojo_Form
 		
 		$approve_by = new Zend_Dojo_Form_Element_FilteringSelect('approve_by');
 		$rows = $db ->getAllCOName();
-		$options_approve=array(''=>"---ជ្រើសរើស---");
+		$options_approve=array(''=>"---????????---");
 		if(!empty($rows))foreach($rows AS $row) $options_approve[$row['co_id']]=$row['co_khname'];
 		$approve_by->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
@@ -155,7 +155,37 @@ class Application_Form_FrmAdvanceSearch extends Zend_Dojo_Form
 		$position_->setMultiOptions($opt_position);
 		$position_->setValue($request->getParam("position"));
 		
-		$this->addElements(array($position_,$from_date,$to_date,$type,$employee,$_title,$_title,$_status,$_btn_search,$branch_id,$approve_by));
+		
+		
+		$_search_village = new Zend_Dojo_Form_Element_FilteringSelect('search_village');
+		$_search_village->setAttribs(array(
+				'dojoType'=>'dijit.form.FilteringSelect',
+				'class'=>'fullside',
+				'onchange'=>'getvillagecode();',
+		));
+		
+		$rows =  $db->getVillage();
+		$options_villag=array($this->tr->translate("SELECT_VILLAGE")); //array(''=>"------Village------",-1=>"Add New");
+		if(!empty($rows))foreach($rows AS $row) $options_villag[$row['id']]=$row['village_name'];
+		$_search_village->setMultiOptions($options_villag);
+		
+		
+		
+		
+		
+		if($data!=null){
+			
+			//$_cust_select->SetVaue($data['cust_select']);
+// 			$BuidingYear->setValue($data['buidingyear']);
+// 			$ParkingSpace->setValue($data['parkingspace']);
+// 			$dinnerroom->setValue($data['dinnerroom']);
+// 			$living->setValue($data['living']);
+// 			$bedroom->setValue($data['bedroom']);
+// 			$propertiestype->setValue($data['property_type']);
+// 			$floor->setValue($data['floor']);
+		}
+		
+		$this->addElements(array($_search_village,$position_,$from_date,$to_date,$type,$employee,$_title,$_title,$_status,$_btn_search,$branch_id,$approve_by));
 		return $this;
 	}
 	

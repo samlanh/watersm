@@ -89,36 +89,21 @@ village_id,phone,status,date_cus_start FROM ln_client";
 			if(!empty($search['adv_search'])){
 				$s_where = array();
 				$s_search = addslashes(trim($search['adv_search']));
-				$s_where[] = " client_number LIKE '%{$s_search}%'";
-				//$s_where[] = " name_en LIKE '%{$s_search}%'";
 				$s_where[] = " name_kh LIKE '%{$s_search}%'";
 				$s_where[] = " phone LIKE '%{$s_search}%'";
-				$s_where[] = " house LIKE '%{$s_search}%'";
+				$s_where[] = " village_id LIKE '%{$s_search}%'";
 				$s_where[] = " street LIKE '%{$s_search}%'";
 				$where .=' AND ('.implode(' OR ',$s_where).')';
+		
 			}
-			/* if($search['status']>-1){
+	
+		/* 	 if($search['status']>-1){
 				$where.= " AND status = ".$search['status'];
 			}
-			if($search['branch_id']>-1){
-				$where.= " AND branch_id = ".$search['branch_id'];
-			}
-			if($search['province_id']>0){
-				$where.=" AND pro_id= ".$search['province_id'];
-			}
-			if(!empty($search['district_id'])){
-				$where.=" AND dis_id= ".$search['district_id'];
-			}
-			if($search['customer_id']>0){
-				$where.=" AND client_id= ".$search['customer_id'];
-			}
-			
-			if(!empty($search['comm_id'])){
-				$where.=" AND com_id= ".$search['comm_id'];
-			}
-			if(!empty($search['village'])){
-				$where.=" AND village_id= ".$search['village'];
-			} */
+			 */
+			if(!empty($search['search_village'])){
+				$where.=" AND v.vill_id= ".$search['search_village'];
+			} 
 			$order=" ORDER BY client_id DESC ";
 			return $db->fetchAll($sql.$where.$order);
 		}catch (Exception $e){
@@ -244,22 +229,36 @@ village_id,phone,status,date_cus_start FROM ln_client";
 	}
 	function getClientInforByAjax($village_id){
 		$db = $this->getAdapter();
-		$sql="
+		/* $sql="
 		SELECT c.`name_kh`,c.`client_id`,u.`stat_use` FROM `ln_client` AS c ,tb_used AS u WHERE c.`village_id`=$village_id
-		";
+		
+		"; */
+		$sql="SELECT c.`name_kh`,c.`client_id` FROM `ln_client` AS c WHERE c.`village_id`=$village_id";
 		return  $db->fetchAll($sql);
 	}
-	
+		function getClientInfo($village_id){
+			$db = $this->getAdapter();
+		
+			$sql="
+			
+		SELECT   `ln_client`.`name_kh`,`ln_client`.`village_id`, `ln_client`.`date_cus_start` ,`tb_used`.`stat_use` AS sat_use, tb_settingprice.`price` as price
+		FROM `ln_client` INNER JOIN `tb_used`
+		ON `ln_client`.`client_id`=`tb_used`.`client_id`
+		INNER JOIN `tb_settingprice` 
+		ON `tb_used`.`price_set_id`=`tb_settingprice`.`setId`
+		WHERE `ln_client`.`village_id`=$village_id
+				";
+			return  $db->fetchAll($sql);
+		}
 	function addused($data){
 	
 	 $db = $this->getAdapter();
      $db->beginTransaction();
      try{
       $arr = array(
-        'client_id'=>$data['price'],
+        'client_id'=>$data['client_id'],
         'stat_use'=>$data['date'],
         'end_use'=>$data['note'],
-        'user_id'=>$this->getUserId(),
        );
       $this->_name='tb_used';
          $this->insert($arr);
@@ -272,16 +271,5 @@ village_id,phone,status,date_cus_start FROM ln_client";
       $db->rollBack();
      }
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
 

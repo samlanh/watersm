@@ -24,6 +24,7 @@ class Loan_IndexController extends Zend_Controller_Action {
 						'end_date'=>date('Y-m-d'),
 						 );
 			}
+			
 			$db = new Loan_Model_DbTable_DbLandpayment();
 			$rs_rows= $db->getAllIndividuleLoan($search);
 			$glClass = new Application_Model_GlobalClass();
@@ -56,9 +57,10 @@ class Loan_IndexController extends Zend_Controller_Action {
 				$_dbmodel = new Loan_Model_DbTable_DbLandpayment();
 				$_dbmodel->addSchedulePayment($_data);
 				if(!empty($_data['saveclose'])){
-					Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/loan");
+					//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/loan");
+					
 				}else{
-					Application_Form_FrmMessage::message("INSERT_SUCCESS");
+					//Application_Form_FrmMessage::message("INSERT_SUCCESS");
 				}
 			}catch (Exception $e) {
 				Application_Form_FrmMessage::message("INSERT_FAIL");
@@ -273,10 +275,11 @@ class Loan_IndexController extends Zend_Controller_Action {
 	function addClientAction(){
 		if($this->getRequest()->isPost()){
 			$data = $this->getRequest()->getPost();
-			$db = new Loan_Model_DbTable_DbLandpayment();
-			$id = $db->addClient($data);
+			$db = new Group_Model_DbTable_Dbindexused();
+			$id = $db->addClientused($data);
 			print_r(Zend_Json::encode($id));
 			exit();
+			
 		}
 	}
 }

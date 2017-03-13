@@ -1,5 +1,9 @@
   <?php $tr = Application_Form_FrmLanguages::getCurrentlanguage();
   // report
+  $rpt_client_month = $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-client'));
+  $rpt_client_water = $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-client-water'));
+  $rpt_of_village = $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-of-village'));
+  $rpt_water_month= $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-water-month'));
   
   $rpt_client = $this->url(array('module'=>'report','controller'=>'groupmember','action'=>'rpt-client'));
   $rpt_callteral = $this->url(array('module'=>'report','controller'=>'groupmember','action'=>'rpt-calleteral'));
@@ -95,6 +99,10 @@
   		<li><a href="<?php echo $rpt_expectincome;?>"><?php echo $tr->translate('REPORT_EXPECT_INCOME');?></a></li>
   		<li><a href="<?php echo $rpt_loanoustading;?>"><?php echo $tr->translate('LOAN_OUTSTADING');?></a></li>
   	 -->
+  	 <li><a href="<?php echo $rpt_water_month;?>" style="color: red;"><?php echo $tr->translate('REPORT_WATER_MONTH');?></a></li>
+    <li><a href="<?php echo $rpt_client_month;?>" style="color: red;"><?php echo $tr->translate('REPORT_CLIENT');?></a></li>
+    <li><a href="<?php echo $rpt_client_water;?>" style="color: red;"><?php echo $tr->translate('REPORT_CLIENT_USE_WATER');?></a></li>
+     <li><a href="<?php echo $rpt_of_village;?>" style="color: red;"><?php echo $tr->translate('REPORT_WATER_OF_VILLAGE');?></a></li>
   	</ul>
   </div>
   <div style="clear: both;"></div>
