@@ -131,7 +131,7 @@ function getAllcustomer(){
 			  				   temp+='<td><input style=" width:90%; readonly="true" readonly="true" font-size:12px;" type="text" value="'+data[i].name_kh+'"   name="name_kh'+r+'" required="true"  id="toowner_name'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
 			  				   temp+='<td><input type="text" readonly="true" style="width:110px" required="true" value="'+data[i].sat_use+'"  name="start_use'+r+'" id="start_use'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
 			  				   temp+='<td><input type="text" style="width:110px"  required="true"  onkeyup="calculate('+r+')"  name="new_num'+r+'" id="new_num'+r+'" dojoType="dijit.form.ValidationTextBox"/><input type="hidden" name="price_setting'+r+'" id="price_setting'+r+'" value="'+data[i].price+'" dojoType="dijit.form.TextBox" /></td>';
-				  			   temp+='<td><input style="  width:110px" type="text" name="tonote'+r+'" readonly="true" id="tonote'+r+'" dojoType="dijit.form.TextBox" /><input type="hidden" name="coid'+r+'" id="coid'+r+'" dojoType="dijit.form.TextBox" /> </td>';
+				  			   temp+='<td><input style="  width:110px" type="text" name="toatal_water'+r+'" readonly="true" id="toatal_water'+r+'" dojoType="dijit.form.TextBox" /><input type="hidden" name="coid'+r+'" id="coid'+r+'" dojoType="dijit.form.TextBox" /> </td>';
 					  		//temp+='<td><input style=" width:110px" type="text" name="tonote'+r+'"  id="1tonote'+r+'" dojoType="dijit.form.TextBox" /><input type="hidden" name="coid'+r+'" id="coid'+r+'" dojoType="dijit.form.TextBox" /> </td>';	 
 					  			temp+='<td><input style=" width:110px; color:red;" readonly="true" type="text" name="total_price'+r+'"  id="total_price_id'+r+'" dojoType="dijit.form.TextBox" /><input type="hidden" name="coid'+r+'" id="1coid'+r+'" dojoType="dijit.form.TextBox" /> </td>'		
 
@@ -183,7 +183,7 @@ function calculate(r){
 		dijit.byId("total_price_id"+r).attr('value',total_price+'៛');
 	}else{
 		dijit.byId("total_price_id"+r).attr('value','0៛');
-		dijit.byId("tonote"+r).attr('value',total);
+		dijit.byId("toatal_water"+r).attr('value',total);
 	}
 	
 }
