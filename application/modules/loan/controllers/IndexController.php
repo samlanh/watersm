@@ -54,8 +54,8 @@ class Loan_IndexController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try {
-				$_dbmodel = new Loan_Model_DbTable_DbLandpayment();
-				$_dbmodel->addSchedulePayment($_data);
+				$_dbmodel = new Loan_Model_DbTable_DbPayUsed();
+				$_dbmodel->addDetailUsed($_data);
 				if(!empty($_data['saveclose'])){
 					//Application_Form_FrmMessage::Sucessfull("INSERT_SUCCESS","/loan");
 					
@@ -67,25 +67,13 @@ class Loan_IndexController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 			}
 		}
-		$frm = new Loan_Form_FrmLoan();
+ 		$frm = new Loan_Form_FrmLoan();
 		$frm_loan=$frm->FrmAddLoan();
 		Application_Model_Decorator::removeAllDecorator($frm_loan);
 		$this->view->frm_loan = $frm_loan;
 		
-		$frmpopup = new Application_Form_FrmPopupGlobal();
-		$db = new Application_Model_DbTable_DbGlobal();
-		$co_name = $db->getAllCoNameOnly();
-		array_unshift($co_name,array(
-		        'id' => -1,
-		        'name' => '---Add New ---',
-		) );
-	    $this->view->co_name=$co_name;
-	    
-	    $db = new Application_Model_DbTable_DbGlobal();
-	    $this->view->client_doc_type = $db->getclientdtype();
-	    
-	    $key = new Application_Model_DbTable_DbKeycode();
-		$this->view->data=$key->getKeyCodeMiniInv(TRUE);
+
+
 	}	
 	public function editAction(){
 		if($this->getRequest()->isPost()){

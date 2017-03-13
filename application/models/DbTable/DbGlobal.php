@@ -227,6 +227,13 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	}
    	return $rows;
    }
+   
+   public function insertDataUsed(){
+   	
+   	
+   	
+   }
+   
    public function getAllCoNameOnly(){
    	$db= $this->getAdapter();
    	$sql = " SELECT co_id AS id, co_khname AS name

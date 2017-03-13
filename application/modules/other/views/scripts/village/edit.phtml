@@ -23,7 +23,7 @@ dojo.ready(function(){
 	searchAttr: "name",
 	value: "<?php echo $this->row['dis_id'];?>",
 	class: 'fullside',
-	missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះសាខា​កូន!",	
+	missingMessage:"áž¢áŸ’áž“áž€â€‹áž—áŸ’áž›áŸ�áž…â€‹áž”áŸ†áž–áŸ�áž‰â€‹ ážˆáŸ’áž˜áŸ„áŸ‡ážŸáž¶áž�áž¶â€‹áž€áž¼áž“!",	
 		onChange: function() {
 			district = dijit.byId('district_name').get('value');
 			if(district==-1){
@@ -42,7 +42,7 @@ dojo.ready(function(){
 	value: "<?php echo $this->row['commune_id'];?>",
 	searchAttr: "name",
 	class: 'fullside',
-	missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឈ្មោះសាខា​កូន!",	
+	missingMessage:"áž¢áŸ’áž“áž€â€‹áž—áŸ’áž›áŸ�áž…â€‹áž”áŸ†áž–áŸ�áž‰â€‹ ážˆáŸ’áž˜áŸ„áŸ‡ážŸáž¶áž�áž¶â€‹áž€áž¼áž“!",	
 		onChange: function() {
 			commune = dijit.byId('commune_name').get('value');
 			if(commune==-1){
@@ -116,32 +116,14 @@ function filterCommune(){
 							<td><?php echo $tr->translate("VILLAGE_CODE")?></td>
 							<td><?php  echo $commune->getElement('code');?></td>
 						</tr>
-						 <tr>
-							<td><?php echo $tr->translate("VILLAGE_KH")?></td>
-							<td><?php  echo $commune->getElement('village_namekh');?></td>
-						</tr>
+						 
 						<tr>
 							<td><?php echo $tr->translate("VILLAGE_NAME")?></td>
-							<td><?php  echo $commune->getElement('village_name');?>
+							<td><?php  echo $commune->getElement('village_namekh');?>
 								<?php  echo $commune->getElement('id');?>
 							</td>
 						</tr>
-						<tr>
-							<td><?php echo $tr->translate("DISPLAY_BY")?></td>
-							<td><?php  echo $commune->getElement('display'); echo $commune->getElement('id')?></td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("PROVINCE_NAME")?></td>
-							<td><?php  echo $commune->getElement('province_name');?></td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("DISTRICT_NAME")?></td>
-							<td><input id="district_name" ><?php  //echo $commune->getElement('district_name');?></td>
-						</tr>
-						<tr>
-							<td><?php echo $tr->translate("COMMUNE_NAME")?></td>
-							<td><input id="commune_name" > <?php  //echo $commune->getElement('commune_name');?></td>
-						</tr>
+						
 						<tr>
 							<td><?php echo $tr->translate("STATUS")?></td>
 							<td><?php  echo $commune->getElement('status');?></td>
@@ -150,7 +132,7 @@ function filterCommune(){
 							<td colspan="2" align="center">
 							  <input type="reset" label="<?php echo $tr->translate('CLEAR');?>" id="" dojoType="dijit.form.Button"
 				                  iconClass="dijitIconClear" />
-							<input type="submit" value="កែប្រែទិន្នន័យ" label="<?php echo $tr->translate('SAVE');?>" id="submitButton" dojoType="dijit.form.Button" 
+							<input type="submit" value="áž€áŸ‚áž”áŸ’ážšáŸ‚áž‘áž·áž“áŸ’áž“áž“áŸ�áž™" label="<?php echo $tr->translate('SAVE');?>" id="submitButton" dojoType="dijit.form.Button" 
 								 iconClass=""/>
 							</td>
 						</tr>

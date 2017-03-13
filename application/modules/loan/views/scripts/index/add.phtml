@@ -19,7 +19,7 @@
    <script>
 		require(["dijit/form/DateTextBox","dijit/form/NumberTextBox","dojo/number","dijit/Dialog"]);
    </script>
-<form id='frm_add_tran' action="<?php echo $this->url(array('module'=>'loan','controller'=>'index','action'=>'add')); ?>" 
+<form id='frm_add_tran' action="" 
 				dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">
 <script type="dojo/method" event="onSubmit">			
 			if(this.validate()) {
@@ -40,7 +40,7 @@
 						<td style="width: 200px;"><?php echo $frm->getElement('village_1_ed')?></td>
 						<td></td>
 						<td>
-							<input type="hidden" class="fullside" id="record_row" name="record_row" value="0"  dojoType="dijit.form.TextBox" />
+							<input type="text" class="fullside" id="record_row" name="record_row" value="0"  dojoType="dijit.form.TextBox" />
 
 						</td>
 					</tr>
@@ -95,6 +95,7 @@ function getAllcustomer(){
 		  handleAs:"json",
 		  load: function(data) {
 			  //alert(data);
+			  dijit.byId('record_row').attr('value','');
 			  if(data==''){
 				  thead='<th><?php echo $tr->translate("DEL");?></th>';
 				    thead+='<th><?php echo $tr->translate("No");?></th>';
@@ -126,12 +127,12 @@ function getAllcustomer(){
 			  				         }
 			  				   temp='<td style="width:30px !important;text-align:center;" ><img style="cursor:pointer" onclick="deleteRecord('+r+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			  				   temp+='<td>'+r+'</td>';
-			  				   temp+='<td><input style=" width:100px" value="'+'BH000'+data[i].client_id+'" type="text" required="true" readonly="true" name="client_id'+r+'" id="client_id'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
-			  				   temp+='<td><input style=" width:90%; readonly="true" readonly="true" font-size:12px;" type="text" value="'+data[i].name_kh+'" required="true"  name="name_kh'+r+'" id="toowner_name'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
+			  				   temp+='<td><input style=" width:100px" value="'+'BH000'+data[i].client_id+'" name="client_id'+r+'" type="text" required="true" readonly="true"  id="client_id'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
+			  				   temp+='<td><input style=" width:90%; readonly="true" readonly="true" font-size:12px;" type="text" value="'+data[i].name_kh+'"   name="name_kh'+r+'" required="true"  id="toowner_name'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
 			  				   temp+='<td><input type="text" readonly="true" style="width:110px" required="true" value="'+data[i].sat_use+'"  name="start_use'+r+'" id="start_use'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
 			  				   temp+='<td><input type="text" style="width:110px"  required="true"  onkeyup="calculate('+r+')"  name="new_num'+r+'" id="new_num'+r+'" dojoType="dijit.form.ValidationTextBox"/><input type="hidden" name="price_setting'+r+'" id="price_setting'+r+'" value="'+data[i].price+'" dojoType="dijit.form.TextBox" /></td>';
 				  			   temp+='<td><input style="  width:110px" type="text" name="tonote'+r+'" readonly="true" id="tonote'+r+'" dojoType="dijit.form.TextBox" /><input type="hidden" name="coid'+r+'" id="coid'+r+'" dojoType="dijit.form.TextBox" /> </td>';
-					  			//temp+='<td><input style=" width:110px" type="text" name="tonote'+r+'"  id="1tonote'+r+'" dojoType="dijit.form.TextBox" /><input type="hidden" name="coid'+r+'" id="coid'+r+'" dojoType="dijit.form.TextBox" /> </td>';	 
+					  		//temp+='<td><input style=" width:110px" type="text" name="tonote'+r+'"  id="1tonote'+r+'" dojoType="dijit.form.TextBox" /><input type="hidden" name="coid'+r+'" id="coid'+r+'" dojoType="dijit.form.TextBox" /> </td>';	 
 					  			temp+='<td><input style=" width:110px; color:red;" readonly="true" type="text" name="total_price'+r+'"  id="total_price_id'+r+'" dojoType="dijit.form.TextBox" /><input type="hidden" name="coid'+r+'" id="1coid'+r+'" dojoType="dijit.form.TextBox" /> </td>'		
 
 					  			temp+='<td><input type="text" style="width:110px"  name="1issue_date'+r+'" readonly="true" value="'+data[i].date_cus_start+'" id="1issue_date'+r+'" dojoType="dijit.form.DateTextBox"/></td>';   

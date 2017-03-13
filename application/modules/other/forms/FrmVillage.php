@@ -164,7 +164,7 @@ Class Other_Form_FrmVillage extends Zend_Dojo_Form {
 			$village_name->setValue($data['village_name']);
 			$village_namekh->setValue($data['village_namekh']);
 			$_display->setValue($data['displayby']);
-			$_province->setValue($data['pro_id']);
+// 			$_province->setValue($data['pro_id']);
 			$code->setValue($data['code']);
 // 			$commune_name->setValue($data['commune_id']);
 			$_status->setValue($data['status']);

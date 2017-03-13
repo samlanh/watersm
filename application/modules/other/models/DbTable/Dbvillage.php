@@ -12,10 +12,10 @@ class Other_Model_DbTable_DbVillage extends Zend_Db_Table_Abstract
 	public function addVillage($_data){
 		$_arr=array(
 				'code'	  => $_data['code'],
-				'commune_id'	  => $_data['commune_name'],
-				'village_name'	  => $_data['village_name'],
+/*				'commune_id'	  => $_data['commune_name'],
+*/				/*'village_name'	  => $_data['village_name'],*/
 				'village_namekh'	  => $_data['village_namekh'],
-				'displayby'	  => $_data['display'],
+/*				'displayby'	  => $_data['display'],*/
 				'status'	  => $_data['status'],
 				'modify_date' => Zend_Date::now(),
 				'user_id'	  => $this->getUserId()
@@ -46,11 +46,7 @@ class Other_Model_DbTable_DbVillage extends Zend_Db_Table_Abstract
 	}
 	public function getVillageById($id){
 		$db = $this->getAdapter();
-		$sql=" SELECT v.vill_id,v.code,v.commune_id,v.village_name,v.village_namekh,v.displayby,v.modify_date,
-					v.status,v.user_id,d.dis_id,d.pro_id FROM 
-			   `ln_village` AS v,ln_commune AS c,ln_district AS d
-			   WHERE v.commune_id=c.com_id AND v.vill_id AND c.district_id=d.dis_id AND
-			  v.vill_id = ".$db->quote($id);
+		$sql=" SELECT *  FROM  `ln_village` AS v where v.vill_id= ".$db->quote($id);
 		$sql.=" LIMIT 1 ";
 		$row=$db->fetchRow($sql);
 		return $row;
@@ -58,35 +54,30 @@ class Other_Model_DbTable_DbVillage extends Zend_Db_Table_Abstract
 	function getAllVillage($search=null){
 		$db = $this->getAdapter();
 // 		$sql =" CALL st_getAllVillage('',1) ";
-		$sql =" SELECT
-				v.vill_id,v.village_namekh,v.village_name,v.displayby,
-				(SELECT commune_name FROM ln_commune WHERE v.commune_id=com_id LIMIT 1) AS commune_name,
-				d.district_name,p.province_en_name,
-				v.modify_date,(SELECT name_en FROM ln_view WHERE TYPE=3 AND key_code=v.status LIMIT 1) AS status, 
-				(SELECT first_name FROM rms_users WHERE id=v.user_id LIMIT 1) AS user_name
-				FROM ln_village AS v,`ln_commune` AS c, `ln_district` AS d , `ln_province` AS p
-				WHERE v.commune_id = c.com_id AND c.district_id = d.dis_id AND d.pro_id = p.province_id ";
+		$sql ="SELECT	v.vill_id,v.code,v.village_namekh,v.modify_date,(select s.name_en from tb_view as s where key_code=v.status and s.type=5) as status ,(select u.first_name from rms_users as u where u.id=v.user_id ) as  user
+				FROM ln_village AS v";
 		$where = '';
-        if($search['province_name']>=0){
-        	$where.= " AND p.province_id = ".$search['province_name'];
-        }
-        if(!empty($search['district_name'])){
-        	$where.= " AND d.dis_id = ".$search['district_name'];
-        }
-        if($search['commune_name']>0){
-        	$where.= " AND c.com_id = ".$search['commune_name'];
-        }
+//         if($search['province_name']>=0){
+//         	$where.= " AND p.province_id = ".$search['province_name'];
+//         }
+//         if(!empty($search['district_name'])){
+//         	$where.= " AND d.dis_id = ".$search['district_name'];
+//         }
+//         if($search['commune_name']>0){
+//         	$where.= " AND c.com_id = ".$search['commune_name'];
+//         }
         
-		if($search['search_status']>-1){
-			$where.= " AND v.status = ".$search['search_status'];
-		}
-		if(!empty($search['adv_search'])){
-			$s_where = array();
-			$s_search = $search['adv_search'];
-			$s_where[] = " v.village_name LIKE '%{$s_search}%'";
-			$s_where[]=" v.village_namekh LIKE '%{$s_search}%'";
-			$where .=' AND ('.implode(' OR ',$s_where).')';
-		}
+// 		if($search['search_status']>-1){
+// 			$where.= " AND v.status = ".$search['search_status'];
+// 		}
+// 		if(!empty($search['adv_search'])){
+// 			$s_where = array();
+// 			$s_search = $search['adv_search'];
+// 			$s_where[] = " v.village_name LIKE '%{$s_search}%'";
+// 			$s_where[]=" v.village_namekh LIKE '%{$s_search}%'";
+// 			$where .=' AND ('.implode(' OR ',$s_where).')';
+// 		}
+		
 		$order= ' ORDER BY v.vill_id DESC ';
 		return $db->fetchAll($sql.$where.$order);	
 	}

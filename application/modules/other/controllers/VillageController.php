@@ -23,12 +23,12 @@ class Other_VillageController extends Zend_Controller_Action {
 						'commune_name'=>'');
 			}
 			$rs_rows= $db->getAllVillage($search);
-			$list = new Application_Form_Frmtable();
-			$collumns = array("VILLAGENAME_KH","VILLAGE_NAME","DISPLAY_BY","COMMNUE_NAME","DISTRICT_NAME","PROVINCE_NAME","DATE","STATUS","BY");
+ 	 			$list = new Application_Form_Frmtable();
+			$collumns = array("VILLAGE_CODE","VILLAGE_NAME","DATE","STATUS","BY");
 			$link=array(
 					'module'=>'other','controller'=>'village','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('village_name'=>$link,'village_namekh'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('code'=>$link,'village_namekh'=>$link,));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			echo $e->getMessage();
@@ -68,9 +68,11 @@ class Other_VillageController extends Zend_Controller_Action {
 	}
 	public function editAction(){
 		$db = new Other_Model_DbTable_Dbvillage();
+		$id = $this->getRequest()->getParam("id");
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
 			try{
+				$_data['ID']=$id;
 				$db->addVillage($_data);
 				Application_Form_FrmMessage::Sucessfull($this->tr->translate('EDIT_SUCCESS'),self::REDIRECT_URL . '/village/index');
 			}catch(Exception $e){
@@ -79,12 +81,12 @@ class Other_VillageController extends Zend_Controller_Action {
 				Application_Model_DbTable_DbUserLog::writeMessageError($err);
 			}
 		}
-		$id = $this->getRequest()->getParam("id");
+		
 		$row = $db->getVillageById($id);
 		$this->view->row=$row;
-		if(empty($row)){
-			$this->_redirect('other/village');
-		}		
+// 		if(empty($row)){
+// 			$this->_redirect('other/village');
+// 		}		
 		$fm = new Other_Form_FrmVillage();
 		$frm = $fm->FrmAddVillage($row);
 		Application_Model_Decorator::removeAllDecorator($frm);
@@ -121,7 +123,7 @@ class Other_VillageController extends Zend_Controller_Action {
 			$data = $this->getRequest()->getPost();
 			$db = new Other_Model_DbTable_Dbvillage();
 			$rows = $db->getAllvillagebyCommune($data['commune_id']);
-			array_unshift($rows, array ( 'id' => -1, 'name' => 'បន្ថែម​អ្នក​ទទួល​ថ្មី') );
+			array_unshift($rows, array ( 'id' => -1, 'name' => 'áž”áž“áŸ’áž�áŸ‚áž˜â€‹áž¢áŸ’áž“áž€â€‹áž‘áž‘áž½áž›â€‹áž�áŸ’áž˜áž¸') );
 			print_r(Zend_Json::encode($rows));
 			exit();
 		}

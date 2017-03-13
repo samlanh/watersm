@@ -241,7 +241,7 @@ village_id,phone,status,date_cus_start FROM ln_client";
 		
 			$sql="
 			
-		SELECT   `ln_client`.`name_kh`,`ln_client`.`village_id`, `ln_client`.`date_cus_start` ,`tb_used`.`stat_use` AS sat_use, tb_settingprice.`price` as price
+		SELECT  `ln_client`.`client_id`, `ln_client`.`name_kh`,`ln_client`.`village_id`, `ln_client`.`date_cus_start` ,`tb_used`.`stat_use` AS sat_use, tb_settingprice.`price` as price
 		FROM `ln_client` INNER JOIN `tb_used`
 		ON `ln_client`.`client_id`=`tb_used`.`client_id`
 		INNER JOIN `tb_settingprice` 
