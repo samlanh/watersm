@@ -280,7 +280,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
    	$new_acc_no= (int)$acc_no+1;
    	$acc_no= strlen((int)$acc_no+1);
    	$pre = "";
-   	for($i = $acc_no;$i<3;$i++){
+   	for($i = $acc_no;$i<4;$i++){
    		$pre.='0';
    	}
    	return $pre.$new_acc_no;
