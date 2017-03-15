@@ -19,17 +19,22 @@ class Group_SettingpriceController extends Zend_Controller_Action {
 			else{
 				$search = array(
 						'adv_search' => '',
-						'status_search' => -1,);
+						'status_search' => -1,
+						'Datesearch_start' => date('Y-m-d'),
+						'Datesearch_stop' => date('Y-m-d')
+						
+						);
+				
 			}
 			$rs_rows= $db->geteAllSettingprice($search);
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("PRICE","DATE","NOTE","STATUS","USEBY");
+			$collumns = array("PRICE","SERVICE_PRICE","Date_start","Date_stop","DEADLINE","NOTE","STATUS","USEBY");
 			$link=array(
 					'module'=>'group','controller'=>'settingprice','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('price'=>$link,'note'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('price'=>$link,'note'=>$link,'service_price'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			echo $e->getMessage();
@@ -54,7 +59,7 @@ class Group_SettingpriceController extends Zend_Controller_Action {
    				if(!empty($_data['save_new'])){
 					Application_Form_FrmMessage::message('ការ​បញ្ចូល​​ជោគ​ជ័យ');
 				}else{
-					Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', self::REDIRECT_URL . '/propertiestype/index');
+					Application_Form_FrmMessage::Sucessfull('ការ​បញ្ចូល​​ជោគ​ជ័យ', self::REDIRECT_URL . '/settingprice/index');
 				}
    		}catch(Exception $e){
    			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
