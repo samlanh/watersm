@@ -78,6 +78,7 @@ class Mygroup_indexController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_index = $frm;
 	}
+	
 	function editAction(){
 		$id = $this->getRequest()->getParam('id');
 		$db_ca = new Mygroup_Model_DbTable_DBindex();
