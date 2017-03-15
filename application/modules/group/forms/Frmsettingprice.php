@@ -19,10 +19,6 @@ Class Group_Form_Frmsettingprice extends Zend_Dojo_Form {
 		$this->tarea = 'dijit.form.SimpleTextarea';
 	}
 	
-	
-	
-	
-	
 	public function Frmsettingprice($data=null){
 		
 		$db = new Application_Model_DbTable_DbGlobal();
@@ -56,7 +52,7 @@ Class Group_Form_Frmsettingprice extends Zend_Dojo_Form {
 		
 	
 		
-		$Date=new Zend_Dojo_Form_Element_DateTextBox('date');
+		$Date=new Zend_Dojo_Form_Element_DateTextBox('date_start');
 		$Date->setAttribs(array(
 				'dojoType'=>'dijit.form.DateTextBox',
 				'class'=>'fullside',
@@ -64,13 +60,27 @@ Class Group_Form_Frmsettingprice extends Zend_Dojo_Form {
 				));
 		$Date->setValue(date('Y-m-d'));
 		
+		$date_stop=new Zend_Dojo_Form_Element_DateTextBox('date_stop');
+		$date_stop->setAttribs(array(
+				'dojoType'=>'dijit.form.DateTextBox',
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+		));
+		$date_stop->setValue(date('Y-m-d'));
+		
 		$price=new Zend_Dojo_Form_Element_NumberTextBox('price');
 		$price->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 				'required'=>true
 		));
-		
+		$service_price=new Zend_Dojo_Form_Element_NumberTextBox('service_price');
+		$service_price->setAttribs(array(
+				'dojoType'=>'dijit.form.NumberTextBox',
+				'class'=>'fullside',
+				'required'=>true
+		));
+	
 	
 		$note=new Zend_Dojo_Form_Element_TextBox('note');
 		$note->setAttribs(array(
@@ -87,39 +97,90 @@ Class Group_Form_Frmsettingprice extends Zend_Dojo_Form {
 		$options= array(1=>"ប្រើប្រាស់",0=>"មិនប្រើប្រាស់");
 		$status->setMultiOptions($options);
 		
-		/* $property_type_nameen=new Zend_Dojo_Form_Element_ValidationTextBox('type_nameen');
-		$property_type_nameen->setAttribs(array(
-				'dojoType'=>'dijit.form.ValidationTextBox',
+		$Dateline=new Zend_Dojo_Form_Element_DateTextBox('deadline');
+		$Dateline->setAttribs(array(
+				'dojoType'=>'dijit.form.DateTextBox',
 				'class'=>'fullside',
-				'required'=>true
-				));
-		$property_type_namekh=new Zend_Dojo_Form_Element_ValidationTextBox('type_namekh');
-		$property_type_namekh->setAttribs(array(
-				'dojoType'=>'dijit.form.ValidationTextBox',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+		));
+		$Dateline->setValue(date('Y-m-d'));
+		
+		/* $Datesearch_start=new Zend_Dojo_Form_Element_DateTextBox('Datesearch_start');
+		$Datesearch_start->setAttribs(array(
 				'class'=>'fullside',
-				'required'=>true
-		)); */
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'dojoType'=>'dijit.form.DateTextBox',
+				'onchange'=>'CalculateDate();'
+		));
+		$Datesearch_start->setValue(date('Y-m-d')); */
+		$Datesearch_start = new Zend_Dojo_Form_Element_DateTextBox('Datesearch_start');
+		$Datesearch_start->setAttribs(array('dojoType'=>'dijit.form.DateTextBox',
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'onchange'=>'CalculateDate();'));
+		$_date = $request->getParam("Datesearch_stop");
+		
+		if(empty($_date)){
+			//$_date = date('Y-m-d');
+		}
+		$Datesearch_start->setValue($_date);
+		
+		
+		
+		
+		
+		
+
+	/* 	$Datesearch_stop=new Zend_Dojo_Form_Element_DateTextBox('Datesearch_stop');
+		$Datesearch_stop->setAttribs(array(
+				'dojoType'=>'dijit.form.DateTextBox',
+				'required' =>'true',
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'onchange'=>'calCulateEndDate();'
+		));
+		$Datesearch_stop->setValue(date('Y-m-d')); */
+		
+		
+		
+		
+		$Datesearch_stop = new Zend_Dojo_Form_Element_DateTextBox('Datesearch_stop');
+		$Datesearch_stop->setAttribs(array('dojoType'=>'dijit.form.DateTextBox',
+				'class'=>'fullside',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'onchange'=>'CalculateDate();'));
+		$_date = $request->getParam("Datesearch_stop");
+		
+		if(empty($_date)){
+			//$_date = date('Y-m-d');
+		}
+		$Datesearch_stop->setValue($_date);
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		/*	this place for update*/
 		$id = new Zend_Form_Element_Hidden("id");
 		if($data!=null){
-			//$property_type_nameen->setValue($data['type_nameen']);
-			//$property_type_namekh->setValue($data['type_namekh']);
+			
 			$price->setValue($data['price']);
 			$note->setValue($data['note']);
 			
-			//$date->setValue($data['datetime']);
-			$Date->setValue($data['date']);
+			$date_stop->setValue($data['date_stop']);
+			$Date->setValue($data['date_start']);
 			$status->setValue($data['status']);
-			//$id->setValue($data['return_id']);
+			$Dateline->setValue($data['deadline']);
+			$service_price->setValue($data['service_price']);
 		}
 		
-		//$this->addElements(array($property_type_nameen,$property_type_namekh,$_btn_search,$_status_search,
-				//$note,$Date,$id,$status,$_title,$price));
-				
+		
 		/*	this place for all set value can use in index add or edi so we dont need to write html direc */
-		$this->addElements(array($_title,$price,$note,$Date,$status,$_btn_search,$_status_search));
+		$this->addElements(array($_title,$price,$service_price,$note,$Date,$status,$_btn_search,$_status_search,$Dateline,$date_stop,$Datesearch_start,$Datesearch_stop));
 		return $this;
 		
 	}	
