@@ -39,22 +39,34 @@ dojo.require("dijit.layout.TabContainer");
 							<legend><strong><?php echo $tr->translate("ADD_CLIENT");?></strong></legend>
 							<table style="margin: 0 auto; width:100%;" cellspacing="10">
 								<tr>
+									<td><?php echo $tr->translate("លេខកូដអតិថិជន")?></td>
+									<td><?php  echo $frm->getElement('client_no');?></td>
 									<td><?php echo $tr->translate("CUSTOMER_NAME")?></td>
 									<td><?php  echo $frm->getElement('name_kh');?></td>
+									<td><?php echo $tr->translate("SEX")?></td>
+									<td><?php  echo $frm->getElement('sex');?></td>
+
+								</tr>
+								<tr>
+
 									<td><?php echo $tr->translate("VILLAGE")?></td>
 									<td><?php  echo $frm->getElement('village_1');?></td>
 
 									<td><?php echo $tr->translate("VILLAGE_CODE")?></td>
 									<td><?php echo $frm->getElement('village_code');?></td>		<!-- client_no -->
+									<td><?php echo $tr->translate("តម្លៃសេវា")?></td>
+									<td><?php  echo $frm->getElement('unit_price');?></td>
+
+
 								</tr>
 								<tr>
-									<td><?php echo $tr->translate("SEX")?></td>
-									<td><?php  echo $frm->getElement('sex');?></td>
+
 									<td><?php echo $tr->translate("PHONE")?></td>
 									<td><?php  echo $frm->getElement('phone');?></td>
-									<td><?php echo $tr->translate("CUS_START_DATE")?></td>
+									<td><?php echo $tr->translate("ថ្ងៃចុះឈ្មោះ")?></td>
 									<td><?php  echo $frm->getElement('date_cus_start');?></td>
-
+									<td><?php echo $tr->translate("ប្រាក់បង់សេវា")?></td>
+										<td><input type="text" style="width:110px"  required="true"  onkeyup="calculate()"  name="price_service" id="price_service" dojoType="dijit.form.ValidationTextBox"/></td>
 
 								</tr>
 
@@ -64,7 +76,8 @@ dojo.require("dijit.layout.TabContainer");
 									<td valign="top"><?php  echo $frm->getElement('status');?></td>
 									<td valign="top"><?php echo $tr->translate("NOTE")?></td>
 									<td><?php  echo $frm->getElement('desc');?></td>
-
+									<td><?php echo $tr->translate("ប្រាក់ជំពាក់ថ្លៃសេវា")?></td>
+									<td><input type="text" style="width:110px;color:red;"  required="true" value="0$"  readonly="true"   name="total_service" id="total_service" dojoType="dijit.form.ValidationTextBox"/></td>
 
 
 								</tr>
@@ -269,7 +282,7 @@ dojo.ready(function(){
 
 url_getvillagecode = '<?php echo $this->url(array('module'=>'group','controller'=>'index','action'=>'get-code-village'));?>';
 function getvillagecode(){
-	var stringvillage="V0000";
+
 	vllage = dijit.byId('village_1').get('value');
 	if(vllage==0){
 		return false;}
@@ -283,7 +296,7 @@ function getvillagecode(){
 			//alert(data.code);
 			//dijit.byId('client_no').attr('value',data.code);
 			//district_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('village_code').set('value',stringvillage+""+ data.code);
+		    dijit.byId('village_code').set('value',data.code);
 		},
 		error: function(err) {
 			alert(err);
@@ -392,6 +405,26 @@ function dfilterDistrict(){
 	//});
 //}
 
+
+function calculate(){
+	/*total_service_price=parseFloat(dijit.byId('total_service').get('value'));*/
+	unit_price=parseFloat(dijit.byId('unit_price').get('value'));
+	pay_service=parseFloat(dijit.byId('price_service').get('value'));
+total_service=unit_price-pay_service;
+
+
+	if(pay_service>unit_price){
+		alert('ការបង់ថ្លៃសេវាមិនអាចច្រើនជាងប្រាក់ដែលបានកំណត់ក្នុងប្រព័ន្ធទេ');
+		dijit.byId('total_service').attr('value','');
+	}else{
+		dijit.byId('total_service').attr('value',total_service+'៛');
+	}
+
+
+
+
+
+}
 
 function hideDialog1(){
 	dijit.byId('popup_doc_type').hide();
