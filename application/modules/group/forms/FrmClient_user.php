@@ -60,7 +60,23 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 						'class'=>'fullside',
 						'required' =>'true'
 		));
-		
+		$_service_price = new Zend_Dojo_Form_Element_TextBox('service_price');
+		$_service_price->setAttribs(array(
+			'dojoType'=>'dijit.form.ValidationTextBox',
+			'class'=>'fullside',
+			'required' =>'true'
+		));
+
+		$_base_price_service = new Zend_Dojo_Form_Element_TextBox('base_price_service');
+		$_base_price_service->setAttribs(array(
+			'dojoType'=>'dijit.form.ValidationTextBox',
+			'class'=>'fullside',
+			'required' =>'true'
+		));
+
+
+
+
  		$id_client = $db->getNewClientId();
 		$_clientno = new Zend_Dojo_Form_Element_TextBox('client_no');
 		$_clientno->setAttribs(array(
@@ -70,6 +86,7 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 				'style'=>'color:red;'
 		));
  		$_clientno->setValue($id_client);
+
 	
 		$_nameen = new Zend_Dojo_Form_Element_TextBox('name_en');
 		$_nameen->setAttribs(array(
@@ -230,6 +247,12 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				//'required' =>'true'
 		));
+		$_ba_price = new Zend_Dojo_Form_Element_TextBox('ba_price');
+		$_ba_price->setAttribs(array(
+			'dojoType'=>'dijit.form.ValidationTextBox',
+			'class'=>'fullside',
+			//'required' =>'true'
+		));
 		
 		$_bnamekh = new Zend_Dojo_Form_Element_TextBox('bname_kh');
 		$_bnamekh->setAttribs(array(
@@ -381,6 +404,8 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 			$_rid_no->setValue($data['rid_no']);
 			$_arid_no->setValue($data['arid_no']);
 			$_edesc->setValue($data['edesc']);
+			$_base_price_service->setValue($data['base_price_service']);
+			$_service_price->setValue($data['service_price']);
 			$_ksex->setValue($data['ksex']);
 			$p_nationality->setValue($data['p_nationality']);
 			$_cprovince->setValue($data['cprovince']);
@@ -389,7 +414,7 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 			$_join_type->setValue($data['join_type']);
 			$referecce_national_id->setValue($data['refe_nation_id']);
 		}
-		$this->addElements(array($_join_type,$referecce_national_id,$p_nationality,$_nationality,$_arid_no,$_rid_no,$_bmember,$_vid_no,$_edesc,$_istatus,$_lphone,$_ghouse,$_dstreet,$_cprovince,$_pnameen,$_bnamekh,$_ksex,$_hnamekh,$client_d_type,$_join_nation_id,
+		$this->addElements(array($_ba_price,$_base_price_service,$_service_price,$_join_type,$referecce_national_id,$p_nationality,$_nationality,$_arid_no,$_rid_no,$_bmember,$_vid_no,$_edesc,$_istatus,$_lphone,$_ghouse,$_dstreet,$_cprovince,$_pnameen,$_bnamekh,$_ksex,$_hnamekh,$client_d_type,$_join_nation_id,
 				$_join_with,$_id,$photo,$job,$national_id,$_member,$_namekh,$_nameen,$_sex,
 				$_province,$_house,$_street,$_id_no,$branch_id,$_email,
 				$_phone,$_desc,$_status,$_clientno,$_dob,$clienttype_namekh,$clienttype_nameen));
