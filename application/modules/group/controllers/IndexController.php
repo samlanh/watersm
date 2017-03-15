@@ -29,7 +29,7 @@ class Group_indexController extends Zend_Controller_Action {
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("CUSTOMER_NAME","SEX","VILLAGE","PHONE","STATUS",
+			$collumns = array("លេខកូដអតិថិជន","CUSTOMER_NAME","SEX","VILLAGE","PHONE","STATUS",
 					"CUS_START_DATE");
 			$link=array(
 					'module'=>'group','controller'=>'index','action'=>'edit',
@@ -67,6 +67,8 @@ class Group_indexController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$data['old_photo']=null;
 
+			
+
 				try{
 				 if(isset($data['save_new'])){
 					$id= $db->addClient($data);
@@ -103,13 +105,6 @@ class Group_indexController extends Zend_Controller_Action {
 		$frm = $fm->FrmAddClient();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_client = $frm;
-
-		$dbpop = new Application_Form_FrmPopupGlobal();
-		$this->view->frm_popup_village = $dbpop->frmPopupVillage();
-		$this->view->frm_popup_comm = $dbpop->frmPopupCommune();
-		$this->view->frm_popup_district = $dbpop->frmPopupDistrict();
-		$this->view->frm_popup_clienttype = $dbpop->frmPopupclienttype();
-
 
 	}
 
