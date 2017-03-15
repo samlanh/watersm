@@ -129,27 +129,6 @@ dojo.ready(function(){
 	}, "district");
 
 	new dijit.form.FilteringSelect({
-	store: commune,
-	autoComplete: true,
-	required: false,
-	name: "commune",
-	id: "commune",
-	searchAttr: "name",
-	class: 'fullside',
-	missingMessage:"អ្នក​ភ្លេច​បំពេញ​ ឃុំ/សង្កាត់",
-		onChange: function() {
-			commune = dijit.byId('commune').get('value');
-			if(commune==-1){
-				showPopupCommune();
-			}
-			else{
-				filterVillage();
-			}
-  }
-	}, "commune");
-
-
-	new dijit.form.FilteringSelect({
 	store: village_store,
 	autoComplete: true,
 	required: false,
@@ -282,7 +261,7 @@ dojo.ready(function(){
 				}
 			}
 		}, "qvillage");
-		getClientNo();
+
 	}catch(e){
 		alert(e);
 	}
