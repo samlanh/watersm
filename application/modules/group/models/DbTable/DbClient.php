@@ -7,26 +7,34 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('auth');
     	return $session_user->user_id;
-    	 
+
     }
 	public function addClient($_data){
-	//	print_r($_data);exit();		
+
+	//	print_r($_data);exit();
 		try{
-		    $_arr=array(
+		//	$client_code = $this->getClientCode();
+			$_arr=array(
+				'client_number'=>$_data['client_no'],
 				'name_kh'	  => $_data['name_kh'],
 				'sex'	      => $_data['sex'],
 		    	'phone'	      => $_data['phone'],
+				'price_service'=>$_data['price_service'],
 				'village_id'  => $_data['village_1'],
 				'remark'	  => $_data['desc'],
 				'status'      => $_data['status'],
-		    	'date_cus_start'=>$_data['date_cus_start']	
-				
+		    	'date_cus_start'=>$_data['date_cus_start'],
+				'price_service'=>$_data['price_service'],
+				'unit_price'=>$_data['unit_price'],
+				'total_service'=>$_data['total_service'],
+				'user_id'=>$this->getUserId(),
+
 		);
 		if(!empty($_data['id'])){
 			$where = 'client_id = '.$_data['id'];
 			$this->update($_arr, $where);
 			return $_data['id'];
-			 
+
 		}else{
 			return  $this->insert($_arr);
 		}
@@ -77,13 +85,13 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
     	$row=$db->fetchRow($sql);
     	return $row;
     }
-	function getAllClients($search = null){		
-		try{	
-	
+	function getAllClients($search = null){
+		try{
+
 
 			$db = $this->getAdapter();
-			$sql="SELECT client_id,name_kh,sex,
-(SELECT v.village_name FROM ln_village AS v WHERE v.vill_id = village_id LIMIT 1)
+			$sql="SELECT client_id,client_number,name_kh,sex,
+(SELECT  v.village_name FROM ln_village AS v WHERE v.vill_id = village_id LIMIT 1)
 village_id,phone,status,date_cus_start FROM ln_client";
 			$where=" where 1";
 			if(!empty($search['adv_search'])){
@@ -94,21 +102,21 @@ village_id,phone,status,date_cus_start FROM ln_client";
 				$s_where[] = " village_id LIKE '%{$s_search}%'";
 				$s_where[] = " street LIKE '%{$s_search}%'";
 				$where .=' AND ('.implode(' OR ',$s_where).')';
-		
+
 			}
-	
+
 		/* 	 if($search['status']>-1){
 				$where.= " AND status = ".$search['status'];
 			}
 			 */
 			if(!empty($search['search_village'])){
 				$where.=" AND v.vill_id= ".$search['search_village'];
-			} 
+			}
 			$order=" ORDER BY client_id DESC ";
 			return $db->fetchAll($sql.$where.$order);
 		}catch (Exception $e){
 			echo $e->getMessage();
-		}	
+		}
 	}
 	public function getGroupCodeBYId($data){
 		$db = $this->getAdapter();
@@ -118,17 +126,24 @@ village_id,phone,status,date_cus_start FROM ln_client";
 			WHERE id = ".$data['land_id']." LIMIT 1" ;
 			 $rs = $db->fetchRow($sql);
 			 $rs['house_type']=ltrim(strstr($rs['property_type'], '('), '.');
-			 
+
 			if(empty($rs)){return ''; }else{
 				return $rs;
 			}
-		
+
 	}
+	public function get_base_price(){
+		$db=$this->getAdapter();
+		$sql="SELECT price_service FROM tb_settingprice";
+		return $db->fetchOne($sql);
+
+	}
+
 	function getPrefixCode($branch_id){
 		$db  = $this->getAdapter();
 		$sql = " SELECT prefix FROM `ln_branch` WHERE br_id = $branch_id  LIMIT 1";
 		return $db->fetchOne($sql);
-	}	
+	}
 	public function getClientCode(){//for get client by branch
 		$db = $this->getAdapter();
 			$sql = "SELECT COUNT(client_id) AS number FROM `ln_client`
@@ -137,13 +152,13 @@ village_id,phone,status,date_cus_start FROM ln_client";
 		$new_acc_no= (int)$acc_no+1;
 		$acc_no= strlen((int)$acc_no+1);
 		$pre ="";
-		for($i = $acc_no;$i<6;$i++){
+		for($i = $acc_no;$i<4;$i++){
 			$pre.='0';
 		}
 		return $pre.$new_acc_no;
 	}
 // 	public function adddoocumenttype($data){
-		
+
 // 		$db = $this->getAdapter();
 // 		$document_type=array(
 // 				'name_en'=>$data['clienttype_nameen'],
@@ -151,14 +166,14 @@ village_id,phone,status,date_cus_start FROM ln_client";
 // 				'displayby'=>1,
 // 				'type'=>23,
 // 				'status'=>1
-				
+
 // 		);
-		
+
 // 		$row= $this->insert($document_type);
 // 		return $row;
 // 	}
 	public function addIndividaulClient($_data){
-		
+
 		$client_code = $this->getClientCode($_data['branch_id']);
 			$_arr=array(
 					'is_group'=>0,
@@ -179,18 +194,18 @@ village_id,phone,status,date_cus_start FROM ln_client";
 					'create_date' => date("Y-m-d"),
 					'client_d_type'      => $_data['client_d_type'],
 					'user_id'	  => $this->getUserId(),
-					'dob'			=>$_data['dob_client'],	
+					'dob'			=>$_data['dob_client'],
 					'pro_id'      => $_data['province'],
 					'com_id'      => $_data['commune'],
-					
-			
+
+
 			);
-			
+
 				$this->_name = "ln_client";
 				$id =$this->insert($_arr);
 				return array('id'=>$id,'client_code'=>$client_code);
 	}
-	
+
 	function addViewType($data){
 		try{
 			$db = $this->getAdapter();
@@ -209,14 +224,14 @@ village_id,phone,status,date_cus_start FROM ln_client";
 			echo '<script>alert('."$e".');</script>';
 		}
 	}
-	
+
 	function getLastKeycodeByType($type){
 		$db =$this->getAdapter();
 		$sql = "SELECT key_code FROM `ln_view` WHERE type=$type ORDER BY key_code DESC LIMIT 1 ";
 		$number = $db->fetchOne($sql);
 		return $number+1;
 	}
-	
+
 	function getVillagOpt(){
 		$db =$this->getAdapter();
 		$sql ="SELECT v.`vill_id` AS id, v.`village_name` AS NAME FROM ln_village AS v WHERE	v.`status`=1";
@@ -231,14 +246,14 @@ village_id,phone,status,date_cus_start FROM ln_client";
 		$db = $this->getAdapter();
 		/* $sql="
 		SELECT c.`name_kh`,c.`client_id`,u.`stat_use` FROM `ln_client` AS c ,tb_used AS u WHERE c.`village_id`=$village_id
-		
+
 		"; */
 		$sql="SELECT c.`name_kh`,c.`client_id` FROM `ln_client` AS c WHERE c.`village_id`=$village_id";
 		return  $db->fetchAll($sql);
 	}
 		function getClientInfo($village_id){
 			$db = $this->getAdapter();
-		
+
 			$sql="
 			
 		SELECT  `ln_client`.`client_id`, `ln_client`.`name_kh`,`ln_client`.`village_id`, `ln_client`.`date_cus_start` ,`tb_used`.`stat_use` AS sat_use, tb_settingprice.`price` as price
@@ -251,7 +266,7 @@ village_id,phone,status,date_cus_start FROM ln_client";
 			return  $db->fetchAll($sql);
 		}
 	function addused($data){
-	
+
 	 $db = $this->getAdapter();
      $db->beginTransaction();
      try{
@@ -263,7 +278,7 @@ village_id,phone,status,date_cus_start FROM ln_client";
       $this->_name='tb_used';
          $this->insert($arr);
       $db->commit();
-      
+
      }catch(exception $e){
       //echo $e->getMessage();exit();
       Application_Form_FrmMessage::message("Application Error");

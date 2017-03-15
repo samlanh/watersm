@@ -1,6 +1,6 @@
 <?php
 
-class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
+class Group_Model_DbTable_DbClientold extends Zend_Db_Table_Abstract
 {
 
     protected $_name = 'ln_client';
@@ -165,7 +165,7 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 		$new_acc_no= (int)$acc_no+1;
 		$acc_no= strlen((int)$acc_no+1);
 		$pre ="";
-		for($i = $acc_no;$i<6;$i++){
+		for($i = $acc_no;$i<3;$i++){
 			$pre.='0';
 		}
 		return $pre.$new_acc_no;
