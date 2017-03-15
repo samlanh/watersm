@@ -83,12 +83,11 @@ function geteAllSettingprice($search=null){
 	}
 	
 	
-	
-	
 	public function getSettingpriceById($id){
 		$db = $this->getAdapter();
 		$sql = "SELECT * FROM `tb_settingprice` AS t WHERE t.`setid`=".$id;
 		return $db->fetchRow($sql);
+		//print_r($sql);exit();
 	}
 	function ajaxPropertytype($data){ // used on ProperiestypeController
 		$this->_name='tb_settingprice';

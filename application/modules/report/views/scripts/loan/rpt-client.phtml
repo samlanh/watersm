@@ -1,0 +1,141 @@
+<?php 
+
+$frm = $this->frm_search;
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+?>
+<script>
+dojo.require("dijit.form.DateTextBox");
+</script>
+<style>
+.hover:hover{background: #ccc;}
+</style>
+<meta charset="utf-8">
+<title><?php echo $tr->translate("REPORT_DAILY_CASH");?></title>
+<form name="frm_rptstaff" action="<?php echo $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-client')); ?>" dojoType="dijit.form.Form" method="post">
+	<table style="width:28cm; margin: 0 auto;">
+		<tr>  
+	        <td><?php echo $frm->getElement("adv_search");?></td>
+	        <td><?php  echo $frm->getElement('village_name');?></td>
+	   		<td><?php echo $frm->getElement('client_name');?></td>
+	   		<td><?php //echo $frm->getElement('start_date');?></td>
+	   		
+	   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+	   </tr>
+	</table>
+ </form> 
+<div style=" width:28cm;min-height:22cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.5cm">
+	<table style="font-family: 'Khmer OS Content'; width:100%;"  >
+		<tr>
+    		<td align="center">
+    	 		<div id="divPrint">
+    	 			<style>
+						.style{
+							line-height: 20px;font-size: 12px !important;
+							font-family: 'Khmer OS Battambang';
+						}
+						th{padding: 5px;}
+					</style>
+        			<table width="100%" style="font-family:'Khmer OS Battambang';" style="margin:0; padding:0;border:none;" >
+			        	<tr>
+			                <td width="20%"><img src="<?php echo $this->baseUrl();?>/images/logo.jpg" height="85px"></td>
+			                <td width="60%" valign="top">
+			                 <h2 style="text-align:center; font-size:16px; font-family:'Khmer MEF2'"><label><?php echo $tr->translate("WATER_STATION_PDAO");?></label></h2>
+			                </td>
+			                <td width="20%"></td>
+			             </tr>
+			             <tr>
+			             	<td width="20%">&nbsp;</td>
+			                <td width="60%" valign="top">
+			                <h2 style="text-align:center; font-size:16px; font-family:'Khmer MEF2'"><label><?php echo $tr->translate("PHONE_NUMBER");?> </label>:<?php echo ("016 885 866/ 015 777 262");?></h2>
+			                <p style="text-align:center; font-size:13px; font-family:'Khmer MEF2'"><?php echo $tr->translate("PREY_PDAO");?></p>
+			                </td>
+			                <td width="20%"></td>
+			             </tr>
+			           	<tr>
+			            	<td colspan="3" id="exportExcel">
+			            			<table width="100%" border="1" style="border-collapse:collapse; border:1px solid #000; " cellspacing="0">
+						               	<?php $all=$this->rows;?>
+						               <tr  class="style" align="center" style="padding:0px 2px;white-space: nowrap;">
+						                    <td  width="10%" rowspan="3"​​><?php echo $tr->translate("CODE");?></td>
+						                    <td width="15%" rowspan="3"​​><?php echo $tr->translate("CUSTOMER_NAME");?></td>
+						                    <td width="10%" rowspan="3"​​><?php echo $tr->translate("PHONE_NUMBER");?></td>	       
+						                    <td width="10%" rowspan="3"​​><?php echo $tr->translate("OLD_CONTER");?></td>
+						                    <td  width="10%"​​ rowspan="3"​​><?php echo $tr->translate("NEW_CONTER");?></td>
+						                    <td width="10%" rowspan="2"><?php echo $tr->translate("TOTAL_USED_WATER");?></td>
+						                    <td width="10%" rowspan="3"​​><?php echo $tr->translate("TOTAL_TO_PAY");?></td>	       
+						                    <td width="10%" rowspan="2"​​><?php echo $tr->translate("MONEY_DEBTS");?></td>
+						                ​​	<td width="15%"><?php echo $tr->translate("TOTAL_PAID_MONEY");?></td>
+						                  
+						                 </tr>  
+						                 <tr  class="style" align="center" style="padding:0px 2px;white-space: nowrap;"> 
+						                ​​	<td width="15%"><?php echo $tr->translate("15 ធ្នូ​  2016");?></td>
+						                 </tr>  
+						                 <tr  class="style" align="center" style="padding:0px 2px;white-space: nowrap;">  
+						                    <td width="10%"><?php echo $tr->translate("ចំនួនទឹក");?></td>
+						                    <td width="10%"><?php echo $tr->translate("2,5678576");?></td>
+						                ​​	<td width="15%"><?php echo $tr->translate("8,69876435");?></td>
+						                </tr>
+						            
+						              <?php $total_water=0; $price=0; $no=1; foreach ($all as $row) 
+						             // print_r($row['name_kh']);exit();
+						             // $total_water=;
+						              //$price=$total_water*$row['price'];
+						              {?> 
+						              
+						                 <tr  class="style" align="center" style="padding:0px 2px;white-space: nowrap;">
+						                    <td width="10%"​​><?php echo $no;?></td>
+						                    <td width="15%"><?php echo $row['name_kh'];?></td>
+						                    <td width="10%"><?php echo $row['phone'];?></td>	       
+						                    <td width="10%"><?php echo $row['stat_use'];?></td>
+						                    <td width="10%"​​​​><?php echo $row['end_use'];?></td>
+						                    <td width="10%"><?php echo $row['end_use']-$row['stat_use'];?></td>
+						                    <td width="10%"​​><?php echo ($row['end_use']-$row['stat_use'])*$row['price'];?></td>	       
+						                    <td width="10%"​​><?php // echo $row[''];?></td>
+						                ​​	<td width="15%"><?php //echo $row[''];?></td>
+						                  
+						                 </tr> 
+						                 
+						            <?php $no++;}?>        
+					            </table>
+			            	</td>
+			            	
+			            </tr>
+            			
+            	</table>
+            </div>
+    	</td>
+    </tr>
+    
+	</table>
+		<br />
+		   
+</div>
+<script type="text/javascript">
+		dojo.require("dojo.data.ItemFileWriteStore"); 
+		dojo.require("dojo.NodeList-manipulate");
+		dojo.require("dojo.html");
+		var adistrict_store  = getDataStorefromJSON('id','name', <?php print_r(Zend_Json::encode(array()));?> );
+		url_getvillagecode = '<?php echo $this->url(array('module'=>'group','controller'=>'index','action'=>'get-code-village'));?>';
+		function getvillagecode(){
+		 vllage = dijit.byId('village_name').get('value');
+		 if(vllage==0){
+		  return false;}
+		 dojo.xhrPost({
+		  url:url_getvillagecode, 
+		  content:{ 
+		   'vllage': vllage
+		  },
+		  handleAs:"json",
+		  load: function(data) { 
+		   alert("");
+		   //dijit.byId('client_no').attr('value',data.code);
+		   //district_store  = getDataStorefromJSON('id','name', data);  
+		    //  dijit.byId('village_code').set('value',data.code);
+		  },
+		  error: function(err) {
+		   alert(err);
+		  }
+		 }); 
+		}
+	</script>
+

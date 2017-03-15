@@ -19,8 +19,6 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 		$_date_cus_start= new Zend_Dojo_Form_Element_DateTextBox('date_cus_start');
 		$_date_cus_start->setAttribs(array('dojoType'=>'dijit.form.DateTextBox','class'=>'fullside','constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
-		
-		
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		$db = new Application_Model_DbTable_DbGlobal();
 		
@@ -92,11 +90,7 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 				'readonly'=>'readonly',
 				'style'=>'color:red;'
 		));
-		
-		//$_village_code->setValue();
-		
- 		
-	
+
 		$_nameen = new Zend_Dojo_Form_Element_TextBox('name_en');
 		$_nameen->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
@@ -546,31 +540,9 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 		
 		if($data!=null){
 			$branch_id->setValue($data['branch_id']);
-			$branch_id->setAttribs(array("readonly"=>true));
-			$_id_no->setValue($data['id']);
-			$_desc->setValue($data['note']);
-			$_status->setValue($data['status']);
-			$_landcode->setValue($data['land_code']);
-			$landaddress->setValue($data['land_address']);
-			$_price->setValue($data['price']);
-			$land_price->setValue($data['land_price']);
-			$house_price->setValue($data['house_price']);
-			$_size->setValue($data['land_size']);
-			$width->setValue($data['width']);
-			$height->setValue($data['height']);
-			$street->setValue($data['street']);
-			$hardtitle->setValue($data['hardtitle']);
-			$_village->SetValue($data['village']);
-			//$_cust_select->SetVaue($data['cust_select']);
-			$BuidingYear->setValue($data['buidingyear']);
-			$ParkingSpace->setValue($data['parkingspace']);
-			$dinnerroom->setValue($data['dinnerroom']);
-			$living->setValue($data['living']);
-			$bedroom->setValue($data['bedroom']);
-			$propertiestype->setValue($data['property_type']);
-			$floor->setValue($data['floor']);
+			
 		}
-		$this->addElements(array($_search_village,$_village,$streetlist,$street,$propertiestype_search,$land_price,$house_price,$branch_id,$photo,$BuidingYear,$ParkingSpace,$dinnerroom,$living,$bedroom,$propertiestype,$floor,$_id_no,$_desc,$_status,$_landcode,$landaddress,$_price,$_size,$width,$height,$hardtitle));
+		$this->addElements(array($_search_village,));
 		return $this;
 	
 	}

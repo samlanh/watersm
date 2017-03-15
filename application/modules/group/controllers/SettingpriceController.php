@@ -99,8 +99,8 @@ class Group_SettingpriceController extends Zend_Controller_Action {
    		$_data = $this->getRequest()->getPost();
    		$_db = new Group_Model_DbTable_DbSettingprice();
    		$id = $_db->ajaxPropertytype($_data);
-   		print_r(Zend_Json::encode($id));
-   		exit();
+   		//print_r(Zend_Json::encode($id));
+   		//exit();
    	}
    }
 }

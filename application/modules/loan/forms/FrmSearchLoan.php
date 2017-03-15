@@ -3,6 +3,7 @@ Class Loan_Form_FrmSearchLoan extends Zend_Dojo_Form {
 	protected $tr;
 	public function init()
 	{
+		//$baseurl =  Zend_Controller_Front::getInstance()->getBaseUrl();
 		$this->tr = Application_Form_FrmLanguages::getCurrentlanguage();
 	}
 	public function AdvanceSearch($data=null){
@@ -34,34 +35,6 @@ Class Loan_Form_FrmSearchLoan extends Zend_Dojo_Form {
 				'class'=>'fullside',
 		
 		));
-		
-// 		$_group_code = new Zend_Dojo_Form_Element_FilteringSelect('group_code');
-// 		$_group_code->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// // 				'class'=>'fullside',
-// 				'onchange'=>'getmemberIdGroup();'
-// 		));
-// 		$group_opt = $db ->getGroupCodeById(1,1,1);
-// 		$_group_code->setMultiOptions($group_opt);
-// 		$_group_code->setValue($request->getParam("group_code"));
-		
-// 		$_customer_code = new Zend_Dojo_Form_Element_FilteringSelect('customer_code');
-// 		$_customer_code->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'onchange'=>'getmemberIdGroup();'
-// 		));
-// 		$group_opt = $db ->getGroupCodeById(1,0,1);//code,individual,option
-// 		$_customer_code->setMultiOptions($group_opt);
-// 		$_customer_code->setValue($request->getParam("customer_code"));
-		
-// 		$_member = new Zend_Dojo_Form_Element_FilteringSelect('member');
-// 		$_member->setAttribs(array(
-// 				'dojoType'=>'dijit.form.FilteringSelect',
-// 				'onchange'=>'checkMember()'
-// 		));
-// 		$options = $db->getGroupCodeById(2,0,1);
-// 		$_member->setMultiOptions($options);
-// 		$_member->setValue($request->getParam("member"));
 		
 		$land_id = new Zend_Dojo_Form_Element_FilteringSelect('land_id');
 		$land_id->setAttribs(array(
@@ -127,7 +100,7 @@ Class Loan_Form_FrmSearchLoan extends Zend_Dojo_Form {
 		$_dateline->setValue($_date);
 		
 		$client_name = new Zend_Dojo_Form_Element_FilteringSelect("client_name");
-		$opt_client = array(''=>'ជ្រើសរើស ឈ្មោះអតិថិជន');
+		$opt_client = array(''=>'ជ្រើសរើស ឈ្មោះអតិថិជន',);
 		$rows = $db->getAllClient();
 		if(!empty($rows))foreach($rows AS $row){
 			$opt_client[$row['id']]=$row['name'];
@@ -135,6 +108,9 @@ Class Loan_Form_FrmSearchLoan extends Zend_Dojo_Form {
 		$client_name->setMultiOptions($opt_client);
 		$client_name->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside',));
 		$client_name->setValue($request->getParam("client_name"));
+		
+		
+		
 		
 		$_branch_id = new Zend_Dojo_Form_Element_FilteringSelect('branch_id');
 		$_branch_id->setAttribs(array(
@@ -145,6 +121,13 @@ Class Loan_Form_FrmSearchLoan extends Zend_Dojo_Form {
 		$options = $db->getAllBranchName(null,1);
 		$_branch_id->setMultiOptions($options);
 		$_branch_id->setValue($request->getParam("branch_id"));
+		
+		
+		
+		
+		
+		
+		
 		
 		$propertiestype = new Zend_Dojo_Form_Element_FilteringSelect('property_type');
 		$propertiestype->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect','class'=>'fullside','onChange'=>'showPopupForm();'));
@@ -194,14 +177,41 @@ Class Loan_Form_FrmSearchLoan extends Zend_Dojo_Form {
 		$buy_type->setMultiOptions($options);
 		$buy_type->setValue($request->getParam("buy_type"));
 		
+		
+		
+		
+		
+		$village_name = new Zend_Dojo_Form_Element_FilteringSelect("village_name");
+		$opt_village = array(''=>'ជ្រើសរើស ឈ្មោះភូមិ',
+							
+				);
+		$rows = $db->getAllvillage();
+		
+		if(!empty($rows))foreach($rows AS $row){
+			$opt_village[$row['vill_id']]=$row['village_namekh'];
+
+		}
+		
+		
+		
+		$village_name->setMultiOptions($opt_village);
+		$village_name->setAttribs(array('dojoType'=>'dijit.form.FilteringSelect',
+										'class'=>'fullside',
+										'onchange'=>'getvillagecode();'));
+		$village_name->setValue($request->getParam("village_namekh"));
+		
+		/*This is my code*/
+		
+		
 		if($data!=null){
 // 			$_member->setValue($data['client_id']);
 			$_coid->setValue($data['co_id']);
 			$_releasedate->setValue($data['date_release']);
 			$client_name->setValue($data['client_name']);
+			$village_name->setValue($data['village_name']);
 		}
 		$this->addElements(array($buy_type,$payment_type,$land_id,$propertiestype,$schedule_opt,$_branch_id,$client_name,$_title,$_coid,$_releasedate,
-				$_category,$category_id_expense,
+				$_category,$category_id_expense,$village_name,
 		// 				$_groupid,$_member,$_group_code,$_customer_code,
 				$_dateline,$_status,$_btn_search));
 		return $this;
@@ -275,6 +285,14 @@ Class Loan_Form_FrmSearchLoan extends Zend_Dojo_Form {
 		$_branch_id->setMultiOptions($options);
 		$_branch_id->setValue($request->getParam("branch_id"));
 		
+// 		$date=new Zend_Dojo_Form_Element_DateTextBox('date');
+// 		$date->setAttribs(array(
+// 				'dojoType'=>'dijit.form.DateTextBox',
+// 				'class'=>'fullside',
+// 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+// 		));
+// 		$date->setValue(date('Y-m-d'));
+		
 		
 		if($data!=null){
 			//print_r($data);
@@ -287,3 +305,6 @@ Class Loan_Form_FrmSearchLoan extends Zend_Dojo_Form {
 		
 	}
 }
+?>
+
+	

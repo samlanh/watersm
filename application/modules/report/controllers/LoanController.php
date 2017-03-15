@@ -280,9 +280,9 @@ class Report_LoanController extends Zend_Controller_Action {
   	
   	if($this->getRequest()->isPost()){
   		$search = $this->getRequest()->getPost();
-  		if(isset($search['btn_search'])){
-  			$this->view->rpt_income_permonth=$db->getAllrtpclient($search);
-  		}
+  		///if(isset($search['btn_search'])){
+  			//$this->view->rpt_income_permonth=$db->getAllrtpclient($search);
+  		//}
   	}else {
   		$search = array(
   				'adv_search' => '',
@@ -290,9 +290,10 @@ class Report_LoanController extends Zend_Controller_Action {
   				'client_name' =>-1,
   				
   		);
-  		$this->view->rpt_income_permonth =$rs=$db->getAllrtpclient($search);
+  		///$this->view->rpt_income_permonth =$rs=$db->getAllrtpclient($search);
   	}
   	//$this->view->list_end_date=$search;
+
   	$this->view->rows =$db->getAllrtpclient($search);
   	$frm = new Loan_Form_FrmSearchLoan();
   	$frm = $frm->AdvanceSearch();
@@ -344,15 +345,25 @@ class Report_LoanController extends Zend_Controller_Action {
   		$search = array(
   				'adv_search' => '',
   				'village_name' => '',
-  				'client_name' =>-1,
+  				'start_date' =>date('Y-m-d'),
+  				'end_date' => date('Y-m-d'),
   
   		);
   		$this->view->rpt_income_permonth =$rs=$db->getAllRptofvillage($search);
   	}
   	//$this->view->list_end_date=$search;
   	$this->view->rows =$db->getAllRptofvillage($search);
-  	
+  	$frm = new Loan_Form_FrmSearchLoan();
+  	$frm = $frm->AdvanceSearch();
+  	Application_Model_Decorator::removeAllDecorator($frm);
+  	$this->view->frm_search = $frm;
   
+  
+  
+  }
+  public function selectSum(){
+  	$db = new Report_Model_DbTable_DbLandreport();
+  	$this->view->rowss =$db->getAllDbsumtotalwater();
   	$frm = new Loan_Form_FrmSearchLoan();
   	$frm = $frm->AdvanceSearch();
   	Application_Model_Decorator::removeAllDecorator($frm);
@@ -389,12 +400,7 @@ class Report_LoanController extends Zend_Controller_Action {
   
   }
   
-
-  
   /*end of my code*/
-  
-  
-  
   
 function rptLoanTotalCollectAction(){
 	$db  = new Report_Model_DbTable_DbLandreport();	
@@ -980,9 +986,11 @@ public function exportFileToExcel($table,$data,$thead){
   	$this->view->customer =  $db->getIndividuleClient();
   
   }
+  
+  
 
   
-	  public function getTotalPriceAction(){  
+	  /* public function getTotalPriceAction(){  
 	  	if($this->getRequest()->isPost()){
 	  		
 	  		$data=$this->getRequest()->isPost();
@@ -993,7 +1001,7 @@ public function exportFileToExcel($table,$data,$thead){
 	  	  		
 	 	 	}
 	 	  
-	  }
+	  } */
   
  
 }

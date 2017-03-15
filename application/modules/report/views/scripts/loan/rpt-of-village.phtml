@@ -1,0 +1,118 @@
+<?php 
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+$frm = $this->frm_search;
+?>
+<script>
+dojo.require("dijit.form.DateTextBox");
+</script>
+<style>
+.hover:hover{background: #ccc;}
+</style>
+<meta charset="utf-8">
+<title><?php echo $tr->translate("REPORT_INCOME_PER_MONTH");?></title>
+<form name="frm_rptstaff" action="<?php echo $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-of-village')); ?>" dojoType="dijit.form.Form" method="post">
+	<table style="width:28cm; margin: 0 auto;">
+		<tr>  
+	        <td><?php echo $frm->getElement("adv_search");?></td>
+	        <td><?php echo $frm->getElement('village_name'); ?></td>
+	   		<td><?php //echo $frm->getElement('client_name');?></td>
+	   		<td><?php echo $frm->getElement('start_date');?></td>
+	   		<td><?php echo $frm->getElement('end_date');?></td>
+	   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
+	   </tr>
+	</table>
+ </form> 
+<div style=" width:28cm;min-height:22cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.5cm">
+	<table style="font-family: 'Khmer OS Content'; width:100%;"  >
+	
+		<tr>
+    		<td align="center">
+    	 		<div id="divPrint">
+    	 			<style>
+						.style{
+							line-height: 20px;font-size: 12px !important;
+							font-family: 'Khmer OS Battambang';
+						}
+						th{padding: 5px;}
+					</style>
+        			<table width="100%" style="font-family:'Khmer OS Battambang';" style="margin:0; padding:0;border:none;" >
+			        	<tr>
+			                <td width="20%"><img src="<?php echo $this->baseUrl();?>/images/logo.jpg" height="85px"></td>
+			                <td width="60%" valign="top">
+			                 <h2 style="text-align:center; font-size:16px; font-family:'Khmer MEF2'"><label><?php echo $tr->translate("WATER_STATION_PDAO");?></label></h2>
+			                </td>
+			                <td width="20%"></td>
+			             </tr>
+			             <tr>
+			             	<td width="20%">&nbsp;</td>
+			                <td width="60%" valign="top">
+			                <h2 style="text-align:center; font-size:16px; font-family:'Khmer MEF2'"><label><?php echo $tr->translate("PHONE_NUMBER");?> :<?php echo ("016 885 866/ 015 777 262");?></label></h2>
+			                <p style="text-align:center; font-size:13px; font-family:'Khmer MEF2'"><?php echo $tr->translate("REPORT_WATER_OF_VILLAGE");?>: <?php echo date("D-d-m-Y",strtotime($this->list_end_date));?></p>
+			                </td>
+			                <td width="20%"></td>
+			             </tr>
+			           	<tr>
+			            	<td colspan="3" id="exportExcel">
+			            			<table width="100%" border="1" style="border-collapse:collapse; border:1px solid #000; " cellspacing="0">
+						               <?php $all=$this->rows;?>
+						                <tr  class="style" align="center" style="padding:0px 2px;white-space: nowrap;">
+						                    <td  width="15%"​​><?php echo $tr->translate("VILLAGE");?></td>
+						                    <td width="15%"><?php echo $tr->translate("TOTAL_WATER");?></td>
+						                    <td width="15%"><?php echo $tr->translate("TOTAL_MONEY");?></td>
+						                     <td width="15%"><?php echo $tr->translate("DEBTS_BEFORE");?></td>
+						                    <td width="20%"><?php echo $tr->translate("TOTAL_PAYMENT_MONEY");?></td>	       
+						                    <td width="20%"><?php echo $tr->translate("DEBTS");?></td>
+						                  
+						                 </tr>  
+						                   <?php 
+						                   $totalAllwater=0; $totalallprice=0; $debemoney=0;$totaldepe=0;$totaldepebefor=0;
+						                   $alldepebefore=0;$alltotalpaid=0;
+						                   
+						                   foreach  ($all as $rows) 
+						                   
+						             	 {
+						             	 	
+						             	 	$totalAllwater+=$rows['total_water'];
+						             	 	$totalallprice+=$rows['total_price'];
+						             	 	$debemoney=$rows['total_price']-$rows['totalpaid'];
+						             	 	$totaldepe+=$debemoney;
+						             	 	$totaldepebefor=$rows['total_price']-$rows['totalpaid'];
+						             	 	$alldepebefore+=$totaldepebefor;
+						             	 	$alltotalpaid+=$rows['totalpaid'];
+						             	 	?> 
+						                <tr  class="style" align="center" style="padding:0px 2px;white-space: nowrap;">  
+						                    <td width="15%"​​><?php echo $rows['village_namekh'];?><br><?php //echo $tr->translate("PDAO");?></td>
+						                    <td width="15%"><?php echo $rows['total_water'];?></td>
+						                    <td width="15%"><?php echo $rows['total_price'];?></td>
+						                    <td width="15%"><?php echo $totaldepebefor; ?></td>	
+						                    <td width="20%"><?php echo $rows['totalpaid'];?></td>	       
+						                    <td width="20%"><?php echo $debemoney;?></td>
+						                  
+						                   
+						                </tr>  
+										  <?php }?>        
+						                  <tr bgcolor="#c1d0f3" class="style" align="center" style="padding:0px 2px;white-space: nowrap;">
+						                    <td  width="15%"><?php echo ("TOTAL");?></td>
+						                    <td  width="15%"> <?php echo $totalAllwater ;?></td>
+						                    <td  width="15%"><?php echo $totalallprice;?></td>	       
+						                    <td  width="15%"><?php echo $alldepebefore;?></td>
+						                    <td  width="20%"><?php echo $alltotalpaid;?></td>	       
+						                    <td  width="20%"><?php echo $totaldepe;?></td>
+						                </tr> 
+						                 
+						                
+					            </table>
+			            	</td>
+			            	
+			            </tr>
+            			
+            	</table>
+            </div>
+    	</td>
+    </tr>
+    
+	</table>
+		<br />
+		   
+</div>
+
