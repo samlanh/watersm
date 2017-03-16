@@ -134,7 +134,7 @@ village_id,phone,status,date_cus_start FROM ln_client";
 	}
 	public function get_base_price(){
 		$db=$this->getAdapter();
-		$sql="SELECT price_service FROM tb_settingprice";
+		$sql="SELECT service_price FROM tb_settingprice";
 		return $db->fetchOne($sql);
 
 	}
@@ -256,13 +256,12 @@ village_id,phone,status,date_cus_start FROM ln_client";
 
 			$sql="
 			
-		SELECT  `ln_client`.`client_id`, `ln_client`.`name_kh`,`ln_client`.`village_id`, `ln_client`.`date_cus_start` ,`tb_used`.`stat_use` AS sat_use, tb_settingprice.`price` as price
+	SELECT  `ln_client`.`client_id`,ln_client.client_number, `ln_client`.`name_kh`,`ln_client`.`village_id`, `ln_client`.`date_cus_start` ,`tb_used`.`stat_use` AS sat_use, tb_settingprice.`price` AS price
 		FROM `ln_client` INNER JOIN `tb_used`
 		ON `ln_client`.`client_id`=`tb_used`.`client_id`
 		INNER JOIN `tb_settingprice` 
 		ON `tb_used`.`price_set_id`=`tb_settingprice`.`setId`
-		WHERE `ln_client`.`village_id`=$village_id
-				";
+		WHERE `ln_client`.`village_id`=$village_id";
 			return  $db->fetchAll($sql);
 		}
 	function addused($data){
