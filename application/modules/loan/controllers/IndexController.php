@@ -46,13 +46,14 @@ class Loan_IndexController extends Zend_Controller_Action {
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_search = $frm;
 		
-		//$db = new Loan_Model_DbTable_DbLandpayment();
-		//$db->updateEnddateSale();
+		$db = new Loan_Model_DbTable_DbLandpayment();
+		$db->updateEnddateSale();
   }
   function addAction()
   {
 		if($this->getRequest()->isPost()){
 			$_data = $this->getRequest()->getPost();
+			
 			try {
 				$_dbmodel = new Loan_Model_DbTable_DbPayUsed();
 				$_dbmodel->addDetailUsed($_data);
