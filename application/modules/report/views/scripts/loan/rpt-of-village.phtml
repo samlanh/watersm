@@ -13,7 +13,7 @@ dojo.require("dijit.form.DateTextBox");
 <form name="frm_rptstaff" action="<?php echo $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-of-village')); ?>" dojoType="dijit.form.Form" method="post">
 	<table style="width:28cm; margin: 0 auto;">
 		<tr>  
-	        <td><?php //echo $frm->getElement("adv_search");?></td>
+	        <td><?php echo $frm->getElement("adv_search") ; ?></td>
 	        <td><?php echo $frm->getElement('village_name'); ?></td>
 	   		<td><?php echo $frm->getElement('start_date');?></td>
 	   		<td><?php echo $frm->getElement('end_date');?></td>
@@ -61,24 +61,25 @@ dojo.require("dijit.form.DateTextBox");
 						                    <td width="15%"><?php echo $tr->translate("DEBTS_BEFORE");?></td>
 						                    <td width="15%"><?php echo $tr->translate("TOTAL_PAYMENT_MONEY");?></td>	       
 						                    <td width="15%"><?php echo $tr->translate("DEBTS");?></td>
-						                    <td width="10%"><?php echo $tr->translate("Months");?></td>
+						                    <td width="10%"><?php echo $tr->translate("ចាប់ពីខែ");?></td>
+						                    <td width="10%"><?php echo $tr->translate("រហូតដល់ខែ");?></td>
 						                  
 						                 </tr>  
 						                   <?php 
-						                   $totalAllwater=0; $totalallprice=0; $debemoney=0;$totaldepe=0;$totaldepebefor=0;
-						                   $alldepebefore=0;$alltotalpaid=0;
+						                   	$totalAllwater=0; $totalallprice=0; $debemoney=0;$totaldepe=0;$totaldepebefor=0;
+						                   	$alldepebefore=0;$alltotalpaid=0;
 						                   
 						                   foreach  ($all as $rows) 
 						                   
 						             	 {
 						             	 	
-						             	 	$totalAllwater+=$rows['total_water'];
-						             	 	$totalallprice+=$rows['total_price'];
+					             	 	 	$totalAllwater+=$rows['total_water'];
+					             	 		$totalallprice+=$rows['total_price'];
 						             	 	$debemoney=$rows['total_price']-$rows['totalpaid'];
 						             	 	$totaldepe+=$debemoney;
 						             	 	$totaldepebefor=$rows['total_price']-$rows['totalpaid'];
-						             	 	$alldepebefore+=$totaldepebefor;
-						             	 	$alltotalpaid+=$rows['totalpaid'];
+					             	 		$alldepebefore+=$totaldepebefor;
+						             	 	$alltotalpaid+=$rows['totalpaid']; 
 						             	 	?> 
 						                <tr  class="style" align="center" style="padding:0px 2px;white-space: nowrap;">  
 						                    <td width="15%"​​><?php echo $rows['village_namekh'];?><br><?php //echo $tr->translate("PDAO");?></td>
@@ -87,7 +88,8 @@ dojo.require("dijit.form.DateTextBox");
 						                    <td width="15%"><?php echo $totaldepebefor; ?></td>	
 						                    <td width="15%"><?php echo $rows['totalpaid'];?></td>	       
 						                    <td width="15%"><?php echo $debemoney;?></td>
-						                    <td width="10%"><?php echo $debemoney;?></td>
+						                    <td width="10%"><?php echo $rows['date_start'];?></td>
+						                    <td width="10%"><?php echo $rows['date_stop'];?></td>
 						                  
 						                   
 						                </tr>  
@@ -99,7 +101,8 @@ dojo.require("dijit.form.DateTextBox");
 						                    <td  width="15%"><?php echo $alldepebefore;?></td>
 						                    <td  width="15%"><?php echo $alltotalpaid;?></td>	       
 						                    <td  width="15%"><?php echo $totaldepe;?></td>
-						                    <td  width="10%"><?php echo $totaldepe;?></td>
+						                    <td  width="10%"><?php //echo "Months";?></td>
+						           			<td  width="10%"><?php //echo "Months";?></td>
 						                </tr> 
 						                 
 						                
