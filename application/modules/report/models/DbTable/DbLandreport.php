@@ -179,38 +179,46 @@ function getAllrtpclient($search=null){
       	return $db->fetchAll($sql.$where.$order);
       }     
       
-      function getAllRptofvillage($search=null){
-      	$db=$this->getAdapter();
-      	
-      	$sql=" SELECT  v.vill_id ,
-			        v.village_namekh,v.village_name ,u.village_id,
-			        SUM(u.total_use) AS total_water ,
-			        SUM(u.total_price) AS total_price,
-			        SUM(u.is_paid) AS totalpaid
-			  
-			   FROM
-				     ln_village AS v ,
-				     tb_used AS u
-			   WHERE 
-				     u.village_id =v.vill_id AND u.statust=1 GROUP BY u.village_id ";
-      	$where=" ";
-      	
-      	if(!empty($search['adv_search'])){
-      		$s_where=array();
-      		$s_search=$search['adv_search'];
-      		$s_where[]="village_namekh  LIKE '%{$s_search}%'";
-      		$s_where[]="village_name  LIKE '%{$s_search}%'";
-      		$where .=' AND ('.implode(' OR ',$s_where).')';
-      	}
+ function getAllRptofvillage($search=null){
+     $db=$this->getAdapter();
   
-    
-//       if($search['village_name']>0){
-//       		$where.=" AND v.vill_id= ".$search['village_name'];
-//       	}
-      	$order = " ";
-      	//echo $sql.$where.$order;
-      	return $db->fetchAll($sql.$where.$order);
+      
+     $sql=" SELECT  v.vill_id,v.village_namekh,v.village_name ,u.village_id,
+		        SUM(u.total_use) AS total_water ,
+		        SUM(u.total_price) AS total_price,
+		        SUM(u.is_paid) AS totalpaid,
+		        s.setId,s.date_start,s.date_stop
+			  
+		   FROM
+			     ln_village AS v,
+			     tb_used AS u,
+			     tb_settingprice s
+		   WHERE 
+			     v.vill_id=u.village_id  AND u.seting_price_id=s.setId AND u.statust=1 ";
+      $where=" ";
+      
+     /*  $from_date =(!empty($search['start_date']))? '1': " date_start >= '".$search['start_date']." 00:00:00'";
+      $to_date = (!empty($search['end_date']))? '1': " date_stop <= '".$search['end_date']." 23:59:59'";
+      
+      $where = " AND ".$from_date." AND ".$to_date; */
+      
+      if(!empty($search['adv_search'])){
+      	$s_where=array();
+      	$s_search=$search['adv_search'];
+      	$s_where[]="village_namekh  LIKE'%{$s_search}%'";
+      	$where .=' AND ('.implode(' OR ',$s_where).')';
       }
+      if(!empty($search['village_name'])){
+      		$where.=" AND u.village_id= ".$search['village_name'];
+      	}
+      	
+     
+      
+      $where .= "  GROUP BY  u.village_id";
+      
+      echo $sql.$where;
+      return $db->fetchAll($sql.$where);
+ }
 
       function getAllCustomuse($search=null){
       	$db=$this->getAdapter();
@@ -244,6 +252,37 @@ function getAllrtpclient($search=null){
       	return $db->fetchAll($sql.$where.$order);
       }
 
+      
+       function  getAllMonthvillage($search=null){
+       	$db=$this->getAdapter();
+       	$sql=" SELECT   c.name_kh,c.client_number ,c.phone,c.village_id,v.village_namekh,
+       					u.stat_use,u.end_use,u.client_id,u.village_id,s.price
+         
+				FROM   
+				     ln_client AS c,
+					  tb_used AS u,
+					  tb_settingprice AS s,
+					  ln_village AS v
+				WHERE c.client_id=u.client_id AND c.village_id=u.village_id AND c.village_id=v.vill_id AND c.status=1";
+       $where=" ";
+      	if(!empty($search['adv_search'])){
+      		$s_where=array();
+      		$s_search=$search['adv_search'];
+      		$s_where[]=" name_kh  LIKE '%{$s_search}%'";
+      		$s_where[]=" phone  LIKE '%{$s_search}%'";
+      		$s_where[]=" client_number  LIKE'%{$s_search}%'";
+      		$s_where[]=" end_use  LIKE'%{$s_search}%'";
+      		$s_where[]=" stat_use  LIKE'%{$s_search}%'";
+      		$where .=' AND ('.implode(' OR ',$s_where).')';
+      	}
+      
+      	$order = " ";
+      	if($search['village_name']>0){
+      		$where.=" AND c.village_id= ".$search['village_name'];
+      	} 
+       	return $db->fetchAll($sql.$where.$order);
+      }
+      
       /*end my code*/
 
       public function getAllLoanCo($search = null){//rpt-loan-released
