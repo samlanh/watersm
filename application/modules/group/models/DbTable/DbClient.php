@@ -4,12 +4,14 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 {
 
     protected $_name = 'ln_client';
+	//protected $_name_used="tb_used";
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('auth');
     	return $session_user->user_id;
 
     }
 	public function addClient($_data){
+
 
 	//	print_r($_data);exit();
 		try{
@@ -38,6 +40,44 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 		}else{
 			return  $this->insert($_arr);
 		}
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
+/*	public function getIdClient($id){
+		$db = $this->getAdapter();
+		$sql = "SELECT client_id FROM $this->_name ORDER BY client_id DESC";
+		$sql.=" LIMIT 1 ";
+		$row=$db->fetchRow($sql);
+		return $row;
+	}*/
+
+	public function getLastClient(){
+		$db = $this->getAdapter();
+		$sql = "SELECT client_id FROM ln_client ORDER BY client_id DESC LIMIT 1 ";
+		$row=$db->fetchRow($sql);
+		print_r($row);exit();
+		return $row;
+	}
+
+	public function addFirstUsed($_data){
+		try{
+			//	$client_code = $this->getClientCode();
+			$_arr=array(
+				'client_id'=>$_data['id'],
+				'end_use'	  => $_data['end_used'],
+				'user_id'=>$this->getUserId(),
+				'new'=>'1',
+				'village_id'  => $_data['village_1'],
+				'price_set_id'=>$_data['price_per_use_id'],
+				'create_date' => date("Y-m-d"),
+				'statust'=> $_data['status'],
+				'client_num'=>$_data['client_no']
+			);
+
+			$this->_name= "tb_used";
+			return  $this->insert($_arr);
+			
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 		}
@@ -132,9 +172,28 @@ village_id,phone,status,date_cus_start FROM ln_client";
 			}
 
 	}
-	public function get_base_price(){
+	public function get_base_service(){
 		$db=$this->getAdapter();
-		$sql="SELECT service_price FROM tb_settingprice";
+		$sql="SELECT service_price FROM tb_settingprice WHERE status='1' order by setId limit 1";
+		return $db->fetchOne($sql);
+
+	}
+
+	public function get_setting_id(){
+		$db=$this->getAdapter();
+		$sql="SELECT setId FROM tb_settingprice WHERE status='1' order by setId limit 1";
+		return $db->fetchOne($sql);
+
+	}
+	public function get_setting_price(){
+		$db=$this->getAdapter();
+		$sql="SELECT price FROM tb_settingprice WHERE status='1' order by setId limit 1";
+		return $db->fetchOne($sql);
+
+	}
+	public function get_price_per_used(){
+		$db=$this->getAdapter();
+		$sql="SELECT setId FROM tb_settingprice WHERE status='1' order by setId limit 1";
 		return $db->fetchOne($sql);
 
 	}
@@ -253,15 +312,29 @@ village_id,phone,status,date_cus_start FROM ln_client";
 	}
 		function getClientInfo($village_id){
 			$db = $this->getAdapter();
-
 			$sql="
 			
-	SELECT  `ln_client`.`client_id`,ln_client.client_number, `ln_client`.`name_kh`,`ln_client`.`village_id`, `ln_client`.`date_cus_start` ,`tb_used`.`stat_use` AS sat_use, tb_settingprice.`price` AS price
-		FROM `ln_client` INNER JOIN `tb_used`
-		ON `ln_client`.`client_id`=`tb_used`.`client_id`
-		INNER JOIN `tb_settingprice` 
-		ON `tb_used`.`price_set_id`=`tb_settingprice`.`setId`
-		WHERE `ln_client`.`village_id`=$village_id";
+	SELECT   
+		c.`client_id` ,
+        c.client_number ,
+        c.`name_kh` ,
+        c.`village_id`,
+		c.`date_cus_start` ,
+	u.`id` ,
+	u.`end_use` ,
+	u.`id`, 
+	u.`price_set_id`,
+	u.`create_date`,
+	p.`price`,
+	p.`date_start`,
+	p.`date_stop`,
+	u.new 
+FROM 
+	`ln_client` AS c , `tb_used` AS u ,tb_settingprice AS p
+WHERE 
+	c.`client_id`=u.`client_id` AND u.`price_set_id`= p.`setId` AND c.`village_id`=$village_id AND u.new=1 AND u.create_date>=p.date_start
+	
+	";
 			return  $db->fetchAll($sql);
 		}
 	function addused($data){
