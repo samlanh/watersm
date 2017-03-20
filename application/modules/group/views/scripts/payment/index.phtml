@@ -1,0 +1,110 @@
+<?php 
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate('SETTINGPRICE'));
+
+?>
+<?php  $frm_pay= $this->frm_pay;?>
+
+<script>
+	dojo.require("dijit/form/DateTextBox");
+	dojo.require("dijit/form/NumberTextBox");
+	dojo.ready(function(){
+		//getStaffCode();
+		});
+</script>
+<form id="add_techer" action="<?php echo $this->url(array('module'=>'group','controller'=>'payment','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+   <table width="30%">
+   	<tr>
+	   <td ><?php echo $frm_pay->getElement("code_search");?></td>
+	   <td ><?php //echo $frm->getElement('status_search');?></td>
+	   <td><?php  //echo $frm->getElement("Datesearch_start");?></td>
+	   <td ><?php //echo $frm->getElement('Datesearch_stop');?></td>
+	   <td><input type="submit" value="search" name="search" label="Search" dojoType="dijit.form.Button" iconClass="dijitIconSearch" /></td>
+	</tr>
+   </table>
+ 
+
+
+<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				return true;
+			} else {
+				return false;
+	}
+</script>		
+<table width="100%" style="margin: 0 auto;">
+	<tr>
+		<td>
+		 <fieldset style="margin-top: -10px;">
+			<legend><strong><?php echo $tr->translate("PAYMENT");?></strong></legend>
+					<table style="margin: 0 auto; width: 100%;" cellspacing="10">
+				   	<?php $all=$this->rows;?>
+				   	  <?php $total_water=0; $price=0; $no=1; foreach ($all as $row) 
+						             
+						{?> 
+						              
+						<tr>
+							<td><?php echo $tr->translate("CODE");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('code');?></td>
+							<td><?php echo $tr->translate("CUSTOMER_NAME");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('customername');?></td>
+							<td><?php //echo $tr->translate("ចំនួនប្រាក់ត្រូបង់");?></td>
+							<td><?php //echo $frm_pay->getElement('moneyto_pay');?></td>
+							<td><?php //echo $tr->translate("បញ្ចូលប្រាក់ដែលបង់");?></td>
+							<td><?php //echo $frm_pay->getElement('input_money');?></td>
+
+						</tr>
+						<tr>
+							<td ><?php echo $tr->translate("ចំនួនប្រាក់ត្រូបង់");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('moneyto_pay');?></td>
+							<td><?php echo $tr->translate("បញ្ចូលប្រាក់ដែលបង់");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('input_money');?></td>
+						
+						
+							<td><?php echo $tr->translate("OLD_CONTER");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('old_conter');?></td>
+							<td><?php echo $tr->translate("NEW_CONTER");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('new_conter');?></td>
+
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate('តម្លៃឋកតា');?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('unit_price');?></td>
+							
+							<td><?php echo $tr->translate("Date_start");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('start_date');?></td>
+							
+							
+							<td><?php echo $tr->translate("Date_stop");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('end_date');?></td>
+							<td><?php echo $tr->translate("ថ្ងៃផុតកំណត់បង់ប្រាក់");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('deadline');?></td>
+							
+							
+							
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("ADDRESS");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('address');?></td>
+							<td><?php echo $tr->translate("PHONE_NUMBER");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('phone');?></td>
+							<td><?php echo $tr->translate("ប្រាក់ជំពាក់");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('money_debts');?></td>
+							<td><?php //echo $tr->translate("ចំនួនប្រាក់ត្រូបង់");?></td>
+							<td><?php //echo $frm_pay->getElement('');?></td>
+						</tr>
+				 <?php }?>  
+				</table>
+					<div style="text-align: center; margin: 10px 0px;">
+						<input type="hidden" name="exchangefrom" value="2" />
+						<input type="reset" value="សំអាត" label="សំអាត"dojoType="dijit.form.Button"/>
+						<input type="submit" value="save_close" name="save_close" label="រក្សាទុក+បិត" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+						<input type="submit" value="save_new" name="save_new" label="រក្សាទុក+ថ្មី" dojoType="dijit.form.Button" 
+							iconClass="dijitEditorIcon dijitEditorIconSave" />
+					</div>
+			</fieldset>	
+	 </td>
+	</tr>
+</table>	
+</form>
