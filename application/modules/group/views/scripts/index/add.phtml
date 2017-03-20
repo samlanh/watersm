@@ -56,28 +56,37 @@ dojo.require("dijit.layout.TabContainer");
 									<td><?php echo $frm->getElement('village_code');?></td>		<!-- client_no -->
 									<td><?php echo $tr->translate("តម្លៃសេវា")?></td>
 									<td><?php  echo $frm->getElement('unit_price');?></td>
-
-
 								</tr>
 								<tr>
 
 									<td><?php echo $tr->translate("PHONE")?></td>
 									<td><?php  echo $frm->getElement('phone');?></td>
 									<td><?php echo $tr->translate("ថ្ងៃចុះឈ្មោះ")?></td>
-									<td><?php  echo $frm->getElement('date_cus_start');?></td>
+									<td><?php  echo $frm->getElement('date_cus_start');?>
+										
+
 									<td><?php echo $tr->translate("ប្រាក់បង់សេវា")?></td>
-										<td><input type="text" style="width:110px"  required="true"  onkeyup="calculate()"  name="price_service" id="price_service" dojoType="dijit.form.ValidationTextBox"/></td>
+									<td><input type="text" style="width:110px"  required="true"  onkeyup="calculate()"  name="price_service" id="price_service" dojoType="dijit.form.ValidationTextBox"/></td>
 
 								</tr>
 
 
 								<tr>
-								<td valign="top"><?php echo $tr->translate("STATUS")?></td>
+									<td valign="top"><?php echo $tr->translate("គីឡូប្រើប្រាស់ដំបូង")?></td>
+									<td valign="top"	<input type="text" style="width:110px"  required="true"  name="end_used"  dojoType="dijit.form.ValidationTextBox"/></td>
+									</td>
+									<td valign="top"><?php echo $tr->translate("តម្លៃក្នុងមួយឯកត្តា")?></td>
+									<td><?php  echo $frm->getElement('price_per_use');?><?php  echo $frm->getElement('price_per_use_id');?></td>
+									<td><?php echo $tr->translate("ប្រាក់ជំពាក់ថ្លៃសេវា")?></td>
+									<td><input type="text" style="width:110px;color:red;"  required="true" value="0$"  readonly="true"   name="total_service" id="total_service" dojoType="dijit.form.ValidationTextBox"/></td>
+
+
+								</tr>
+								<tr>
+									<td valign="top"><?php echo $tr->translate("STATUS")?></td>
 									<td valign="top"><?php  echo $frm->getElement('status');?></td>
 									<td valign="top"><?php echo $tr->translate("NOTE")?></td>
 									<td><?php  echo $frm->getElement('desc');?></td>
-									<td><?php echo $tr->translate("ប្រាក់ជំពាក់ថ្លៃសេវា")?></td>
-									<td><input type="text" style="width:110px;color:red;"  required="true" value="0$"  readonly="true"   name="total_service" id="total_service" dojoType="dijit.form.ValidationTextBox"/></td>
 
 
 								</tr>
