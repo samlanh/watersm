@@ -9,10 +9,24 @@ class Group_Model_DbTable_DbSettingprice extends Zend_Db_Table_Abstract
     	return $session_user->user_id;
     
     }
+    public function getSettingpriceTopById(){
+    	$db = $this->getAdapter();
+    	$sql = "SELECT t.setId FROM `tb_settingprice` AS t ORDER By setId DESC limit 1";
+    	return $db->fetchRow($sql);
+    	//print_r($sql);exit();
+    }
     function addsetting($data){
     	$db = $this->getAdapter();
     	$db->beginTransaction();
+    	
     	try{
+    	$topID=$this->getSettingpriceTopById();
+    		$arr=array('status'=>0);
+    		$where="setId='.$topID.'";
+    		$this->_name='tb_settingprice';
+    		$this->update($arr,$where);
+    		
+    		print_r($where);
 	    	$arr = array(
 	    			'price'=>$data['price'],
 	    			'service_price'=>$data['service_price'],
@@ -21,11 +35,14 @@ class Group_Model_DbTable_DbSettingprice extends Zend_Db_Table_Abstract
 	    			'deadline'=>$data['deadline'],
 	    			'note'=>$data['note'],
 	    			'status'=>$data['status'],
+	    			'create_date' => date("Y-m-d"),
 	    			'user_id'=>$this->getUserId(),
 	    		);
 	    	$this->_name='tb_settingprice';
 	        $this->insert($arr);
 	    	$db->commit();
+	    	
+			exit();
 	    	
     	}catch(exception $e){
     		//echo $e->getMessage();exit();
@@ -67,12 +84,12 @@ class Group_Model_DbTable_DbSettingprice extends Zend_Db_Table_Abstract
 	
 function geteAllSettingprice($search=null){
 		$db = $this->getAdapter();
-		 $from_date =(empty($search['Datesearch_start']))? '1': " date_start >= '".$search['Datesearch_start']." 00:00:00'";
-		$to_date = (empty($search['Datesearch_stop']))? '1': " date_stop <= '".$search['Datesearch_stop']." 23:59:59'";
-		$where = " AND ".$from_date." AND ".$to_date; 
-		
-		$sql='select setId,price,service_price,date_start,date_stop,deadline,note,status,(select u.user_name from rms_users as u where u.id=user_id ) as user from tb_settingprice Where status=1';
-		
+		$sql='select setId,price,service_price,date_start,date_stop,deadline,note,status,(select u.user_name from rms_users as u where u.id=user_id ) as user from tb_settingprice  Where 1';
+		 $where="  ";
+	    /*$from_date =(!empty($search['Datesearch_start']))? '1': " date_start >= '".$search['Datesearch_start']." 00:00:00'";
+		$to_date = (!empty($search['Datesearch_stop']))? '1': " date_stop <= '".$search['Datesearch_stop']." 23:59:59'";
+		$where = " AND ".$from_date." AND ".$to_date;  */ 
+	
 		if($search['status_search']>-1){
 			$where.=" AND status=".$search['status_search'];
 		}
