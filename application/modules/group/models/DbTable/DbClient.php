@@ -69,7 +69,7 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 				'user_id'=>$this->getUserId(),
 				'new'=>'1',
 				'village_id'  => $_data['village_1'],
-				'price_set_id'=>$_data['price_per_use_id'],
+				'seting_price_id'=>$_data['price_per_use_id'],
 				'create_date' => date("Y-m-d"),
 				'statust'=> $_data['status'],
 				'client_num'=>$_data['client_no']
@@ -322,7 +322,7 @@ village_id,phone,status,date_cus_start FROM ln_client";
 	u.`id` ,
 	u.`end_use` ,
 	u.`id`, 
-	u.`price_set_id`,
+	u.`seting_price_id`,
 	u.`create_date`,
 	p.`price`,
 	p.`date_start`,
@@ -331,7 +331,7 @@ village_id,phone,status,date_cus_start FROM ln_client";
 FROM 
 	`ln_client` AS c , `tb_used` AS u ,tb_settingprice AS p
 WHERE 
-	c.`client_id`=u.`client_id` AND u.`price_set_id`= p.`setId` AND c.`village_id`=$village_id AND u.new=1 AND u.create_date>=p.date_start
+	c.`client_id`=u.`client_id` AND u.`seting_price_id`= p.`setId` AND c.`village_id`=$village_id AND u.new=1 AND u.create_date>=p.date_start
 	
 	";
 			return  $db->fetchAll($sql);
