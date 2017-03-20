@@ -87,7 +87,7 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 		));
 		$_clientno->setValue("C".$id_client);
 
-		$id_client = $db1->get_base_price();
+		$id_client = $db1->get_base_service();
 		$_unit_price = new Zend_Dojo_Form_Element_NumberTextBox('unit_price');
 		$_unit_price->setAttribs(array(
 			'dojoType'=>'dijit.form.TextBox',
@@ -96,6 +96,28 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 			'style'=>'color:red;'
 		));
 		$_unit_price->setValue($id_client);
+
+
+
+		$id_setting_price = $db1->get_setting_id();
+		$_price_per_use_id = new Zend_Dojo_Form_Element_NumberTextBox('price_per_use_id');
+		$_price_per_use_id->setAttribs(array(
+			'dojoType'=>'dijit.form.TextBox',
+			'class'=>'fullside',
+			'readonly'=>'readonly',
+			'style'=>'color:red;'
+		));
+		$_price_per_use_id->setValue($id_setting_price);
+
+		$setting_price = $db1->get_setting_price();
+		$_price_per_use = new Zend_Dojo_Form_Element_NumberTextBox('price_per_use');
+		$_price_per_use->setAttribs(array(
+			'dojoType'=>'dijit.form.TextBox',
+			'class'=>'fullside',
+			'readonly'=>'readonly',
+			'style'=>'color:red;'
+		));
+		$_price_per_use->setValue($setting_price);
 		
 
 		$_village_code = new Zend_Dojo_Form_Element_TextBox('village_code');
@@ -369,14 +391,14 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 			$_price_service->setValue($data['price_service']);
 			$_desc->setValue($data['remark']);
 			$_status->setValue($data['status']);
-
 			$_unit_price->setValue($data['unit_price']);
+			$_price_per_use->setValue($data['price_per_use']);
 			$_id->setValue($data['client_id']);
-
+			$_price_per_use_id->setValue($data['price_per_use_id']);
 			$_date_cus_start->setValue($data['date_cus_start']);
 
 			}
-		$this->addElements(array($_unit_price,$_price_service,$village_ed,$_cust_select, $_join_type,$referecce_national_id,$p_nationality,$_nationality,$_rid_no,$_bmember,$_vid_no,$_edesc,$_istatus,$_lphone,$_ghouse,$_dstreet,$_cprovince,$_pnameen,$_bnamekh,$_ksex,$_hnamekh,$client_d_type,$_join_nation_id,
+		$this->addElements(array($_price_per_use_id,$_price_per_use,$_unit_price,$_price_service,$village_ed,$_cust_select, $_join_type,$referecce_national_id,$p_nationality,$_nationality,$_rid_no,$_bmember,$_vid_no,$_edesc,$_istatus,$_lphone,$_ghouse,$_dstreet,$_cprovince,$_pnameen,$_bnamekh,$_ksex,$_hnamekh,$client_d_type,$_join_nation_id,
 				$_join_with,$_id,$photo,$job,$national_id,$_member,$_village_code,$_namekh,$_nameen,$_sex,
 				$_province,$_house,$_street,$_id_no,$branch_id,
 				$_phone,$_desc,$_status,$_clientno,$_date_cus_start,$_dob,$clienttype_namekh,$clienttype_nameen,$village));
