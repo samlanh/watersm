@@ -34,7 +34,7 @@ class Group_SettingpriceController extends Zend_Controller_Action {
 			$link=array(
 					'module'=>'group','controller'=>'settingprice','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('price'=>$link,'note'=>$link,'service_price'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('price'=>$link,'note'=>$link,'service_price'=>$link,'status'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			echo $e->getMessage();
