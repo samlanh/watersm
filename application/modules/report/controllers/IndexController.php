@@ -75,7 +75,7 @@ function delinquentloansAction(){
  	$file='/budget/budget.html';
  	// 		$head=$report->getHeadBudgetList('project',date('Y'));
  	$report=new Application_Model_DbTable_DbGlobal();
- 	$content=$report->getContent($result_row);
+ 	//$content=$report->getContent($result_row);
  	$param=array(
  			'division'=>1,
  			'budget'=>1,
@@ -99,7 +99,6 @@ function delinquentloansAction(){
  function contractHistoryAction(){
  	
  }
-
  
 //  function indexAction(){
  	
