@@ -17,12 +17,9 @@ class Group_indexController extends Zend_Controller_Action {
 						);
 			}else{
 				$search = array(
-
 						'adv_search' => '',
-						);
+					);
 			}
-
-
 			$rs_rows= $db->getAllClients($search);
 			//print_r($rs_rows);exit();
 
@@ -66,21 +63,21 @@ class Group_indexController extends Zend_Controller_Action {
 		if($this->getRequest()->isPost()){
 				$data = $this->getRequest()->getPost();
 				$data['old_photo']=null;
-
-			
-
 				try{
-				 if(isset($data['save_new'])){
 					$id= $db->addClient($data);
-				//	print_r($id);exit();
+					$data['id']=$id['client_id'];
+
+
+					$db	->addFirstUsed($data);
+				 if(isset($data['save_new'])){
 					Application_Form_FrmMessage::message("រក្សាទុក និង បង្កើតថ្មី !");
 				}
 				else if (isset($data['save_close'])){
-					$id= $db->addClient($data);
-				//	print_r($id);exit();
 					Application_Form_FrmMessage::message("រក្សាទុក និង បិទ !");
 					Application_Form_FrmMessage::redirectUrl("/group/index");
 				}
+
+
 			}catch (Exception $e){
 				Application_Form_FrmMessage::message("Application Error");
 				Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
@@ -89,7 +86,8 @@ class Group_indexController extends Zend_Controller_Action {
 
 		}
 
-
+//		$getID=$db->getLastClient();
+	//	print_r($getID);
 		$this->view->villsge = $db->getVillagOpt();
 
 
@@ -356,6 +354,7 @@ class Group_indexController extends Zend_Controller_Action {
 			$data = $this->getRequest()->getPost();
 			$db = new Group_Model_DbTable_DbClient();
 			$dataclient=$db->getClientInfo($data['vllage']);
+
 			print_r(Zend_Json::encode($dataclient));
 			exit();
 		}
