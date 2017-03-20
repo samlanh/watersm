@@ -183,7 +183,6 @@ village_id,phone,status,date_cus_start FROM ln_client";
 		$db=$this->getAdapter();
 		$sql="SELECT setId FROM tb_settingprice WHERE status='1' order by setId limit 1";
 		return $db->fetchOne($sql);
-
 	}
 	public function get_setting_price(){
 		$db=$this->getAdapter();
