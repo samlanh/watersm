@@ -61,7 +61,6 @@ Class Group_Form_FrmPayment extends Zend_Dojo_Form {
 				));
 		$start_date->setValue(date('Y-m-d'));
 		
-		
 		$end_date=new Zend_Dojo_Form_Element_DateTextBox('end_date');
 		$end_date->setAttribs(array(
 				'dojoType'=>'dijit.form.DateTextBox',
