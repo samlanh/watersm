@@ -136,18 +136,18 @@ function getAllcustomer(){
 			  				   temp='<td style="width:30px !important;text-align:center;" ><img style="cursor:pointer" onclick="deleteRecord('+r+')" src="<?php echo $this->baseUrl();?>/images/Delete_16.png"></td>';
 			  				   temp+='<td>'+r+'</td>';
 			  				   temp+='<td><input style=" width:100px" value="'+data[i].id+'"  name="id'+r+'" type="hidden" required="true" readonly="true"  dojoType="dijit.form.ValidationTextBox"/>' +
-								   '<input style=" width:100px" value="'+data[i].client_number+'"  name="client_num'+r+'" type="text" required="true" readonly="true"  dojoType="dijit.form.ValidationTextBox"/><input type="hidden" name="client_id'+r+'" style="width: 30px;" value="'+data[i].client_id+'" dojoType="dijit.form.TextBox" /></td>';
+								   '<input style=" width:100px" value="'+data[i].client_num+'"  name="client_num'+r+'" type="text" required="true" readonly="true"  dojoType="dijit.form.ValidationTextBox"/><input type="hidden" name="client_id'+r+'" style="width: 30px;" value="'+data[i].client_id+'" dojoType="dijit.form.TextBox" /></td>';
 			  				   temp+='<td><input style=" width:90%; readonly="true" readonly="true" font-size:12px;" type="text" value="'+data[i].name_kh+'"   name="name_kh'+r+'" required="true"  id="toowner_name'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
 			  				   temp+='<td><input type="text" readonly="true" style="width:110px" required="true" value="'+data[i].end_use+'"  name="start_use'+r+'" id="start_use'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
 			  				   temp+='<td><input type="text" style="width:110px"   onkeyup="calculate('+r+')"  name="new_num'+r+'" id="new_num'+r+'" dojoType="dijit.form.ValidationTextBox"/></td>';
 				  			   temp+='<td><input style="  width:110px" type="text" name="toatal_water'+r+'" readonly="true" id="toatal_water'+r+'" dojoType="dijit.form.TextBox" /><input type="hidden" name="coid'+r+'" id="coid'+r+'" dojoType="dijit.form.TextBox" /> </td>';
 					  		//temp+='<td><input style=" width:110px" type="text" name="tonote'+r+'"  id="1tonote'+r+'" dojoType="dijit.form.TextBox" /><input type="hidden" name="coid'+r+'" id="coid'+r+'" dojoType="dijit.form.TextBox" /> </td>';	 
-								   temp+='<td><input type="text" style="width: 30px;color:red;font-weight: bold;border: none;"  readonly="true" name="price_setting'+r+'" id="price_setting'+r+'" value="'+data[i].price+'" dojoType="dijit.form.TextBox" /><input type="hidden" name="price_setting_id'+r+'"  value="'+data[i].price_set_id+'" dojoType="dijit.form.TextBox" /></td>'
+								   temp+='<td><input type="text" style="width: 30px;color:red;font-weight: bold;border: none;"  readonly="true" name="price_setting'+r+'" id="price_setting'+r+'" value="'+data[i].price+'" dojoType="dijit.form.TextBox" /><input type="text" name="price_setting_id'+r+'"  value="'+data[i].setId+'" dojoType="dijit.form.TextBox" /></td>'
 
 								   temp+='<td><input style=" width:110px; color:red;" readonly="true" type="text" name="total_price'+r+'"  id="total_price_id'+r+'" dojoType="dijit.form.TextBox" /><input type="hidden" name="coid'+r+'" id="1coid'+r+'" dojoType="dijit.form.TextBox" /> </td>'
 
-								temp+='<td><input type="text" style="width:110px"  name="1issue_date'+r+'" readonly="true" value="'+data[i].date_cus_start+'" id="1issue_date'+r+'" dojoType="dijit.form.DateTextBox"/></td>';
-					  			temp+='<td><input type="text" style="width:110px"  name="issue_date'+r+'"  id="0issue_date'+r+'" dojoType="dijit.form.DateTextBox"/></td>';   
+								temp+='<td><input type="text" style="width:110px"  name="1issue_date'+r+'" readonly="true" value="'+data[i].date_start+'" id="1issue_date'+r+'" dojoType="dijit.form.DateTextBox"/></td>';
+					  			temp+='<td><input type="text" style="width:110px"  name="issue_date'+r+'"  id="0issue_date'+r+'" value="'+data[i].date_stop+'" dojoType="dijit.form.DateTextBox"/></td>';
 						  			 
 				  			   tmp='<tr style="border:1px solid #eee; font-size:14px; !important" id="row_capital'+r+'">'
 

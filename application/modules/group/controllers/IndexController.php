@@ -13,8 +13,10 @@ class Group_indexController extends Zend_Controller_Action {
 				$formdata=$this->getRequest()->getPost();
 				$search=array(
 						'adv_search' => $formdata['adv_search'],
-						'village_id' => $formdata['search_village'],
+						'search_village' => $formdata['search_village'],
+						'status'=>$formdata['status']
 						);
+				
 			}else{
 				$search = array(
 						'adv_search' => '',

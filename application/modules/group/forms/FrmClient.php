@@ -18,9 +18,7 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 		$_dob= new Zend_Dojo_Form_Element_DateTextBox('dob_client');
 		$_dob->setAttribs(array('dojoType'=>'dijit.form.DateTextBox','class'=>'fullside','constraints'=>"{datePattern:'dd/MM/yyyy'}",
 		));
-		$_date_cus_start= new Zend_Dojo_Form_Element_DateTextBox('date_cus_start');
-		$_date_cus_start->setAttribs(array('dojoType'=>'dijit.form.DateTextBox','class'=>'fullside','constraints'=>"{datePattern:'dd/MM/yyyy'}",
-		));
+
 		$request=Zend_Controller_Front::getInstance()->getRequest();
 		$db = new Application_Model_DbTable_DbGlobal();
 		$db1=new Group_Model_DbTable_DbClient();
@@ -97,7 +95,15 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 		));
 		$_unit_price->setValue($id_client);
 
-
+		$_date_cus_start_month=$db1->get_cus_start();
+		$_date_cus_start= new Zend_Dojo_Form_Element_DateTextBox('date_cus_start');
+		$_date_cus_start->setAttribs(array(
+			'dojoType'=>'dijit.form.DateTextBox',
+			'class'=>'fullside',
+			'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+			'readonly'=>'true',
+		));
+		$_date_cus_start->setValue($_date_cus_start_month);
 
 		$id_setting_price = $db1->get_setting_id();
 		$_price_per_use_id = new Zend_Dojo_Form_Element_NumberTextBox('price_per_use_id');
@@ -110,7 +116,7 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 		$_price_per_use_id->setValue($id_setting_price);
 
 		$setting_price = $db1->get_setting_price();
-		$_price_per_use = new Zend_Dojo_Form_Element_NumberTextBox('price_per_use');
+		$_price_per_use = new Zend_Form_Element_Hidden('price_per_use');
 		$_price_per_use->setAttribs(array(
 			'dojoType'=>'dijit.form.TextBox',
 			'class'=>'fullside',
@@ -125,6 +131,7 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 			'dojoType'=>'dijit.form.TextBox',
 			'class'=>'fullside',
 			'readonly'=>'readonly',
+			'required' =>'true',
 			'style'=>'color:red;'
 		));
 

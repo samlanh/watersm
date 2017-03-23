@@ -10,7 +10,7 @@ class Loan_Model_DbTable_DbPayUsed extends Zend_Db_Table_Abstract
 	public function addDetailUsed($data){
 		$db = $this->getAdapter();
 		$userID= $this->getUserId();
-	//	print_r($data);exit();
+
 		$db->beginTransaction();
 		try{
 			$identity_su = $data["record_row"];
@@ -25,7 +25,7 @@ class Loan_Model_DbTable_DbPayUsed extends Zend_Db_Table_Abstract
 
 
 				$this->update($arr, $where);
-				
+
 			}
 			foreach ($idsu as $i){
 				$start_used=$data['new_num'.$i]-$data['toatal_water'.$i];
@@ -36,7 +36,7 @@ class Loan_Model_DbTable_DbPayUsed extends Zend_Db_Table_Abstract
 					'stat_use'=>$start_used,
 					'end_use'=>$data['new_num'.$i],
 					'total_use'=>$data['toatal_water'.$i],
-					'price_set_id'=>$data['price_setting_id'.$i],
+					'seting_price_id'=>$data['price_setting_id'.$i],
 					'new' => 1 ,
 
 					'statust'=>'1',

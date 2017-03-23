@@ -222,65 +222,80 @@ function getAllrtpclient($search=null){
 
       function getAllCustomuse($search=null){
       	$db=$this->getAdapter();
-      	$sql=" SELECT c.name_kh ,c.name_en,c.client_number ,c.phone,c.village_id, u.stat_use,
-      		    u.end_use, u.date,u.end_date,u.ohter_fee,s.price
-      	       FROM ln_client AS c,tb_used AS u,tb_settingprice as s
-               WHERE u.client_id=c.client_id 
-      	";
-      	$where=" ";
-      	if(!empty($search['adv_search'])){
-      		$s_where=array();
-      		$s_search=$search['adv_search'];
-      		//$b=trim($s_search," ");
-      		$s_where[]=" name_kh  LIKE '%{$s_search}%'";
-      		$s_where[]=" name_en  LIKE '%{$s_search}%'";
-      		$s_where[]=" phone  LIKE '%{$s_search}%'";
-      		$s_where[]=" client_number  LIKE'%{$s_search}%'";
+		  $test="
+		   WHERE u.create_date>=(SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
+	AND 
+	u.create_date<=(SELECT s.date_stop FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
+	AND u.new=1 ORDER BY village_id DESC
       
-      		$where .=' AND ('.implode(' OR ',$s_where).')';
-      	}
-      	//       	client_name
-      	//       print_r($search);exit();
-      	if($search['client_name']>0){
-      		$where.=" AND c.client_id= ".$search['client_name'];
-      	}
-      	if($search['village_name']>0){
-      		$where.=" AND c.village_id= ".$search['village_name'];
-      	}
-      	$order = " ";
-      	//echo $sql.$where.$order;
-      	return $db->fetchAll($sql.$where.$order);
-      }
+		  ";
+      	$sql="
+       
+SELECT 
+	(SELECT l.name_kh FROM ln_client AS l WHERE l.client_id=u.client_id LIMIT 1) AS name_kh,
+	(SELECT l.village_id FROM ln_client AS l WHERE l.village_id=u.village_id LIMIT 1) AS village_id,
+	(SELECT l.phone FROM ln_client AS l WHERE l.village_id=u.village_id LIMIT 1) AS phone,
+	(SELECT v.village_namekh FROM ln_village AS v WHERE v.vill_id=u.village_id  LIMIT 1) AS village_namekh,	
+u.client_id,u.client_num,u.stat_use,u.end_use,u.total_use,u.total_price,u.create_date,
+u.new,
+	(SELECT s.maintanance_service FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id LIMIT 1) AS maintanance_service,
+	(SELECT s.price FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id LIMIT 1) AS price,
+	(SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) AS date_start,
+	(SELECT s.deadline FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) AS deadline
+ FROM tb_used AS u
+	";
+$where="WHERE 1";
+		  if (!empty($search['adv_search'])){
+			  $s_where=array();
+			  $s_search=addslashes(trim($search['adv_search']));
+			  $s_where[] = " client_num LIKE '%{$s_search}%'";
+			 $s_where[]=" village_id LIKE '%{$s_search}%'";
+			  $where .=' AND ('.implode(' OR ',$s_where).')';
+		  }
+		  if(!empty($search['village_name'])){
+			  $where.=" AND u.village_id= ".$search['village_name'];
+		  }
+		  if(!empty($search['start_date'])){
+			  $where.=" AND (SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) >= ".$search['start_date'];
+		  }
+
+		 
+      	return $db->fetchAll($sql.$where);
+}
 
       
        function  getAllMonthvillage($search=null){
        	$db=$this->getAdapter();
-       	$sql=" SELECT   c.name_kh,c.client_number ,c.phone,c.village_id,v.village_namekh,
-       					u.stat_use,u.end_use,u.client_id,u.village_id,s.price
-         
-				FROM   
-				     ln_client AS c,
-					  tb_used AS u,
-					  tb_settingprice AS s,
-					  ln_village AS v
-				WHERE c.client_id=u.client_id AND c.village_id=u.village_id AND c.village_id=v.vill_id AND c.status=1";
-       $where=" ";
+		   $test="
+		    WHERE u.create_date>(SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
+	AND 
+	u.create_date<=(SELECT s.date_stop FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
+	AND u.new=1 ORDER BY village_id DESC	
+		   ";
+       	$sql=" 
+SELECT 
+	(SELECT l.name_kh FROM ln_client AS l WHERE l.client_id=u.client_id LIMIT 1) AS name_kh,
+	(SELECT l.village_id FROM ln_client AS l WHERE l.village_id=u.village_id LIMIT 1) AS village_id,
+	(SELECT l.phone FROM ln_client AS l WHERE l.village_id=u.village_id LIMIT 1) AS phone,
+	(SELECT v.village_namekh FROM ln_village AS v WHERE v.vill_id=u.village_id  LIMIT 1) AS village_namekh,	
+u.client_id,u.client_num,u.stat_use,u.end_use,u.total_use,u.total_price,
+u.new,
+	(SELECT s.price FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id LIMIT 1) AS price,
+	(SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) AS date_start
+ FROM tb_used AS u
+				";
+       $where=" WHERE 1";
       	if(!empty($search['adv_search'])){
       		$s_where=array();
       		$s_search=$search['adv_search'];
       		$s_where[]=" name_kh  LIKE '%{$s_search}%'";
-      		$s_where[]=" phone  LIKE '%{$s_search}%'";
-      		$s_where[]=" client_number  LIKE'%{$s_search}%'";
-      		$s_where[]=" end_use  LIKE'%{$s_search}%'";
-      		$s_where[]=" stat_use  LIKE'%{$s_search}%'";
       		$where .=' AND ('.implode(' OR ',$s_where).')';
       	}
-      
-      	$order = " ";
-      	if($search['village_name']>0){
+		   
+      /*	if($search['village_name']>0){
       		$where.=" AND c.village_id= ".$search['village_name'];
-      	} 
-       	return $db->fetchAll($sql.$where.$order);
+      	} */
+       	return $db->fetchAll($sql.$where);
       }
       
       /*end my code*/
@@ -304,7 +319,6 @@ function getAllrtpclient($search=null){
       	if(!empty($search['adv_search'])){
       		$s_where = array();
       		$s_search = addslashes(trim($search['adv_search']));
-//       		$s_where[] = " loan_number LIKE '%{$s_search}%'";
       		$s_where[] = " client_number LIKE '%{$s_search}%'";
       		$s_where[] = " commission LIKE '%{$s_search}%'";
       		$s_where[] = " client_name LIKE '%{$s_search}%'";
@@ -1675,7 +1689,8 @@ function updatePaymentStatus($data){
 	  		return 1;
 	  	}catch (Exception $e){
 	  		$db->rollBack();
-	  		echo $e->getMessage();exit();
+	  		echo $e->getMessage();
+
 	  		Application_Form_FrmMessage::message("INSERT_FAIL");
 	  		Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
 	  	}

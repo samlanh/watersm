@@ -26,7 +26,7 @@ class Group_Model_DbTable_DbSettingprice extends Zend_Db_Table_Abstract
     		$this->_name='tb_settingprice';
     		$this->update($arr,$where);
     		
-    		print_r($where);
+
 	    	$arr = array(
 	    			'price'=>$data['price'],
 	    			'service_price'=>$data['service_price'],
@@ -42,7 +42,7 @@ class Group_Model_DbTable_DbSettingprice extends Zend_Db_Table_Abstract
 	        $this->insert($arr);
 	    	$db->commit();
 	    	
-			exit();
+
 	    	
     	}catch(exception $e){
     		//echo $e->getMessage();exit();

@@ -333,21 +333,30 @@ class Report_LoanController extends Zend_Controller_Action {
   	$db = new Report_Model_DbTable_DbLandreport();
   
   	if($this->getRequest()->isPost()){
-  		$search = $this->getRequest()->getPost();
-  		/* if(isset($search['btn_search'])){
-  			$this->view->rpt_income_permonth=$db->getAllCustomuse($search);
-  		} */
+		$data=$this->getRequest()->getPost();
+		$search=array(
+			'village_name'=>$data['village_name'],
+			'adv_search'=>$data['adv_search'],
+			'client_name'=>$data['client_name'],
+			'start_date'=>$data['start_date'],
+			'end_date'=>$data['end_date']
+		);
+		//print_r($data);exit();
   	}else {
   		$search = array(
   				'adv_search' => '',
   				'village_name' => '',
-  				'client_name' =>-1,
-  
+  				'client_name' =>'',
+
+
   		);
+
   		//$this->view->rpt_income_permonth =$rs=$db->getAllCustomuse($search);
   	}
+
   	//$this->view->list_end_date=$search;
   	$this->view->rows =$db->getAllCustomuse($search);
+
   	$frm = new Loan_Form_FrmSearchLoan();
   	$frm = $frm->AdvanceSearch();
   	Application_Model_Decorator::removeAllDecorator($frm);

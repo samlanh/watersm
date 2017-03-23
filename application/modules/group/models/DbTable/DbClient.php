@@ -68,9 +68,10 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 				'end_use'	  => $_data['end_used'],
 				'user_id'=>$this->getUserId(),
 				'new'=>'1',
+
 				'village_id'  => $_data['village_1'],
 				'seting_price_id'=>$_data['price_per_use_id'],
-				'create_date' => date("Y-m-d"),
+				'create_date' => $_data['date_cus_start'],
 				'statust'=> $_data['status'],
 				'client_num'=>$_data['client_no']
 			);
@@ -127,8 +128,6 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
     }
 	function getAllClients($search = null){
 		try{
-
-
 			$db = $this->getAdapter();
 			$sql="SELECT client_id,client_number,name_kh,sex,
 (SELECT  v.village_name FROM ln_village AS v WHERE v.vill_id = village_id LIMIT 1)
@@ -174,25 +173,31 @@ village_id,phone,status,date_cus_start FROM ln_client";
 	}
 	public function get_base_service(){
 		$db=$this->getAdapter();
-		$sql="SELECT service_price FROM tb_settingprice WHERE status='1' order by setId limit 1";
+		$sql="SELECT service_price FROM tb_settingprice WHERE status='1' order by setId desc limit 1";
+		return $db->fetchOne($sql);
+
+	}
+	public function get_cus_start(){
+		$db=$this->getAdapter();
+		$sql="SELECT date_start FROM tb_settingprice WHERE status='1' order by setId desc limit 1";
 		return $db->fetchOne($sql);
 
 	}
 
 	public function get_setting_id(){
 		$db=$this->getAdapter();
-		$sql="SELECT setId FROM tb_settingprice WHERE status='1' order by setId limit 1";
+		$sql="SELECT setId FROM tb_settingprice WHERE status='1' order by setId desc limit 1";
 		return $db->fetchOne($sql);
 	}
 	public function get_setting_price(){
 		$db=$this->getAdapter();
-		$sql="SELECT price FROM tb_settingprice WHERE status='1' order by setId limit 1";
+		$sql="SELECT price FROM tb_settingprice WHERE status='1' order by setId desc limit 1";
 		return $db->fetchOne($sql);
 
 	}
 	public function get_price_per_used(){
 		$db=$this->getAdapter();
-		$sql="SELECT setId FROM tb_settingprice WHERE status='1' order by setId limit 1";
+		$sql="SELECT setId FROM tb_settingprice WHERE status='1' order by setId desc limit 1";
 		return $db->fetchOne($sql);
 
 	}
@@ -311,28 +316,24 @@ village_id,phone,status,date_cus_start FROM ln_client";
 	}
 		function getClientInfo($village_id){
 			$db = $this->getAdapter();
+
 			$sql="
-			
-	SELECT   
-		c.`client_id` ,
-        c.client_number ,
-        c.`name_kh` ,
-        c.`village_id`,
-		c.`date_cus_start` ,
-	u.`id` ,
-	u.`end_use` ,
-	u.`id`, 
-	u.`seting_price_id`,
-	u.`create_date`,
-	p.`price`,
-	p.`date_start`,
-	p.`date_stop`,
-	u.new 
-FROM 
-	`ln_client` AS c , `tb_used` AS u ,tb_settingprice AS p
-WHERE 
-	c.`client_id`=u.`client_id` AND u.`seting_price_id`= p.`setId` AND c.`village_id`=$village_id AND u.new=1 AND u.create_date>=p.date_start
-	
+
+			SELECT 
+				  	(SELECT l.name_kh FROM ln_client AS l WHERE l.client_id=u.client_id LIMIT 1) AS name_kh,
+					  (SELECT l.village_id FROM ln_client AS l WHERE l.village_id=u.village_id LIMIT 1) AS village_id,
+					  (SELECT v.village_namekh FROM ln_village AS v WHERE v.vill_id=u.village_id LIMIT 1) AS village_namekh,
+					  (SELECT s.setId FROM tb_settingprice AS s ORDER BY s.setId DESC LIMIT 1)AS setId,	
+							u.client_id,u.client_num,u.stat_use,u.end_use,u.total_use,u.total_price,u.id,
+
+					  (SELECT s.price FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id LIMIT 1) AS price,
+					  (SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) AS date_start,
+	  				  (SELECT s.date_stop FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) AS date_stop
+ 			FROM tb_used AS u
+ 	WHERE u.create_date>=(SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
+	AND 
+		u.create_date<=(SELECT s.date_stop FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
+	AND u.village_id=$village_id
 	";
 			return  $db->fetchAll($sql);
 		}
