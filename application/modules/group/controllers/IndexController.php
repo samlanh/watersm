@@ -16,11 +16,11 @@ class Group_indexController extends Zend_Controller_Action {
 						'search_village' => $formdata['search_village'],
 						'status'=>$formdata['status']
 						);
-				
-			}else{
+				}else{
 				$search = array(
 						'adv_search' => '',
-					);
+						'status'=>'1'
+				);
 			}
 			$rs_rows= $db->getAllClients($search);
 			//print_r($rs_rows);exit();
@@ -44,7 +44,7 @@ class Group_indexController extends Zend_Controller_Action {
 		}
 
 		$frm = new Application_Form_FrmAdvanceSearch();
-		$frm = $frm->AdvanceSearch();
+		$frm = $frm->AdvanceSearch($rs_rows);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_search = $frm;
 
@@ -66,6 +66,7 @@ class Group_indexController extends Zend_Controller_Action {
 				$data = $this->getRequest()->getPost();
 				$data['old_photo']=null;
 				try{
+
 					$id= $db->addClient($data);
 					$data['id']=$id['client_id'];
 

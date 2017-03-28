@@ -1,0 +1,37 @@
+<?php
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate('SETTINGPRICE'));
+
+?>
+<?php  $frm_pay= $this->frm_pay;?>
+
+<script>
+	dojo.require("dijit/form/DateTextBox");
+	dojo.require("dijit/form/NumberTextBox");
+	dojo.ready(function(){
+		//getStaffCode();
+		});
+</script>
+<form id="add_techer" action="<?php echo $this->url(array('module'=>'payment','controller'=>'index','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+   <table width="45%">
+   	<tr>
+		<td ><?php echo $frm_pay->getElement("search_option_number");?></td>
+	   <td ><?php echo $frm_pay->getElement("code_search");?></td>
+
+	   <td><input type="submit" value="search" name="search" label="Search"  id="search_id" dojoType="dijit.form.Button" iconClass="dijitIconSearch" /></td>
+
+	</tr>
+   </table>
+<script type="dojo/method" event="onSubmit">
+			if(this.validate()) {
+				return true;
+			} else {
+				return false;
+	}
+</script>
+	<?php echo $this->list;?>
+</form>
+
+
+
+

@@ -1,0 +1,180 @@
+<?php
+$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+echo $this->headTitle($tr->translate('SETTINGPRICE'));
+
+?>
+<?php  $frm_pay= $this->frm_pay;?>
+
+<script>
+	dojo.require("dijit/form/DateTextBox");
+	dojo.require("dijit/form/NumberTextBox");
+	dojo.ready(function(){
+		//getStaffCode();
+	});
+</script>
+<form id="add_techer" action="<?php echo $this->url(array('module'=>'payment','controller'=>'index','action'=>'edit')); ?>" dojoType="dijit.form.Form" method="post">
+	<table width="45%">
+		<tr>
+			<td ><?php //echo $frm_pay->getElement("search_option_number");?></td>
+			<td ><?php //echo $frm_pay->getElement("code_search");?></td>
+
+			<!-- <td><input type="submit" value="search" name="search" label="Search"  id="search_id" dojoType="dijit.form.Button" iconClass="dijitIconSearch" /></td> -->
+
+		</tr>
+	</table>
+	<script type="dojo/method" event="onSubmit">
+			if(this.validate()) {
+				return true;
+			} else {
+				return false;
+	}
+</script>
+	<table width="100%" style="margin: 0 auto;">
+		<tr>
+			<td>
+				<fieldset style="margin-top: -10px;">
+					<legend><strong><?php echo $tr->translate("PAYMENT");?></strong></legend>
+					<table style="margin: 0 auto; width: 100%;" cellspacing="10">
+						<?php
+						echo $frm_pay->getElement('used_id');
+						echo $frm_pay->getElement('seting_price_id');
+						echo $frm_pay->getElement('user_id');
+						echo $frm_pay->getElement('village_id');
+						?>
+
+						<tr>
+							<td><?php echo $tr->translate("បញ្ចូលប្រាក់ដែលបង់");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('input_money');?></td>
+
+							<td><?php echo $tr->translate("ប្រាក់បង់សរុប");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('total_full_pay');?></td>
+						</tr>
+						<tr>
+
+
+							<td><?php echo $tr->translate("ប្រក់ជំពាក់ខែមុន");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('old_owed');?></td>
+							<td><?php echo $tr->translate("ប្រាក់ជំពាក់ខែថ្មី");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('new_owed');?></td>
+
+
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("CODE");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('code');?></td>
+							<td><?php echo $tr->translate("CUSTOMER_NAME");?></td>
+							<td style="color:blue; ">
+								<?php echo $frm_pay->getElement('customername');?>
+								<?php echo $frm_pay->getElement('customername_id');?>
+							</td>
+							<td ><?php echo $tr->translate("ចំនួនប្រាក់ត្រូបង់");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('moneyto_pay');?></td>
+
+
+
+							<td><?php echo $tr->translate("OLD_CONTER");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('old_conter');?></td>
+
+
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("NEW_CONTER");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('new_conter');?></td>
+							<td><?php echo $tr->translate('តម្លៃឋកតា');?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('unit_price');?></td>
+
+							<td><?php echo $tr->translate("Date_start");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('start_date');?></td>
+
+
+							<td><?php echo $tr->translate("Date_stop");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('end_date');?></td>
+
+
+
+
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("ថ្ងៃផុតកំណត់បង់ប្រាក់");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('deadline');?></td>
+							<td><?php echo $tr->translate("ADDRESS");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('address');?></td>
+							<td><?php echo $tr->translate("PHONE_NUMBER");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('phone');?></td>
+							<td><?php echo $tr->translate("ប្រាក់ជំពាក់");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('money_debts');?></td>
+							<td><?php //echo $tr->translate("ចំនួនប្រាក់ត្រូបង់");?></td>
+							<td><?php //echo $frm_pay->getElement('');?></td>
+						</tr>
+
+					</table>
+					<div style="text-align: center; margin: 10px 0px;">
+						<input type="hidden" name="exchangefrom" value="2" />
+						<input type="reset" value="សំអាត" label="សំអាត"dojoType="dijit.form.Button"/>
+						<input type="submit" value="save_close" name="save_close" label="រក្សាទុក+បិត" dojoType="dijit.form.Button"
+							   iconClass="dijitEditorIcon dijitEditorIconSave" />
+						<input type="submit" value="save_new" name="save_new" label="រក្សាទុក+ថ្មី" dojoType="dijit.form.Button"
+							   iconClass="dijitEditorIcon dijitEditorIconSave" />
+					</div>
+				</fieldset>
+			</td>
+		</tr>
+	</table>
+</form>
+<script type="text/javascript">
+	function calculate () {
+		moneyto_pay=parseFloat(dijit.byId('moneyto_pay').get('value'));
+		old_owed=parseFloat(dijit.byId('old_owed').get('value'));
+		input_money=parseFloat(dijit.byId('input_money').get('value'));
+		new_owed=(old_owed+moneyto_pay)-input_money;
+
+		if (input_money>(old_owed+moneyto_pay)){
+			alert("អតិថិជនមិនអាចបង់ប្រាក់ធំជាងតារាងថ្លៃសរុបបានទេ");
+			dijit.byId("new_owed").attr('value','');
+		}else{
+			dijit.byId("new_owed").attr('value',new_owed);
+		}
+
+
+	}
+
+
+
+	url_getClient_num = '<?php echo $this->url(array('module'=>'payment','controller'=>'index','action'=>'get-client-num'));?>';
+	function getClientNum(){
+
+		search_option_number = dijit.byId('search_option_number').get('value');
+		if(search_option_number==0){
+			return false;}
+		dojo.xhrPost({
+			url:url_getClient_num,
+			content:{
+				'search_option_number': search_option_number
+			},
+			handleAs:"json",
+			load: function(data) {
+				//alert(data.client_num+'-'+data.id);
+				//dijit.byId('client_no').attr('value',data.code);
+				//district_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('code').set('value',data.client_num);
+				dijit.byId('customername').set('value',data.name_kh);
+				dijit.byId('moneyto_pay').set('value',data.total_price);
+				dijit.byId('old_conter').set('value',data.stat_use);
+				dijit.byId('new_conter').set('value',data.end_use);
+				dijit.byId('unit_price').set('value',data.price);
+				dijit.byId('start_date').set('value',data.date_start);
+				dijit.byId('end_date').set('value',data.date_start);
+				dijit.byId('end_date').set('value',data.date_start);
+				dijit.byId('deadline').set('value',data.deadline);
+				dijit.byId('address').set('value',data.village_name);
+				dijit.byId('phone').set('value',data.phone);
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
+	}
+
+</script>
+
+

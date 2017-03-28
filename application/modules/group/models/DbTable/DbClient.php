@@ -68,7 +68,6 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 				'end_use'	  => $_data['end_used'],
 				'user_id'=>$this->getUserId(),
 				'new'=>'1',
-
 				'village_id'  => $_data['village_1'],
 				'seting_price_id'=>$_data['price_per_use_id'],
 				'create_date' => $_data['date_cus_start'],
@@ -129,27 +128,27 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 	function getAllClients($search = null){
 		try{
 			$db = $this->getAdapter();
-			$sql="SELECT client_id,client_number,name_kh,sex,
-(SELECT  v.village_name FROM ln_village AS v WHERE v.vill_id = village_id LIMIT 1)
-village_id,phone,status,date_cus_start FROM ln_client";
+			$sql="SELECT l.client_id,l.client_number,l.name_kh,l.sex,
+	(SELECT  v.village_name FROM ln_village AS v WHERE v.vill_id = l.village_id LIMIT 1) AS village,
+l.village_id,l.phone,l.status,l.date_cus_start FROM ln_client AS l";
 			$where=" where 1";
 			if(!empty($search['adv_search'])){
 				$s_where = array();
 				$s_search = addslashes(trim($search['adv_search']));
+				$s_where[] = " client_number LIKE '%{$s_search}%'";
 				$s_where[] = " name_kh LIKE '%{$s_search}%'";
 				$s_where[] = " phone LIKE '%{$s_search}%'";
 				$s_where[] = " village_id LIKE '%{$s_search}%'";
 				$s_where[] = " street LIKE '%{$s_search}%'";
 				$where .=' AND ('.implode(' OR ',$s_where).')';
-
 			}
 
-		/* 	 if($search['status']>-1){
+		 	 if($search['status']>-1){
 				$where.= " AND status = ".$search['status'];
 			}
-			 */
+
 			if(!empty($search['search_village'])){
-				$where.=" AND v.vill_id= ".$search['search_village'];
+				$where.=" AND l.village_id= ".$search['search_village'];
 			}
 			$order=" ORDER BY client_id DESC ";
 			return $db->fetchAll($sql.$where.$order);
@@ -300,9 +299,10 @@ village_id,phone,status,date_cus_start FROM ln_client";
 		$sql ="SELECT v.`vill_id` AS id, v.`village_name` AS NAME FROM ln_village AS v WHERE	v.`status`=1";
 		return $db->fetchAll($sql);
 	}
+
 	function getVillageByAjax($vid){
 		$db = $this->getAdapter();
-		$sql="SELECT v.`code` FROM `ln_village`AS v WHERE v.`vill_id`=".$vid;
+		$sql="SELECT v.`code`,v.`village_namekh` FROM `ln_village`AS v WHERE v.`vill_id`=".$vid;
 		return $db->fetchRow($sql);
 	}
 	function getClientInforByAjax($village_id){
@@ -316,7 +316,10 @@ village_id,phone,status,date_cus_start FROM ln_client";
 	}
 		function getClientInfo($village_id){
 			$db = $this->getAdapter();
-
+				$testwhere="WHERE u.create_date>=(SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
+	AND 
+		u.create_date<=(SELECT s.date_stop FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
+	";
 			$sql="
 
 			SELECT 
@@ -330,10 +333,13 @@ village_id,phone,status,date_cus_start FROM ln_client";
 					  (SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) AS date_start,
 	  				  (SELECT s.date_stop FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) AS date_stop
  			FROM tb_used AS u
- 	WHERE u.create_date>=(SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
+ 	WHERE 
+ 	 u.create_date>=(SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
 	AND 
-		u.create_date<=(SELECT s.date_stop FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
-	AND u.village_id=$village_id
+		u.create_date<=(SELECT s.deadline FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
+	AND
+ 	u.village_id=$village_id 
+ 	AND u.new =1
 	";
 			return  $db->fetchAll($sql);
 		}

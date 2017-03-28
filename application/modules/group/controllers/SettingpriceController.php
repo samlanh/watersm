@@ -80,7 +80,6 @@ class Group_SettingpriceController extends Zend_Controller_Action {
    	$row = $db_co->getSettingpriceById($id);
    	if($this->getRequest()->isPost()){
    		$_data = $this->getRequest()->getPost();
-   		
    		try{
    			$_data['id']= $id;
    			/* print_r($_data);exit(); */

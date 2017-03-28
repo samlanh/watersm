@@ -174,8 +174,7 @@ class Application_Form_FrmAdvanceSearch extends Zend_Dojo_Form
 		
 		
 		if($data!=null){
-			
-			//$_cust_select->SetVaue($data['cust_select']);
+		//	$_cust_select->SetVaue($data['cust_select']);
 // 			$BuidingYear->setValue($data['buidingyear']);
 // 			$ParkingSpace->setValue($data['parkingspace']);
 // 			$dinnerroom->setValue($data['dinnerroom']);

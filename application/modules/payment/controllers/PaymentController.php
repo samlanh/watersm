@@ -1,7 +1,7 @@
 <?php
-class Group_PaymentController extends Zend_Controller_Action {
+class Payment_PaymentController extends Zend_Controller_Action {
 	private $activelist = array('មិនប្រើ​ប្រាស់', 'ប្រើ​ប្រាស់');
-	const REDIRECT_URL = '/group';
+	const REDIRECT_URL = '/payment';
     public function init()
     {    	
      /* Initialize action controller here */
@@ -12,7 +12,7 @@ class Group_PaymentController extends Zend_Controller_Action {
 	
 	public function indexAction(){
 		//$id = $this->getRequest()->getParam("code");
-	   	$db = new Group_Model_DbTable_DbPayment();
+	   	$db = new Payment_Model_DbTable_DbPayment();
 
 	   	if($this->getRequest()->isPost()){
 			$search='';
@@ -24,14 +24,14 @@ class Group_PaymentController extends Zend_Controller_Action {
 				);
 			}
 			if (isset($searchdata['save_new'])){
-				//print_r($searchdata);exit();
+				print_r($searchdata);exit();
 				$db->addPayment($searchdata);
 				echo "<script>alert('Save new');</script>";
 			}
 			if (isset($searchdata['save_close'])){
-				//print_r($searchdata);exit();
+				print_r($searchdata);exit();
 				$db->addPayment($searchdata);
-				Application_Form_FrmMessage::redirectUrl("/group/index");
+				Application_Form_FrmMessage::redirectUrl("/payment/index");
 				echo "<script>alert('Save close')</script>";
 			}
 
@@ -48,7 +48,7 @@ class Group_PaymentController extends Zend_Controller_Action {
 		//$this->view->rows =$db->geteAllpayment($searchdata);
 
 
-		$frm = new Group_Form_FrmPayment();
+		$frm = new Payment_Form_FrmPayment();
 		$frm_pay = $frm->FrmPayment($rs_row);
 	   	Application_Model_Decorator::removeAllDecorator($frm);
 	 	$this->view->frm_pay = $frm_pay;
@@ -57,7 +57,7 @@ class Group_PaymentController extends Zend_Controller_Action {
 	
 	
    function addAction(){
-   	$frm = new Group_Form_FrmPayment();
+   	$frm = new Payment_Form_FrmPayment();
    	$frm_pay=$frm->FrmPayment();
    	Application_Model_Decorator::removeAllDecorator($frm_pay);
    	$this->view->frm_pay = $frm_pay;
@@ -65,7 +65,7 @@ class Group_PaymentController extends Zend_Controller_Action {
 
    function editAction(){
    	 $id = $this->getRequest()->getParam("id");
-   	$db_co = new Group_Model_DbTable_DbSettingprice();
+   	$db_co = new Payment_Model_DbTable_DbSettingprice();
    	$row = $db_co->getSettingpriceById($id);
    	if($this->getRequest()->isPost()){
    		$_data = $this->getRequest()->getPost();
@@ -74,7 +74,7 @@ class Group_PaymentController extends Zend_Controller_Action {
    			$_data['id']= $id;
    			/* print_r($_data);exit(); */
    			$db_co-> updatesetting($_data);
-   			Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !",'/group/settingprice');
+   			Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !",'/payment/settingprice');
    		}catch(Exception $e){
    			Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
    			$err =$e->getMessage();
@@ -82,52 +82,32 @@ class Group_PaymentController extends Zend_Controller_Action {
    		}
    	} 
    	
-   	$frm = new Group_Form_Frmsettingprice();
+   	$frm = new Payment_Form_Frmsettingprice();
    	$frm_pro=$frm->Frmsettingprice($row);
    	Application_Model_Decorator::removeAllDecorator($frm_pro);
    	$this->view->frm_setting_price = $frm_pro;
    
    }
-   
-  	function  indexoldAction(){
-  		
-  		try{
-  			$db = new Group_Model_DbTable_DbPayment();
-  			if($this->getRequest()->isPost()){
-  				$search=$this->getRequest()->getPost();
-  			}
-  			else{
-  				$search = array(
-  						'adv_search' => '',
-  						//'status_search' => -1,
-  						//'Datesearch_start' => date('Y-m-d'),
-  						//'Datesearch_stop' => date('Y-m-d')
-  		
-  				);
-  		
-  			}
-  			$rs_rows= $db->geteAllpayment($search);
-  			$glClass = new Application_Model_GlobalClass();
-  			//$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
-  			$list = new Application_Form_Frmtable();
-  			$collumns = array("PRICE","SERVICE_PRICE","Date_start","Date_stop","DEADLINE","NOTE","STATUS","USEBY");
-  			$link=array(
-  					'module'=>'group','controller'=>'payment','action'=>'edit',
-  			);
-  			$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('total_use'=>$link));
-  		}catch (Exception $e){
-  			Application_Form_FrmMessage::message("Application Error");
-  			echo $e->getMessage();
-  			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
-  		}
-  		
-  		$frm = new Group_Form_FrmPayment();
-  		$frm_pro=$frm->FrmPayment();
-  		Application_Model_Decorator::removeAllDecorator($frm_pro);
-  		$this->view->frm_pay = $frm_pro;
-  	}
-   
-   
+   function  getClientSearchAction(){
+	   if($this->getRequest()->isPost()){
+		   $data = $this->getRequest()->getPost();
+		   $db = new Payment_Model_DbTable_DbPayment();
+		   $dataclient=$db->getVillageByAjax($data['vllage']);
+		   print_r(Zend_Json::encode($dataclient));
+		   exit();
+	   }
+	
+}
+
+	function getClientNumAction(){
+		if($this->getRequest()->isPost()){
+			$data = $this->getRequest()->getPost();
+			$db = new Payment_Model_DbTable_DbPayment();
+			$search_option_numbert=$db->getNumerClient($data['search_option_number']);
+			print_r(Zend_Json::encode($search_option_numbert));
+			exit();
+		}
+}
 
 }
 

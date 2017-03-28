@@ -12,10 +12,10 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 		//getStaffCode();
 		});
 </script>
-<form id="add_techer" action="<?php echo $this->url(array('module'=>'group','controller'=>'payment','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
+<form id="add_techer" action="<?php echo $this->url(array('module'=>'payment','controller'=>'payment','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
    <table width="45%">
    	<tr>
-
+		<td><?php  echo $frm_pay->getElement('village_1');?></td>
 	   <td ><?php echo $frm_pay->getElement("code_search");?></td>
 
 	   <td><input type="submit" value="search" name="search" label="Search"  id="search_id" dojoType="dijit.form.Button" iconClass="dijitIconSearch" /></td>
@@ -139,6 +139,31 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 		}
 
 
+	}
+
+	url_getvillagecode = '<?php echo $this->url(array('module'=>'payment','controller'=>'payment','action'=>'get-client-search'));?>';
+	function getvillagecode(){
+
+		vllage = dijit.byId('village_1').get('value');
+		if(vllage==0){
+			return false;}
+		dojo.xhrPost({
+			url:url_getvillagecode,
+			content:{
+				'vllage': vllage
+			},
+			handleAs:"json",
+			load: function(data) {
+				alert(data.village_namekh);
+				//dijit.byId('client_no').attr('value',data.code);
+				//district_store  = getDataStorefromJSON('id','name', data);
+				dijit.byId('code').set('value',data.code);
+				dijit.byId('customername').set('value',data.village_namekh);
+			},
+			error: function(err) {
+				alert(err);
+			}
+		});
 	}
 </script>
 

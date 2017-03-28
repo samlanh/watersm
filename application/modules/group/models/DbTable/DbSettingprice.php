@@ -78,9 +78,12 @@ class Group_Model_DbTable_DbSettingprice extends Zend_Db_Table_Abstract
 			$db->rollBack();
 		}
 	}
-	
-	
-	
+
+	function clientPay ($client_pay_id){
+		$db = $this->getAdapter();
+		$sql="SELECT * FROM  tb_used AS u WHERE u.client_num=".$client_pay_id;
+		return $db->fetchRow($sql);
+	}
 	
 function geteAllSettingprice($search=null){
 		$db = $this->getAdapter();

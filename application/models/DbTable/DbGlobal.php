@@ -29,6 +29,15 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql.=" ORDER BY v.`vill_id` DESC";
 		return $db->fetchAll($sql);
 	}
+	function getClientNumer($client=null){
+		$db = $this->getAdapter();
+		$sql="
+		  SELECT u.client_num FROM tb_used AS u;
+		   ";
+
+		$sql.=" ORDER BY u.client_num DESC";
+		return $db->fetchAll($sql);
+	}
 
 
 	public function getReceiptnumber($branch_id=1){

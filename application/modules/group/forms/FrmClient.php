@@ -377,10 +377,8 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'onchange'=>'getvillagecode();', 
 		));
-		
-		
 		$rows =  $db->getVillage();
-		$options_villag=array($this->tr->translate("SELECT_VILLAGE")); //array(''=>"------Village------",-1=>"Add New");
+		$options_villag=array($this->tr->translate("ជ្រើសរើសភូមិ")); //array(''=>"------Village------",-1=>"Add New");
 		if(!empty($rows))foreach($rows AS $row) $options_villag[$row['id']]=$row['village_name'];
 		$village->setMultiOptions($options_villag);
 		
@@ -389,7 +387,7 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 			$village->setValue($data['village_id']);
 			$branch_id->setAttribs(array("readonly"=>true));
 			$_namekh->setValue($data['name_kh']);
-		//	$_village_code->setValue($data['village_code']);
+		//	$_village_code->setValue($data['village_name']);
 		
 			$_sex->setValue($data['sex']);
 			$_clientno->setValue($data['client_no']);
@@ -398,7 +396,7 @@ Class Group_Form_FrmClient extends Zend_Dojo_Form {
 			$_price_service->setValue($data['price_service']);
 			$_desc->setValue($data['remark']);
 			$_status->setValue($data['status']);
-			$_unit_price->setValue($data['unit_price']);
+			$_unit_price->setValue($data['price']);
 			$_price_per_use->setValue($data['price_per_use']);
 			$_id->setValue($data['client_id']);
 			$_price_per_use_id->setValue($data['price_per_use_id']);

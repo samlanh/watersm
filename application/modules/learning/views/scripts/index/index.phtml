@@ -1,0 +1,56 @@
+<?php
+$all=$this->rows;
+
+    $tr = Application_Form_FrmLanguages::getCurrentlanguage();
+    echo $this->headTitle($tr->translate('ADD_CLIENT'));
+ $frm=$this->frmCategory
+?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script>
+    dojo.require("dojo.data.ItemFileWriteStore");
+    dojo.require("dijit.form.DateTextBox");
+    dojo.require("dijit.form.CheckBox");
+    dojo.require("dijit.Dialog");
+</script>
+<form method="post">
+    <table width="50%" style="border:1px solid;">
+        <thead>
+        <tr>
+            <td>
+                <?php echo $frm->getElement('search');?>
+            </td>
+            <td><input type="submit" value="SAVE_NEW" tabindex="2" label="<?php echo $tr->translate('Search');?>" id="save_new" dojoType="dijit.form.Button" name="search"
+                       iconClass="dijitEditorIcon dijitEditorIconSave"/></td>
+        </tr>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Description
+            </th>
+        </tr>
+        </thead>
+       <tbody>
+       <tr>
+           
+       </tr>
+       <?php
+       foreach ($all as $row){
+           ?>
+           <tr>
+               
+               <td><?php echo $row['category'];?></td>
+               <td><?php echo $row['description']?></td>
+               <td><a href="<?php echo $this->baseUrl()."/learning/index/edit/id/".$row['cat_id']?>">edit</a></td>
+               <td><a href="<?php echo $this->baseUrl()."/learning/index/delete/id/".$row['cat_id']?>">delete</a></td>
+           </tr>
+       <?php
+       }
+
+       ?>
+       </tbody>
+
+
+    </table>
+</form>

@@ -1,0 +1,14 @@
+<form id='add_client' action="" method="post">
+<table border="0">
+	<tr>
+		<td>Category</td>
+		<input type="text" name="cat_id_text" value="<?php echo $this->rows['cat_id']?>">
+		<td><input type="text"value="<?php echo $this->rows['category']?>" name="txt_category"></td>
+		<td>Description</td>
+		<td><input type="text"value="<?php echo $this->rows['description']?>"name="txtDesc" > </td>
+	</tr>
+	<tr>
+		<td><input type="submit" value="Edit" name="edit"></td>
+	</tr>
+</table>
+</form>

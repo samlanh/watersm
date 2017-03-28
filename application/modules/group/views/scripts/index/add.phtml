@@ -79,8 +79,6 @@ dojo.require("dijit.layout.TabContainer");
 									<td><?php  echo $frm->getElement('price_per_use');?><?php  echo $frm->getElement('price_per_use_id');?></td>
 									<td><?php echo $tr->translate("ប្រាក់ជំពាក់ថ្លៃសេវា")?></td>
 									<td><input type="text" style="width:110px;color:red;"  required="true" value="0$"  readonly="true"   name="total_service" id="total_service" dojoType="dijit.form.ValidationTextBox"/></td>
-
-
 								</tr>
 								<tr>
 									<td valign="top"><?php echo $tr->translate("STATUS")?></td>
@@ -302,7 +300,7 @@ function getvillagecode(){
 		},
 		handleAs:"json",
 		load: function(data) {
-			//alert(data.code);
+			alert(data.village_namekh);
 			//dijit.byId('client_no').attr('value',data.code);
 			//district_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('village_code').set('value',data.code);
@@ -426,7 +424,7 @@ total_service=unit_price-pay_service;
 		alert('ការបង់ថ្លៃសេវាមិនអាចច្រើនជាងប្រាក់ដែលបានកំណត់ក្នុងប្រព័ន្ធទេ');
 		dijit.byId('total_service').attr('value','');
 	}else{
-		dijit.byId('total_service').attr('value',total_service+'៛');
+		dijit.byId('total_service').attr('value',total_service);
 	}
 
 

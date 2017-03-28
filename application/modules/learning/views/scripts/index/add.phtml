@@ -1,0 +1,31 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('ADD_CLIENT'));
+?>
+
+<?php $frm=$this->frmCategory?>
+<script src="<?php echo $this->baseUrl();?>/js/help.js"  type="text/javascript"></script>
+<script>
+	dojo.require("dojo.data.ItemFileWriteStore");
+	dojo.require("dijit.form.DateTextBox");
+	dojo.require("dijit.form.CheckBox");
+	dojo.require("dijit.Dialog");
+</script>
+
+<form id='add_client' action="" method="post">
+
+
+
+<table border="0">
+	<tr>
+		<td>Category</td>
+		<td><?php  echo $frm->getElement('txt_category');?></td>
+		<td>Description</td>
+		<td><?php echo $frm->getElement('txtDesc');?></td>
+	</tr>
+	<tr>
+		<td><input type="submit" value="SAVE_NEW" tabindex="1" label="<?php echo $tr->translate('SAVENEW');?>" id="save_new" dojoType="dijit.form.Button" name="save_new"
+				   iconClass="dijitEditorIcon dijitEditorIconSave"/></td>
+	</tr>
+</table>
+</form>

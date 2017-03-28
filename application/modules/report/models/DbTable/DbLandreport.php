@@ -284,7 +284,12 @@ u.new,
 	(SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) AS date_start
  FROM tb_used AS u
 				";
-       $where=" WHERE 1";
+       $where="
+          WHERE u.create_date>=(SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
+	AND 
+	u.create_date<=(SELECT s.deadline FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
+	AND u.new=1 ORDER BY village_id DESC	
+       ";
       	if(!empty($search['adv_search'])){
       		$s_where=array();
       		$s_search=$search['adv_search'];
