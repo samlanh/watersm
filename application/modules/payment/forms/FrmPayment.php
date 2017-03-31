@@ -18,7 +18,15 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 		$this->text = 'dijit.form.TextBox';
 		$this->tarea = 'dijit.form.SimpleTextarea';
 	}
-	
+	public function getUserId(){
+		$session_user=new Zend_Session_Namespace('auth');
+		return $session_user->user_id;
+
+	}
+	public function getUserSession(){
+		$session_user=new Zend_Session_Namespace('auth');
+		return $session_user->first_name;
+	}
 	public function FrmPayment($data=null){
 
 		$db = new Application_Model_DbTable_DbGlobal();
@@ -27,7 +35,8 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 		$_title->setAttribs(array('dojoType'=>$this->tvalidate,
 				'onkeyup'=>'this.submit()',
 				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("ADVANCE_SEARCH")
+				'placeholder'=>$this->tr->translate("ADVANCE_SEARCH"),
+			'style'=>'padding-left:5px;'
 		));
 		$_title->setValue($request->getParam("adv_search"));
 
@@ -46,6 +55,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.Button',
 				'iconclass'=>'dijitIconSearch',
 				'class'=>'fullside',
+			'style'=>'padding-left:5px;'
 		));
 		$label=$this->tr->translate("SEARCH");
 		$_btn_search->setLabel("SEARCh");
@@ -56,6 +66,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 			'dojoType'=>'dijit.form.FilteringSelect',
 			'class'=>'fullside',
 			'onchange'=>'getvillagecode();',
+			'style'=>'padding-left:5px;'
 		));
 		$rows =  $db->getVillage();
 		$options_villag=array($this->tr->translate("")); //array(''=>"------Village------",-1=>"Add New");
@@ -67,6 +78,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 			'dojoType'=>'dijit.form.FilteringSelect',
 			'class'=>'fullside',
 			'onchange'=>'getClientNum();',
+
 		));
 
 		$rows_ed =  $db->getClientNumer();
@@ -81,6 +93,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'readonly'=>'true',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+			'style'=>'padding-left:5px;'
 				));
 		$start_date->setValue(date('Y-m-d'));
 
@@ -90,6 +103,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'readonly'=>'true',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+			'style'=>'padding-left:5px;'
 		));
 		$end_date->setValue(date('Y-m-d'));
 
@@ -100,7 +114,8 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 		$service_price->setAttribs(array(
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
-				'required'=>true
+				'required'=>true,
+			'style'=>'padding-left:5px;'
 		));
 
 
@@ -108,6 +123,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 		$note->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
+			'style'=>'padding-left:5px;'
 		));
 
 
@@ -115,6 +131,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 		$status ->setAttribs(array(
 				'dojoType'=>'dijit.form.FilteringSelect',
 				'class'=>'fullside',
+			'style'=>'padding-left:5px;'
 				));
 		$options= array(1=>"ប្រើប្រាស់",0=>"មិនប្រើប្រាស់");
 		$status->setMultiOptions($options);
@@ -125,6 +142,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'readonly'=>'true',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+			'style'=>'padding-left:5px;'
 		));
 		$Dateline->setValue(date('Y-m-d'));
 
@@ -140,7 +158,11 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 		$Datesearch_start->setAttribs(array('dojoType'=>'dijit.form.DateTextBox',
 				'class'=>'fullside',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-				'onchange'=>'CalculateDate();'));
+				'onchange'=>'CalculateDate();',
+				'style'=>'padding-left:5px;'
+		)
+
+		);
 		$_date = $request->getParam("Datesearch_start");
 
 		if(empty($_date)){
@@ -152,7 +174,9 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 		$Datesearch_stop->setAttribs(array('dojoType'=>'dijit.form.DateTextBox',
 				'class'=>'fullside',
 				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
-				'onchange'=>'CalculateDate();'));
+				'onchange'=>'CalculateDate();',
+			'style'=>'padding-left:5px;'
+			));
 		$_date = $request->getParam("Datesearch_stop");
 
 		if(empty($_date)){
@@ -167,6 +191,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 				'readonly'=>'true',
+			'style'=>'padding-left:5px;'
 		));
 
 		$address=new Zend_Dojo_Form_Element_TextBox('address');
@@ -174,6 +199,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 				'readonly'=>'true',
+			'style'=>'padding-left:5px;'
 		));
 
 		$code=new Zend_Dojo_Form_Element_TextBox('code');
@@ -181,13 +207,15 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 				'readonly'=>'true',
-			'required'=>'true'
+			'required'=>'true',
+			'style'=>'padding-left:5px;'
 		));
 		$code_search=new Zend_Dojo_Form_Element_TextBox('code_search');
 		$code_search->setAttribs(array(
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
-				'placeholder'=>$this->tr->translate("បញ្ចូលលេខកូដដើម្បីស្វែងរក")
+				'placeholder'=>$this->tr->translate("បញ្ចូលលេខកូដដើម្បីស្វែងរក"),
+			'style'=>'padding-left:5px;'
 		));
 
 
@@ -197,26 +225,35 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 				'readonly'=>'true',
+			'style'=>'padding-left:5px;color:red'
 		));
 		$total_full_pay=new Zend_Dojo_Form_Element_TextBox('total_full_pay');
 		$total_full_pay->setAttribs(array(
 			'dojoType'=>'dijit.form.NumberTextBox',
 			'class'=>'fullside',
-
+			'required'=>'true',
+			'style'=>'padding-left:5px;color:red;'
 		));
-
-		$total_full_pay->setValue(40000);
 
 		$input_money=new Zend_Dojo_Form_Element_TextBox('input_money');
 		$input_money->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
-				'class'=>'fullside',
-				'required'=>'true',
-				'onkeyup'=>'calculate()'
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+			'required'=>'true',
+			'onkeyup'=>'calculate()',
+			'style'=>'padding-left:5px;'
+		));
+		$maintanance_service=new Zend_Dojo_Form_Element_TextBox('maintanance_service');
+		$maintanance_service->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+			'required'=>'true',
+			'readonly'=>'true',
+			'style'=>'padding-left:5px;'
 		));
 
 		$customername_id=new Zend_Form_Element_Hidden('customername_id');
-		$user_id=new Zend_Form_Element_Hidden('user_id');
+	//	$user_id=new Zend_Form_Element_Hidden('user_id');
 		$village_id=new Zend_Form_Element_Hidden('village_id');
 		$seting_price_id=new Zend_Form_Element_Hidden('seting_price_id');
 		$used_id=new Zend_Form_Element_Hidden('used_id');
@@ -227,7 +264,9 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 		$old_owed->setAttribs(array(
 			'dojoType'=>'dijit.form.NumberTextBox',
 			'class'=>'fullside',
-
+			'readonly'=>'true',
+			'style'=>'color:red',
+			'style'=>'padding-left:5px;'
 		));
 		$old_owed->setValue(5000);
 
@@ -235,21 +274,28 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 		$new_owed->setAttribs(array(
 			'dojoType'=>'dijit.form.NumberTextBox',
 			'class'=>'fullside',
+			'readonly'=>'true',
+			'required'=>'true',
+			'style'=>'padding-left:5px;color:red;'
 
 		));
 
 
-		$money_debts=new Zend_Dojo_Form_Element_TextBox('money_debts');
-		$money_debts->setAttribs(array(
-				'dojoType'=>'dijit.form.NumberTextBox',
+		$date_input=new Zend_Dojo_Form_Element_DateTextBox('date_input');
+		$date_input->setAttribs(array(
+				'dojoType'=>'dijit.form.DateTextBox',
 				'class'=>'fullside',
-				'readonly'=>'true',
+				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+			'style'=>'padding-left:5px;'
 		));
+		$date_input->setValue(date('Y-m-d'));
+
 		$service_price=new Zend_Dojo_Form_Element_TextBox('service_price');
 		$service_price->setAttribs(array(
 			'dojoType'=>'dijit.form.NumberTextBox',
 			'class'=>'fullside',
 			'readonly'=>'true',
+			'style'=>'padding-left:5px;'
 		));
 
 		$old_conter=new Zend_Dojo_Form_Element_TextBox('old_conter');
@@ -257,6 +303,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 				'readonly'=>'true',
+			'style'=>'padding-left:5px;'
 		));
 
 		$new_conter=new Zend_Dojo_Form_Element_TextBox('new_conter');
@@ -264,6 +311,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 				'readonly'=>'true',
+			'style'=>'padding-left:5px;'
 
 		));
 		$unit_price=new Zend_Dojo_Form_Element_TextBox('unit_price');
@@ -271,6 +319,7 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.NumberTextBox',
 				'class'=>'fullside',
 					'readonly'=>'true',
+			'style'=>'padding-left:5px;'
 
 		));
 
@@ -279,14 +328,23 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 				'dojoType'=>'dijit.form.TextBox',
 				'class'=>'fullside',
 				'readonly'=>'true',
+				'style'=>'padding-left:5px;'
 		));
+		$user_id=new Zend_Form_Element_Hidden('user_id');
 
+		$user_name=new Zend_Dojo_Form_Element_TextBox('user_name');
+		$user_name->setAttribs(array(
+			'dojoType'=>'dijit.form.TextBox',
+			'class'=>'fullside',
+			'readonly'=>'true',
+			'style'=>'padding-left:5px;'
+		));
+		$user_name->setValue($this->getUserSession());
 		/*	this place for update*/
 		$id = new Zend_Form_Element_Hidden("id");
 		if($data!=null){
-//$village->setValue($data['village_id']);
 			$customname->setValue($data['client_kh']);
-			//$money_debts->setValue($data['money_debts']);
+			$date_input->setValue($data['date_input']);
 			$old_conter->setValue($data['stat_use']);
 			$new_conter->setValue($data['end_use']);
 			$moneyto_pay->setValue($data['total_price']);
@@ -305,13 +363,14 @@ Class Payment_Form_FrmPayment extends Zend_Dojo_Form {
 			//$village_id->setValue($data['village_id']);
 			//$seting_price_id->setValue($data['seting_price_id']);
 			//$used_id->setValue($data['id']);
-			//$total_full_pay->setValue($data['total_full_pay']);
-
-
+			$total_full_pay->setValue($data['total_payment']);
+			$maintanance_service->setValue($data['maintanance_service']);
+			$user_id->setValue($this->getUserId());
+			$user_name->setValue($this->getUserSession());
 		}
 		/*	this place for all set value can use in index add or edi so we dont need to write html direc */
 	
-		$this->addElements(array($total_full_pay,$search_option_number,$village,$used_id,$seting_price_id,$village_id,$user_id,$customername_id,$total_full_pay,$new_owed,$old_owed,$code_search,$unit_price,$service_price,$code,$address,$phone,$Dateline,$customname,$money_debts,$old_conter,$new_conter,$moneyto_pay,$input_money,$start_date,$end_date));
+		$this->addElements(array($user_name,$user_id,$maintanance_service,$total_full_pay,$search_option_number,$village,$used_id,$seting_price_id,$village_id,$customername_id,$total_full_pay,$new_owed,$old_owed,$code_search,$unit_price,$service_price,$code,$address,$phone,$Dateline,$customname,$date_input,$old_conter,$new_conter,$moneyto_pay,$input_money,$start_date,$end_date));
 		return $this;
 
 	}

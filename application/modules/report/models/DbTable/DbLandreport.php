@@ -1160,11 +1160,11 @@ public function getAllOutstadingLoan($search=null){
       	$db = $this->getAdapter();
       	$sql = "SELECT * FROM v_gettransferloan WHERE 1";
       	$where ='';
-      
+
       	$from_date =(empty($search['start_date']))? '1': " date >= '".$search['start_date']." 00:00:00'";
       	$to_date = (empty($search['end_date']))? '1': " date <= '".$search['end_date']." 23:59:59'";
       	$where.= " AND ".$from_date." AND ".$to_date;
-      
+
       	if($search['branch_id']>0){
       		$where.=" AND branch_id = ".$search['branch_id'];
       	}
@@ -1196,13 +1196,13 @@ public function getAllOutstadingLoan($search=null){
       }
       public function getClientLoanCo($search = null){//rpt-loan-released
       	$db = $this->getAdapter();
-      
+
       	$sql = "SELECT *,sum(total_capital) as alltotal_principle,count(level) as totallevel FROM v_released_co WHERE 1";
       	$where ='';
       	$from_date =(empty($search['start_date']))? '1': " date_release >= '".$search['start_date']." 00:00:00'";
       	$to_date = (empty($search['end_date']))? '1': " date_release <= '".$search['end_date']." 23:59:59'";
       	$where.= " AND ".$from_date." AND ".$to_date;
-      	 
+
       	if($search['branch_id']>0){
       		$where.=" AND branch_id = ".$search['branch_id'];
       	}
@@ -1219,7 +1219,7 @@ public function getAllOutstadingLoan($search=null){
       		$s_where = array();
       		$s_search = addslashes(trim($search['adv_search']));
       		$s_where[] = " branch_name LIKE '%{$s_search}%'";
-      		
+
       		$s_where[] = " client_number LIKE '%{$s_search}%'";
       		$s_where[] = " client_name LIKE '%{$s_search}%'";
 //       		$s_where[] = " total_capital LIKE '%{$s_search}%'";
@@ -1227,7 +1227,7 @@ public function getAllOutstadingLoan($search=null){
 //       		$s_where[] = " admin_fee LIKE '%{$s_search}%'";
       		$s_where[] = " name_en LIKE '%{$s_search}%'";
       		$s_where[] = " client_khname LIKE '%{$s_search}%'";
-      		
+
       		$s_where[] = " loan_type LIKE '%{$s_search}%'";
       		$where .=' AND ('.implode(' OR ',$s_where).')';
       	}
@@ -1262,7 +1262,7 @@ public function getAllOutstadingLoan($search=null){
 		  if(empty($rs)){return ''; }else{
 				return $rs;
 			}
-		
+
 	  }
 public static function getUserId(){
 	  	$session_user=new Zend_Session_Namespace('auth');
@@ -1323,15 +1323,15 @@ function updatePaymentStatus($data){
 	  				// 	  				'comission'=>$data['commission'],
 	  				//     				'payment_number'=>$data['loan_type'],
 	  		);
-	  		
+
 	  		$this->_name="ln_sale";
 	  		$where = " id = ".$data['id'];
 	  		$this->update($arr, $where);
-	  		
+
 	  		$this->_name="ln_saleschedule";
 	  		$where = " principal_permonth=principal_permonthafter AND is_completed=0 AND sale_id = ".$data['id'];
 	  		$this->delete($where);
-	  		
+
 	  		$total_day=0;
 	  		$old_remain_principal = 0;
 	  		$old_pri_permonth = 0;
@@ -1356,9 +1356,9 @@ function updatePaymentStatus($data){
 	  		$payment_method = $data["schedule_opt"];
 	  		$j=0;
 	  		$pri_permonth=0;
-	  		
+
 	  		$str_next = '+1 month';
-	  		
+
 	  		//     		$str_next = $dbtable->getNextDateById($data['collect_termtype'],$data['amount_collect']);//for next,day,week,month;
 // 	  		echo $loop_payment;exit();
 	  		$ids =explode(',', $data['identity']);
@@ -1406,10 +1406,10 @@ function updatePaymentStatus($data){
 	  								$old_pri_permonth = $data['total_payment'.$j];
 	  							}
 	  							$old_interest_paymonth = 0;
-	  							 
+
 	  							$cum_interest = $cum_interest+$old_interest_paymonth;
 	  							$amount_day = $dbtable->CountDayByDate($from_date,$data['date_payment'.$j]);
-	  							 
+
 	  							$this->_name="ln_saleschedule";
 	  							$datapayment = array(
 	  									'branch_id'=>$data['branch_id'],
@@ -1464,12 +1464,12 @@ function updatePaymentStatus($data){
 	  						//echo "remain_principal=".$data['sold_price']."-installment_paid=".$data['total_installamount'];
 // 	  						echo $remain_principal;exit();
 	  					}
-	  		
+
 	  					$next_payment = $data['first_payment'];
 	  					$next_payment = $dbtable->checkFirstHoliday($next_payment,3);//normal day
 	  				}
-	  				
-	  				
+
+
 	  				$amount_day = $dbtable->CountDayByDate($from_date,$next_payment);
 	  				$total_day = $amount_day;
 	  				$interest_paymonth =$remain_principal*(($data['interest_rate']/12)/100);//fixed 30day
@@ -1487,16 +1487,16 @@ function updatePaymentStatus($data){
 	  					$old_pri_permonth = $data['total_payment'.$i];
 	  					if($key==1){
 	  						$old_remain_principal = $data['price_sold'];
-	  							
+
 	  					}else{
 	  						$old_remain_principal = $old_remain_principal-$old_pri_permonth;
 	  					}
-	  		
+
 	  					$old_interest_paymonth = ($data['interest_rate']==0)?0:$this->round_up_currency(1,($old_remain_principal*$data['interest_rate']/12/100));
-	  		
+
 	  					$cum_interest = $cum_interest+$old_interest_paymonth;
 	  					$amount_day = $dbtable->CountDayByDate($from_date,$data['date_payment'.$i]);
-	  		
+
 	  					$this->_name="ln_saleschedule";
 	  					$datapayment = array(
 	  							'branch_id'=>$data['branch_id'],
@@ -1534,9 +1534,9 @@ function updatePaymentStatus($data){
 	  					}else{
 	  						$this->insert($datapayment);
 	  					}
-	  					
+
 	  					//$sale_currid = $this->insert($datapayment);
-	  					
+
 	  				}
 	  				break;
 	  			}
@@ -1571,7 +1571,7 @@ function updatePaymentStatus($data){
 	  						// 		    			        	'service_charge'=>,
 	  						// 		    			        	'status'=>,
 	  				);
-	  				 
+
 	  				$idsaleid = $this->insert($datapayment);
 	  				// 		    		$amount_collect=0;
 	  				$old_remain_principal = 0;
@@ -1581,17 +1581,17 @@ function updatePaymentStatus($data){
 	  				$from_date=$next_payment;
 	  			}
 	  		}
-	  		
+
 // 	  		$arr = array("status"=>0);
 // 	  		$where = "sale_id = ".$data['id'];
 // 	  		$this->_name="ln_saleschedule";
 // 	  		$this->update($arr, $where);
 
-	  		
-	  		
+
+
 // 	  		$dbc = new Loan_Model_DbTable_DbLandpayment();
 // 	  		$row = $dbc->getTranLoanByIdWithBranch($data['id'],null);
-	  		
+
 // 	  		$tranlist = explode(',',$data['indentity']);
 // 	  		 $price_sold = $data['price_sold'];
 // 	  		 $pricipale_paid = 0;
@@ -1602,15 +1602,15 @@ function updatePaymentStatus($data){
 // 	  			$price_sold = $data['price_sold']-$data['price_sold'];
 // 	  			$pricipale_paid = $pricipale_paid+$data['principal_permonth_'.$i];
 // 	  			$begining_after = $data['price_sold']-$pricipale_paid;
-	  			
+
 // 	  			if($isset==0){
 // 	  				$begining = $data['price_sold'];$isset=1;
-	  				
+
 // 	  			}else{
 // 	  				$begining=$begining-$old_pricipale;
 // 	  			}
 // 	  			$old_pricipale=$data['principal_permonth_'.$i];
-	  			
+
 // 	  			$datapayment = array(
 // 	  					'sale_id'=>$data['id'],
 // 	  					'begining_balance'=> $begining,//good
@@ -1630,7 +1630,7 @@ function updatePaymentStatus($data){
 // 	  			);
 // 	  			$this->_name="ln_saleschedule";
 // 	  			$sale_id= $this->insert($datapayment);
-	  			
+
 // 	  			if($data['paid_amount_'.$i]>0){
 // 		  			$array = array(
 // 		  					'client_id'         =>$row['client_id'],
@@ -1664,7 +1664,7 @@ function updatePaymentStatus($data){
 // 		  			);
 // 		  			$this->_name='ln_client_receipt_money';
 // 		  			$crm_id = $this->insert($array);
-		  			
+
 // 		  			$array = array(
 // 		  					'crm_id'				=>$crm_id,
 // 		  					'lfd_id'				=>$sale_id,

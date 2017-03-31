@@ -28,6 +28,10 @@ class Payment_Model_DbTable_DbPayment extends Zend_Db_Table_Abstract
 				'seting_price_id'=>$searchdata['seting_price_id'],
 				'village_id'=>$searchdata['village_id'],
 				'used_id'=>$searchdata['used_id'],
+				'date_input'=>$searchdata['date_input'],
+				'maintanance_service'=>$searchdata['maintanance_service'],
+				'user_id'=>$this->getUserId(),
+
 
 			);
 			$this->_name='tbl_payment';
@@ -259,6 +263,7 @@ village_id,phone,status,date_cus_start FROM ln_client";
 	(SELECT s.date_stop FROM tb_settingprice AS s WHERE s.setId=u.seting_price_id LIMIT 1) AS date_stop,
 	(SELECT s.date_start FROM tb_settingprice AS s WHERE s.setId=u.seting_price_id LIMIT 1) AS date_start,
 	(SELECT s.deadline FROM tb_settingprice AS s WHERE s.setId=u.seting_price_id LIMIT 1) AS deadline,
+	(SELECT s.maintanance_service FROM tb_settingprice AS s WHERE s.setId=u.seting_price_id LIMIT 1) AS maintanance_service,
 				u.id,		
 				u.total_price,
 				u.id,
@@ -266,6 +271,7 @@ village_id,phone,status,date_cus_start FROM ln_client";
 				u.end_use			
 			FROM 
 				tb_used AS u where u.client_num='".$client."'
+				order by u.id desc limit 1
 			
 			"	;
 //$condition="	tb_used AS u 	where u.client_num='".$client."'";
@@ -277,15 +283,17 @@ function getListPayment($search=null){
 					$sql="
 			SELECT
 			pa.pay_id ,
+			
 				(SELECT cl.client_number FROM ln_client AS cl WHERE pa.client_id=cl.client_id LIMIT 1) AS client_num,
 				(SELECT cl.name_kh FROM ln_client AS cl WHERE pa.client_id=cl.client_id LIMIT 1) AS name_kh,
+				pa.input_pay,
 				pa.total_payment,
 				pa.payment_month,
-				pa.input_pay,
 				pa.owed_last_month,
 				pa.owed_next_month,
-				pa.used_id,
-				(SELECT v.village_namekh FROM ln_village AS v WHERE v.vill_id=pa.village_id LIMIT 1 )AS village_namekh	
+			  	(SELECT v.village_namekh FROM ln_village AS v WHERE v.vill_id=pa.village_id LIMIT 1 )AS village_namekh	
+				,pa.date_input,
+				(select usr.user_name From rms_users as usr where pa.user_id=usr.id limit 1) as user_name
 			FROM
 				tbl_payment AS pa
 					";
@@ -311,7 +319,8 @@ function getListPayment($search=null){
 		 	pa.pay_id,
 			(Select ln.name_kh From ln_client as ln WHERE ln.client_id=pa.client_id limit 1) as client_kh,
 			(Select ln.client_number From ln_client as ln where ln.client_id=pa.client_id limit 1) as client_number,
-			pa.total_payment,pa.payment_month,pa.input_pay,pa.owed_last_month,pa.owed_next_month,
+			pa.total_payment,pa.payment_month,pa.input_pay,pa.owed_last_month,
+			pa.owed_next_month,pa.maintanance_service,pa.date_input,
 			
 			(Select s.price From tb_settingprice AS s WHERE s.setId=pa.seting_price_id limit 1 ) AS Sett_price,
 			(Select v.village_name From ln_village AS v WHERE v.vill_id=pa.village_id limit 1 ) AS village,
@@ -322,6 +331,7 @@ function getListPayment($search=null){
 			(Select u.total_price From tb_used AS u WHERE u.id=pa.used_id limit 1 ) AS total_price,
 			(Select u.stat_use From tb_used AS u WHERE u.id=pa.used_id limit 1 ) AS stat_use,
 			(Select u.end_use From tb_used AS u WHERE u.id=pa.used_id limit 1 ) AS end_use
+			
  			From tbl_payment as pa
 		
 		
@@ -341,6 +351,8 @@ function getListPayment($search=null){
 				//'total_payment'=>$data['total_full_pay'],
 				//'payment_month'=>$data['moneyto_pay'],
 				'input_pay'=>$data['input_money'],
+				'date_input'=>$data['date_input'],
+				'user_id'=>$data['user_id']
 				//'owed_last_month'=>$data['old_owed'],
 				//'owed_next_month'=>$data['new_owed'],
 				//'used_id'=>$this->getUserId(),

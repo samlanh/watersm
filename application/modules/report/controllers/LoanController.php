@@ -10,6 +10,29 @@ class Report_LoanController extends Zend_Controller_Action {
   function indexAction(){
   	
   }
+	public  function  rptUserGetMoneyAction(){
+
+		$db = new Report_Model_DbTable_DbReportUserPay();
+
+		if($this->getRequest()->isPost()){
+			$search = $this->getRequest()->getPost();
+
+		}else {
+			$search = array(
+				'adv_search' => '',
+				'village_name' => '',
+				'client_name' =>-1,
+
+			);
+
+		}
+
+		$this->view->rows =$db->userGetMoney($search);
+		$frm = new Loan_Form_FrmSearchLoan();
+		$frm = $frm->AdvanceSearch();
+		Application_Model_Decorator::removeAllDecorator($frm);
+		$this->view->frm_search = $frm;
+	}
   function rptLoanDisburseCoAction(){//realease by co
 	  $db  = new Report_Model_DbTable_DbLandreport();
 	  if($this->getRequest()->isPost()){
@@ -23,19 +46,19 @@ class Report_LoanController extends Zend_Controller_Action {
 	  				'co_id'=>-1,
 	  				'start_date'=> date('Y-m-d'),
 	  				'end_date'=>date('Y-m-d'));
-	  			
+
 	  	}
   	$this->view->list_end_date=$search;
   	$this->view->loanrelease_list=$db->getAllLoanCo($search);
-  	  	 
+
   	$frm = new Loan_Form_FrmSearchLoan();
   	$frm = $frm->AdvanceSearch();
   	Application_Model_Decorator::removeAllDecorator($frm);
   	$this->view->frm_search = $frm;
-  	
+
   	$key = new Application_Model_DbTable_DbKeycode();
   	$this->view->data=$key->getKeyCodeMiniInv(TRUE);
-  	 
+
   }
   function rptLoancollectAction(){//list payment that collect from client
   	$dbs = new Report_Model_DbTable_DbloanCollect();
@@ -364,8 +387,8 @@ class Report_LoanController extends Zend_Controller_Action {
 
   
   }
-  
-  
+
+
   public  function  rptOfMonthVillageAction(){
   	
   	

@@ -51,7 +51,7 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 							<td style="color:blue; "><?php echo $frm_pay->getElement('input_money');?></td>
 
 							<td><?php echo $tr->translate("ប្រាក់បង់សរុប");?></td>
-							<td style="color:blue; "><?php echo $frm_pay->getElement('total_full_pay');?></td>
+							<td style="color:red; "><?php echo $frm_pay->getElement('total_full_pay');?></td>
 						</tr>
 						<tr>
 
@@ -60,7 +60,13 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 							<td style="color:blue; "><?php echo $frm_pay->getElement('old_owed');?></td>
 							<td><?php echo $tr->translate("ប្រាក់ជំពាក់ខែថ្មី");?></td>
 							<td style="color:blue; "><?php echo $frm_pay->getElement('new_owed');?></td>
-
+							<td><?php echo $tr->translate("សេវាថែទាំ");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('maintanance_service');?></td>
+							<td><?php echo $tr->translate("អ្នកបញ្ជូល");?></td>
+							<td style="color:blue; ">
+								<?php echo $frm_pay->getElement('user_name');?>
+								<?php echo $frm_pay->getElement('user_id');?>
+							</td>
 
 						</tr>
 						<tr>
@@ -71,10 +77,8 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 								<?php echo $frm_pay->getElement('customername');?>
 								<?php echo $frm_pay->getElement('customername_id');?>
 							</td>
-							<td ><?php echo $tr->translate("ចំនួនប្រាក់ត្រូបង់");?></td>
+							<td ><?php echo $tr->translate("តម្លៃប្រើប្រាស់");?></td>
 							<td style="color:blue; "><?php echo $frm_pay->getElement('moneyto_pay');?></td>
-
-
 
 							<td><?php echo $tr->translate("OLD_CONTER");?></td>
 							<td style="color:blue; "><?php echo $frm_pay->getElement('old_conter');?></td>
@@ -105,8 +109,8 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 							<td style="color:blue; "><?php echo $frm_pay->getElement('address');?></td>
 							<td><?php echo $tr->translate("PHONE_NUMBER");?></td>
 							<td style="color:blue; "><?php echo $frm_pay->getElement('phone');?></td>
-							<td><?php echo $tr->translate("ប្រាក់ជំពាក់");?></td>
-							<td style="color:blue; "><?php echo $frm_pay->getElement('money_debts');?></td>
+							<td><?php echo $tr->translate("ថ្ងៃបញ្ជូល");?></td>
+							<td style="color:blue; "><?php echo $frm_pay->getElement('date_input');?></td>
 							<td><?php //echo $tr->translate("ចំនួនប្រាក់ត្រូបង់");?></td>
 							<td><?php //echo $frm_pay->getElement('');?></td>
 						</tr>
@@ -125,19 +129,17 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 		</tr>
 	</table>
 </form>
-
-
-
 <script type="text/javascript">
 	function calculate () {
 		moneyto_pay=parseFloat(dijit.byId('moneyto_pay').get('value'));
 		old_owed=parseFloat(dijit.byId('old_owed').get('value'));
 		input_money=parseFloat(dijit.byId('input_money').get('value'));
-		new_owed=(old_owed+moneyto_pay)-input_money;
+		maintanance_service=parseFloat(dijit.byId('maintanance_service').get('value'));
+		new_owed=(old_owed+moneyto_pay+maintanance_service)-input_money;
 
-		if (input_money>(old_owed+moneyto_pay)){
-			alert("អតិថិជនមិនអាចបង់ប្រាក់ធំជាងតារាងថ្លៃសរុបបានទេ");
+		if (input_money>(old_owed+moneyto_pay+maintanance_service+maintanance_service)){
 			dijit.byId("new_owed").attr('value','');
+			alert("អតិថិជនមិនអាចបង់ប្រាក់ធំជាងតារាងថ្លៃសរុបបានទេ");
 		}else{
 			dijit.byId("new_owed").attr('value',new_owed);
 		}
@@ -160,7 +162,19 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 			},
 			handleAs:"json",
 			load: function(data) {
-				//alert(data.client_num+'-'+data.id);
+
+			/*	var answer = confirm ("Are you sure you want to delete from the database?");
+
+				if (answer){	}*/
+
+				old_owed=parseFloat(dijit.byId('old_owed').get('value'));
+
+				var total_price=data.total_price;
+				var maintanance_service= data.maintanance_service;
+				total_full_pay=parseFloat(total_price)+parseFloat(old_owed)+parseFloat(maintanance_service);
+				new_owed=parseFloat(total_price)+parseFloat(old_owed);
+
+
 				//dijit.byId('client_no').attr('value',data.code);
 				//district_store  = getDataStorefromJSON('id','name', data);
 				dijit.byId('code').set('value',data.client_num);
@@ -174,7 +188,10 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 				dijit.byId('end_date').set('value',data.date_start);
 				dijit.byId('deadline').set('value',data.deadline);
 				dijit.byId('address').set('value',data.village_name);
-				dijit.byId('phone').set('value',data.user_id);
+				dijit.byId('phone').set('value',data.phone);
+				dijit.byId('total_full_pay').set('value',total_full_pay);
+				dijit.byId('new_owed').set('value',new_owed);
+				dijit.byId('maintanance_service').set('value',data.maintanance_service);
 
 				//dijit.byId('seting_price_id').set('value',data.seting_price_id);
 				//dijit.byId('used_id').set('value',data.id);
@@ -187,6 +204,7 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 				$('#user_id').val(data.user_id);
 				$('#client_id').val(data.client_id)
 
+
 			},
 			error: function(err) {
 				alert(err);
@@ -195,5 +213,4 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 	}
 
 </script>
-
 

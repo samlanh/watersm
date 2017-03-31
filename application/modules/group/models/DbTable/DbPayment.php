@@ -221,7 +221,7 @@ village_id,phone,status,date_cus_start FROM ln_client";
 		$db = $this->getAdapter();
 		$sql='
 			SELECT 	u.client_id,u.seting_price_id,u.village_id,u.end_use,u.stat_use,u.total_use,u.total_price,u.ohter_fee,
-					c.name_kh,c.client_number,s.date_start,s.date_stop
+					c.name_kh,c.client_number,s.date_start,s.date_stop,
 			FROM tb_used AS u,tb_settingprice AS s,ln_client AS c 
 			
 			WHERE u.client_id=c.client_id AND u.seting_price_id=s.setId 

@@ -30,11 +30,11 @@ class Payment_indexController extends Zend_Controller_Action {
 			$rs_rows= $db->getListPayment($search);
 
 			$list = new Application_Form_Frmtable();
-			$collumns = array("លេខកូដ","ឈ្មោះ","ដ","ប្រាក់បង់សរុប","ប្រាក់បង់ប្រចាំខែ","ប្រាក់ដែលបានបង់","បំណុលចាស់","បំណុលថ្មី","ភូមិ");
+			$collumns = array("លេខកូដ","ឈ្មោះ","ប្រាក់ដែលបានបង់","ប្រាក់បង់សរុប","ប្រាក់បង់ប្រចាំខែ","បំណុលចាស់","បំណុលថ្មី","ភូមិ","ថ្ងៃបញ្ជូល","អ្នកបញ្ជូល");
 			$link=array(
 				'module'=>'payment','controller'=>'index','action'=>'edit',
 			);
-			$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('total_payment'=>$link));
+			$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('name_kh'=>$link,'client_num'=>$link,'total_payment'=>$link));
 		}catch (Exception $e){
 			Application_Form_FrmMessage::message("Application Error");
 			echo $e->getMessage();
@@ -81,11 +81,6 @@ class Payment_indexController extends Zend_Controller_Action {
 
 	   }
 	   $rs_row=$db->get_client_pay($search);
-
-	   //	$rs_rows= $db->geteAllpayment($searchtada;//call frome model
-	   //$this->view->rows =$db->geteAllpayment($searchdata);
-
-
 	   $frm = new Payment_Form_FrmPayment();
 	   $frm_pay = $frm->FrmPayment($rs_row);
 	   Application_Model_Decorator::removeAllDecorator($frm);
