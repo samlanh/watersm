@@ -13,8 +13,9 @@ dojo.require("dijit.form.DateTextBox");
 <form name="frm_rptstaff" action="<?php echo $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-user-get-money')); ?>" dojoType="dijit.form.Form" method="post">
 	<table style="width:28cm; margin: 0 auto;">
 		<tr>  
-	        <td><?php echo $frm->getElement("adv_search") ; ?></td>
+	        <td><?php echo $frm->getElement("search_option_number") ; ?></td>
 	        <td><?php echo $frm->getElement('village_name'); ?></td>
+			<td><?php echo $frm->getElement("user_id") ; ?></td>
 	   		<td><?php echo $frm->getElement('start_date');?></td>
 	   		<td><?php echo $frm->getElement('end_date');?></td>
 	   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
@@ -36,7 +37,7 @@ dojo.require("dijit.form.DateTextBox");
 					</style>
         			<table width="100%" style="font-family:'Khmer OS Battambang';" style="margin:0; padding:0;border:none;" >
 			        	<tr>
-							<input type="date">
+
 			                <td width="20%"><img src="<?php echo $this->baseUrl();?>/images/logo.jpg" height="85px"></td>
 			                <td width="60%" valign="top">
 			                 <h2 style="text-align:center; font-size:16px; font-family:'Khmer MEF2'"><label><?php echo $tr->translate("WATER_STATION_PDAO");?></label></h2>
@@ -77,17 +78,12 @@ dojo.require("dijit.form.DateTextBox");
 												<td width="15%"​​><?php echo $i;?></td>
 												<td width="15%"><?php echo $row['user_name'];?></td>
 												<td width="15%"><?php echo $row['date_start'];?></td>
-												<td width="15%"><?php echo $row['date_start'];?></td>
+												<td width="15%"><?php echo $row['date_stop'];?></td>
 												<td width="15%"><?php echo $row['total_usr_get_money']."៛";?></td>
 										</tr>
 											<?php
 											}
 											?>
-
-
-
-
-
 						                  <tr bgcolor="#c1d0f3" class="style" align="center" style="padding:0px 2px;white-space: nowrap;">
 											<td colspan="3" style="background-color: #fff;border-bottom: hidden;border-left: hidden">&nbsp;</td>
 						                    <td  width="15%"​  style="text-align: right; padding-right: 20px;"><?php echo ("TOTAL");?></td>
@@ -102,6 +98,23 @@ dojo.require("dijit.form.DateTextBox");
 			            </tr>
             			
             	</table>
+
+				<?php
+				echo "<br>";
+				print_r($this->list);
+
+				?>
+
+
+
+
+
+
+
+
+					<!--////////////////////////////////////////////<<<<<<<<<<-->
+
+
             </div>
     	</td>
     </tr>

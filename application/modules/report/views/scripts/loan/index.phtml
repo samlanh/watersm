@@ -5,7 +5,7 @@
   $rpt_client_water = $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-client-water'));
   $rpt_of_village = $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-of-village'));
   $rpt_water_month= $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-water-month'));
-  $rpt_of_month = $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-of-month'));
+  $rpt_amount_month = $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-amount-month'));
   $rpt_of_month = $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-of-month-village'));
   
   $rpt_client = $this->url(array('module'=>'report','controller'=>'groupmember','action'=>'rpt-client'));
@@ -106,7 +106,7 @@
     <li><a href="<?php echo $rpt_client_water;?>" style="color: red;"><?php echo $tr->translate('REPORT_CLIENT_USE_WATER');?></a></li>
     <li><a href="<?php echo $rpt_of_village;?>" style="color: red;"><?php echo $tr->translate('REPORT_WATER_OF_VILLAGE');?></a></li>
     <li><a href="<?php echo $rpt_of_month;?>" style="color: red;"><?php echo $tr->translate('បញ្ជីប្រចាំខែ');?></a></li>
-    <li><a href="<?php echo  $rpt_of_month;?>" style="color: red;"><?php echo $tr->translate('អំពីរបាយកាប្រចាំខែ');?></a></li>
+    <li><a href="<?php echo  $rpt_amount_month;?>" style="color: red;"><?php echo $tr->translate('អំពីរបាយកាប្រចាំខែ');?></a></li>
     <li><a href="<?php echo $rpt_user_get_money;?>"style="color: red;"><?php echo $tr->translate('របាយការណ៏ប្រមូលប្រាក់ប្រចាំខែ');?></a></li>
     
   	</ul>

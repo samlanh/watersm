@@ -18,6 +18,8 @@ $lang =	$session_lang->lang_id;
       $acl=$this->url(array('module'=>'rsvacl','controller'=>'index','action'=>'index'), null, true);
       $setting=$this->url(array('module'=>'setting','controller'=>'index','action'=>'index'), null, true);
       $sale = $this->url(array('module'=>'loan','controller'=>'index','action'=>'add'), null, true);
+		
+	  //$pay=$this->url(array('module'=>'payment','controller'=>'index','action'=>'add'), null, true);
 
 
 	  
@@ -32,6 +34,7 @@ $lang =	$session_lang->lang_id;
       		'report'=>'<span class="icon_menu"><i class="fa  fa-file-text" aria-hidden="true"></i></span><br>',
       		'rsvacl'=>'<span class="icon_menu"><i class="fa  fa-cog" aria-hidden="true"></i></span><br>',
       		'setting'=>'<span class="icon_menu"><i class="fa  fa-cogs" aria-hidden="true"></i></span><br>',
+	 		'payment'=>'<span class="icon_menu"><i class="fa  fa-cogs" aria-hidden="true"></i></span><br>',
 	 
       		);
 	  $module=Zend_Controller_Front::getInstance()->getRequest()->getModuleName();

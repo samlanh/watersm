@@ -20,17 +20,17 @@ class Payment_indexController extends Zend_Controller_Action {
 			else{
 				$search = array(
 					'adv_search' => '',
-					'status_search' => -1,
+					'search_option_number' =>'',
 					'Datesearch_start' => date('Y-m-d'),
 					'Datesearch_stop' => date('Y-m-d')
 
 				);
 
 			}
-			$rs_rows= $db->getListPayment($search);
+			$rs_rows= $db->geteAllpaymentlist($search);
 
 			$list = new Application_Form_Frmtable();
-			$collumns = array("លេខកូដ","ឈ្មោះ","ប្រាក់ដែលបានបង់","ប្រាក់បង់សរុប","ប្រាក់បង់ប្រចាំខែ","បំណុលចាស់","បំណុលថ្មី","ភូមិ","ថ្ងៃបញ្ជូល","អ្នកបញ្ជូល");
+			$collumns = array("លេខកូដ","ឈ្មោះ","ភូមិ","ប្រាក់បង់សរុប","ប្រាក់បង់ប្រចាំខែ","បំណុលចាស់","ប្រាក់បានបង់","គីឡូចាស់","គីឡូថ្មី","តម្លៃទឹក","អ្នកបញ្ជូល");
 			$link=array(
 				'module'=>'payment','controller'=>'index','action'=>'edit',
 			);
@@ -130,20 +130,26 @@ class Payment_indexController extends Zend_Controller_Action {
   		
   			}
   			$rs_rows= $db->geteAllpayment($search);
-  			$glClass = new Application_Model_GlobalClass();
-  			//$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
-  			$list = new Application_Form_Frmtable();
+  		/*	$glClass = new Application_Model_GlobalClass();
+  			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
+  			*/
+			$list = new Application_Form_Frmtable();
   			$collumns = array("PRICE","SERVICE_PRICE","Date_start","Date_stop","DEADLINE","NOTE","STATUS","USEBY");
   			$link=array(
   					'module'=>'group','controller'=>'payment','action'=>'edit',
   			);
   			$this->view->list=$list->getCheckList(0, $collumns,$rs_rows,array('total_use'=>$link));
+
+
+
+			$rs_rows1= $db->geteAllpayment($search);
+
+
   		}catch (Exception $e){
   			Application_Form_FrmMessage::message("Application Error");
   			echo $e->getMessage();
   			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
   		}
-  		
   		$frm = new Group_Form_FrmPayment();
   		$frm_pro=$frm->FrmPayment();
   		Application_Model_Decorator::removeAllDecorator($frm_pro);

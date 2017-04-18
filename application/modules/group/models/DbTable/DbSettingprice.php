@@ -36,7 +36,10 @@ class Group_Model_DbTable_DbSettingprice extends Zend_Db_Table_Abstract
 	    			'note'=>$data['note'],
 	    			'status'=>$data['status'],
 	    			'create_date' => date("Y-m-d"),
+					'maintanance_service'=>$data['maintanance_service'],
 	    			'user_id'=>$this->getUserId(),
+					'earning_start'=>$data['earning_start'],
+					'earning_stop'=>$data['earning_stop'],
 	    		);
 	    	$this->_name='tb_settingprice';
 	        $this->insert($arr);
@@ -59,6 +62,7 @@ class Group_Model_DbTable_DbSettingprice extends Zend_Db_Table_Abstract
 			$where=" setId=".$data['id'];
 			$arr = array(
 					'price'=>$data['price'],
+					'maintanance_service'=>$data['maintanance_service'],
 					'service_price'=>$data['service_price'],
 	    			'date_start'=>$data['date_start'],
 	    			'date_stop'=>$data['date_stop'],
@@ -66,6 +70,9 @@ class Group_Model_DbTable_DbSettingprice extends Zend_Db_Table_Abstract
 	    			'note'=>$data['note'],
 	    			'status'=>$data['status'],
 	    			'user_id'=>$this->getUserId(),
+					'earning_start'=>$data['earning_start'],
+					'earning_stop'=>$data['earning_stop'],
+
 			);
 			$this->_name='tb_settingprice';
 			$this->update($arr, $where);
@@ -87,7 +94,9 @@ class Group_Model_DbTable_DbSettingprice extends Zend_Db_Table_Abstract
 	
 function geteAllSettingprice($search=null){
 		$db = $this->getAdapter();
-		$sql='select setId,price,service_price,date_start,date_stop,deadline,note,status,(select u.user_name from rms_users as u where u.id=user_id ) as user from tb_settingprice  Where 1';
+		$sql='select setId,price,service_price,maintanance_service,date_start,date_stop,deadline,note,status,
+				earning_start,earning_stop,
+		(select u.user_name from rms_users as u where u.id=user_id limit 1) as user from tb_settingprice  Where 1';
 		 $where="  ";
 	    /*$from_date =(!empty($search['Datesearch_start']))? '1': " date_start >= '".$search['Datesearch_start']." 00:00:00'";
 		$to_date = (!empty($search['Datesearch_stop']))? '1': " date_stop <= '".$search['Datesearch_stop']." 23:59:59'";

@@ -9,6 +9,7 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$session_user=new Zend_Session_Namespace('auth');
 		return $session_user->user_id;
 	}
+
 	
 	function  getAllBranchByUser(){
 		$db = $this->getAdapter();
@@ -29,16 +30,24 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 		$sql.=" ORDER BY v.`vill_id` DESC";
 		return $db->fetchAll($sql);
 	}
+
 	function getClientNumer($client=null){
 		$db = $this->getAdapter();
 		$sql="
-		  SELECT u.client_num FROM tb_used AS u;
+		  SELECT u.client_id,u.client_num FROM tb_used AS u;
 		   ";
-
 		$sql.=" ORDER BY u.client_num DESC";
 		return $db->fetchAll($sql);
 	}
 
+	function getUserList($user=null){
+		$db = $this->getAdapter();
+		$sql="
+		  SELECT u.id,u.user_name FROM rms_users AS u where u.active='1';
+		   ";
+		$sql.=" ORDER BY u.id desc ";
+		return $db->fetchAll($sql);
+	}
 
 	public function getReceiptnumber($branch_id=1){
 		$this->_name='ln_client_receipt_money';
@@ -73,6 +82,22 @@ class Application_Model_DbTable_DbGlobal extends Zend_Db_Table_Abstract
 			$result = " AND $branch_str =".$branch_id;
 			return '';
 		}
+	}
+	function getFirstSearchDefault(){
+		$db=$this->getAdapter();
+		$sql="
+			SELECT s.`date_stop` FROM `tb_settingprice` AS s 
+			WHERE s.`status`='1' ORDER BY s.`setId` DESC LIMIT 1
+		";
+		return $db->fetchOne($sql);
+	}
+	function getEndSearchDefault(){
+		$db=$this->getAdapter();
+		$sql="
+			SELECT s.`earning_stop` FROM `tb_settingprice` AS s 
+			WHERE s.`status`='1' ORDER BY s.`setId` DESC LIMIT 1
+		";
+		return $db->fetchOne($sql);
 	}
 	
 	public function init()

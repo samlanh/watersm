@@ -12,10 +12,11 @@ dojo.require("dijit.form.DateTextBox");
 <title><?php echo $tr->translate("BILLING_CLIENT");?></title>
 <form name="frm_rptstaff" action="<?php echo $this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-water-month')); ?>" dojoType="dijit.form.Form" method="post">
 	<table style="width:28cm; margin: 0 auto;">
-		<tr>  
-	        <td><?php echo $frm->getElement("adv_search");?></td>
+		<tr>
+	        <td><?php echo $frm->getElement("search_option_number");?></td>
+			<td><?php echo $frm->getElement('client_name');?></td>
 	        <td><?php echo $frm->getElement('village_name');?></td>
-	   		<td><?php echo $frm->getElement('client_name');?></td>
+			<td><?php echo $frm->getElement('user_id');?></td>
 	   		<td><?php echo $frm->getElement('start_date');?></td>
 	   		<td><?php echo $frm->getElement('end_date');?></td>
 	   		<td><button iconclass="dijitIconSearch" dojoType="dijit.form.Button" showLabel="true" type="submit"><?php echo $tr->translate("SEARCH");?></button></td>
@@ -24,16 +25,16 @@ dojo.require("dijit.form.DateTextBox");
  </form> 
 <div style=" width:28cm;min-height:22cm; margin:0 auto; border: 1px dotted #ccc; padding:0px 0.5cm">
 <?php $all=$this->rows;?>
-
  <?php
  //print_r($all);exit();
+ $expense=5000;
  $total_water=0; $total_payment=0;
  	foreach ($all as $rows)
 
- 		
  		//$total_water=$rows['end_use']-$rows['stat_use'];
  		//$total_payment=$total_water*$rows['price'];
- {?> 
+ {
+	 ?>
  
           
 	<table style="font-family: 'Khmer OS Content'; width:100%;"  >
@@ -77,7 +78,7 @@ dojo.require("dijit.form.DateTextBox");
 									</tr>
 									<tr>
 										<td width="25%"style="  font-weight: bold" ><?php echo $tr->translate("END_DATE");?></td>
-										<td width="25%"><?php echo $rows['deadline']?></td>
+										<td width="25%" ><?php echo $rows['deadline']?></td>
 										<td width="25%"style="  font-weight: bold" ><?php echo $tr->translate("ADDRESS");?></td>
 										<td width="25%"><?php echo $rows['village_namekh']?></td>
 									</tr>
@@ -104,28 +105,30 @@ dojo.require("dijit.form.DateTextBox");
 						                	<td><?php echo $rows['end_use'];?>m<sup>3</sup></td>
 						                	<td><?php echo $rows['end_use']-$rows['stat_use'];?>m<sup>3</sup></td>
 						                	 <td  width="25%" align="center"><?php echo $rows["price"];?></td>
-						                	<td>&nbsp;</td>
+						                	<td style="padding-left: 10px;"><?php echo ($rows['end_use']-$rows['stat_use'])*$rows["price"];?></td>
 						                </tr>
 						                <tr  style="height: 7px;">
 						                	<td colspan="3" rowspan="5" ><?php //echo $rows['stat_use'];?></td>
-						                	<td  width="25%" align="center" style="background-color: #c1d0f3"><?php echo $tr->translate("MONEY_DEBTS");?></td>
-						                	<td>&nbsp;</td>
-						                </tr> 
-						                <tr style="height: 7px; ">
+											<td  width="25%" align="center" style="background-color: #c1d0f3"><?php echo $tr->translate("DAY_PAY");?></td>
+											<td style="padding-left: 10px;"><?php echo $rows['create_date']?></td>
+
+										</tr>
+
+						                 <tr style="height: 7px; ">
 						                	<td  width="25%" align="center" ><?php echo $tr->translate("MANTAINENT_CONTER");?></td>
-						                	<td><?php echo $rows['maintanance_service']?></td>
+						                	<td style="padding-left: 10px;"><?php echo $rows['maintanance_service']?></td>
 						                </tr> 
 						                <tr style="height: 7px; ">
 						                	<td  width="25%" align="center" style="background-color: #c1d0f3"><?php echo $tr->translate("TOTALY_PAY");?></td>
-						                	<td><?php echo $rows['total_price']?></td>
-						                </tr> 
+						                	<td style="padding-left: 10px;"><?php echo $rows['total_price']?></td>
+						                </tr>
 						                  <tr style="height: 7px; ">
-						                	<td  width="25%" align="center" ><?php echo $tr->translate("DAY_PAY");?></td>
-						                	<td><?php echo $rows['create_date']?></td>
-						                </tr> 
+						                	  <td  width="25%" align="center" ><?php echo $tr->translate("MONEY_DEBTS");?></td>
+											  <td style="padding-left: 10px;"><?php echo $expense;?></td>
+										  </tr>
 						                  <tr style="height: 7px; ">
 						                	<td  width="25%" align="center" style="background-color: #c1d0f3"><?php echo $tr->translate("TOTALY_PAID");?></td>
-						                	<td><?php echo $rows['total_price']+$rows['maintanance_service']?></td>
+						                	<td style="padding-left: 10px;"><?php echo $rows['total_price']+$rows['maintanance_service']+$expense?></td>
 						                </tr> 
 						                
 						                
@@ -139,7 +142,7 @@ dojo.require("dijit.form.DateTextBox");
 							            </tr>
 						               <tr bgcolor="#c1d0f3" style="padding: 0px; 20px;">
 							            	<td colspan="3" align="right" ><?php echo $tr->translate("PLEASE_PAY_BEFOR");?></td>
-							            	<td colspan="2" ><?php echo $rows['deadline'];?></td>
+							            	<td colspan="2" style="padding-left: 20px;"><?php echo $rows['deadline'];?></td>
 							            </tr>
    
 					            </table>
@@ -162,12 +165,12 @@ dojo.require("dijit.form.DateTextBox");
 						                <tr  style="height: 7px; " >
 						                	<td colspan="3" rowspan="4" ><?php //echo $rows['stat_use'];?></td>
 						                	<td  width="25%" align="center" style="background-color: #c1d0f3"><?php echo $tr->translate("MONNEY_TO_PAY_AMOUNT");?> </td>
-						                	<td><?php echo $rows['total_price']+$rows['maintanance_service'] ?></td>
+						                	<td style="padding-left: 10px;"><?php echo $rows['total_price']+$rows['maintanance_service']+$expense ?></td>
 						                </tr> 
 						                 
 						                <tr style="height: 7px; ">
 						                	<td  width="25%" align="center" ><?php echo $tr->translate("DAY_PAYMENT");?> </td>
-						                	<td><?php echo $rows['create_date']?></td>
+						                	<td style="padding-left: 10px;"><?php echo $rows['create_date']?></td>
 						                </tr> 
 						                  <tr style="height: 7px; ">
 						                	<td  width="25%" align="center" style="background-color: #c1d0f3"><?php echo $tr->translate("TOTALY_PAID");?> </td>
@@ -175,7 +178,7 @@ dojo.require("dijit.form.DateTextBox");
 						                </tr> 
 						                  <tr style="height: 7px; ">
 						                	<td  width="25%" align="center" ><?php echo $tr->translate("THE_AMOUNT_lACKING");?> </td>
-						                	<td>&nbsp;</td>
+						                	<td style="padding-left: 10px;">&nbsp;</td>
 						                </tr> 
 						                
 						                

@@ -34,13 +34,18 @@
 							<td><?php  //echo $property->getElement('type_namekh');?></td>
 						</tr> -->
 						<tr>
-							<td><?php echo $tr->translate("PRICE")?></td>
+							<td><?php echo $tr->translate("PRICE_SETTING")?></td>
 							<td><?php  echo $stting->getElement('price');?></td>
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("SERVICE_PRICE")?></td>
 							<td><?php  echo $stting->getElement('service_price');?></td>
 						</tr>
+						<tr>
+							<td><?php echo $tr->translate("maintanance_service")?></td>
+							<td><?php  echo $stting->getElement('maintanance_service');?></td>
+						</tr>
+						
 						<tr>
 							<td><?php echo $tr->translate("Date_start")?></td>
 							<td><?php  echo $stting->getElement('date_start');?></td>
@@ -53,6 +58,14 @@
 						<tr>
 							<td><?php echo $tr->translate("PLEASE_PAY_BEFOR")?></td>
 							<td><?php  echo $stting->getElement('deadline');?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("earning_start")?></td>
+							<td><?php  echo $stting->getElement('earning_start');?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("earning_stop")?></td>
+							<td><?php  echo $stting->getElement('earning_stop');?></td>
 						</tr>
 						<tr>
 							<td><?php echo $tr->translate("NOTE")?></td>

@@ -220,26 +220,34 @@ village_id,phone,status,date_cus_start FROM ln_client";
 		}
 	}
 	
-	function geteAllpayment($search=null){
+	function geteAllpaymentlist($search=null){
 		$db = $this->getAdapter();
 		$sql='
-			SELECT 	u.client_id,u.seting_price_id,u.village_id,u.end_use,u.stat_use,u.total_use,u.total_price,u.ohter_fee,
-					c.name_kh,c.client_number,s.date_start,s.date_stop
-			FROM tb_used AS u,tb_settingprice AS s,ln_client AS c 
-			
-			WHERE u.client_id=c.client_id AND u.seting_price_id=s.setId 
+			SELECT  
+				p.`pay_id`,(SELECT c.`client_number` FROM `ln_client` AS c WHERE c.client_id =p.`client_id`) AS client_id,
+				(SELECT c.`name_kh` FROM `ln_client` AS c WHERE c.client_id =p.`client_id`) AS name_kh,
+				(SELECT  v.village_name FROM ln_village AS v WHERE v.vill_id = p.village_id ) AS village,
+				p.`total_payment`,p.`payment_month`,p.`owed_last_month`,p.`input_pay`,
+				(SELECT us.stat_use FROM `tb_used` AS us  WHERE us.id =p.used_id) AS stat_use,
+				(SELECT us.end_use FROM `tb_used` AS us  WHERE us.id =p.used_id) AS end_use, 
+				(SELECT s.price FROM `tb_settingprice` AS s WHERE s.setId =p.`seting_price_id` ) AS settingprice,
+				(SELECT u.`first_name`  FROM `rms_users` AS u WHERE u.`id`= p.`user_id`) AS user_id 
+			FROM `tbl_payment` AS p 
+			WHERE `pay_note`=1
 		';
-		$where="   ";
-		/*$from_date =(!empty($search['Datesearch_start']))? '1': " date_start >= '".$search['Datesearch_start']." 00:00:00'";
-			$to_date = (!empty($search['Datesearch_stop']))? '1': " date_stop <= '".$search['Datesearch_stop']." 23:59:59'";
-		$where = " AND ".$from_date." AND ".$to_date;  */
-	 
-		/*  if($search['client_id']){
-			$where.=" AND client_id=".$search['code'];
-		}   */
 
 		$where = "  ";
-		//echo $sql.$where;
+		if(!empty($search['search_option_number'])){
+			//$where.=" AND client_id='209' ";
+		$where.=" AND (SELECT cl.client_number FROM ln_client AS cl WHERE p.client_id=cl.client_id LIMIT 1)='".$search['search_option_number']."'";
+		}
+		/* if (!empty($search['adv_search'])){
+			$s_where = array();
+			$s_search = trim(addslashes($search['adv_search']));
+			$s_where[] = " name_kh LIKE '%{$s_search}%'";
+			$s_where[] = " village LIKE '%{$s_search}%'";
+			$where .=' AND ('.implode(' OR ',$s_where).')';
+		} */
 		return $db->fetchAll($sql.$where);
 	
 	}
@@ -346,20 +354,11 @@ function getListPayment($search=null){
 		try{
 			$where="pay_id=".$data['id'];
 			$arr = array(
-				//'client_id'=>$data['customername_id'],
-				//'client_id'=>$data['customname'],
-				//'total_payment'=>$data['total_full_pay'],
-				//'payment_month'=>$data['moneyto_pay'],
+				
 				'input_pay'=>$data['input_money'],
 				'date_input'=>$data['date_input'],
 				'user_id'=>$data['user_id']
-				//'owed_last_month'=>$data['old_owed'],
-				//'owed_next_month'=>$data['new_owed'],
-				//'used_id'=>$this->getUserId(),
-				//'Sett_price'=>$data['unit_price'],
-				//'village'=>$data['village_id'],
-				//'used_id'=>$data['used_id'],
-				//'client_number'=>$data['code'],
+				
 			);
 
 			$this->_name='tbl_payment';

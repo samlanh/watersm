@@ -13,10 +13,10 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 		});
 </script>
 <form id="add_techer" action="<?php echo $this->url(array('module'=>'payment','controller'=>'index','action'=>'index')); ?>" dojoType="dijit.form.Form" method="post">
-   <table width="45%">
+   <table width="30%">
    	<tr>
 		<td ><?php echo $frm_pay->getElement("search_option_number");?></td>
-	   <td ><?php echo $frm_pay->getElement("code_search");?></td>
+	   <td ><?php //echo $frm_pay->getElement("code_search");?></td>
 
 	   <td><input type="submit" value="search" name="search" label="Search"  id="search_id" dojoType="dijit.form.Button" iconClass="dijitIconSearch" /></td>
 
@@ -29,6 +29,7 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 				return false;
 	}
 </script>
+	
 	<?php echo $this->list;?>
 </form>
 

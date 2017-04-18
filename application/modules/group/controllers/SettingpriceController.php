@@ -9,7 +9,7 @@ class Group_SettingpriceController extends Zend_Controller_Action {
     	defined('BASE_URL')	|| define('BASE_URL', Zend_Controller_Front::getInstance()->getBaseUrl());
 	}
 	
-	
+
 	public function indexAction(){
 		  try{
 			$db = new Group_Model_DbTable_DbSettingprice();
@@ -30,7 +30,7 @@ class Group_SettingpriceController extends Zend_Controller_Action {
 			$glClass = new Application_Model_GlobalClass();
 			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
 			$list = new Application_Form_Frmtable();
-			$collumns = array("PRICE","SERVICE_PRICE","Date_start","Date_stop","DEADLINE","NOTE","STATUS","USEBY");
+			$collumns = array("PRICE","SERVICE_PRICE","maintanance_service","Date_start","Date_stop","DEADLINE","NOTE","STATUS","earning_start","earning_stop","USEBY");
 			$link=array(
 					'module'=>'group','controller'=>'settingprice','action'=>'edit',
 			);
@@ -73,7 +73,6 @@ class Group_SettingpriceController extends Zend_Controller_Action {
    	Application_Model_Decorator::removeAllDecorator($frm_pro);
    	$this->view->frm_setting_price = $frm_pro;
    }
-   
    function editAction(){
    	 $id = $this->getRequest()->getParam("id");
    	$db_co = new Group_Model_DbTable_DbSettingprice();

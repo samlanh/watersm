@@ -11,27 +11,42 @@ class Report_LoanController extends Zend_Controller_Action {
   	
   }
 	public  function  rptUserGetMoneyAction(){
+		
 
 		$db = new Report_Model_DbTable_DbReportUserPay();
 
 		if($this->getRequest()->isPost()){
 			$search = $this->getRequest()->getPost();
+		//	print_r($search);exit();
 
 		}else {
 			$search = array(
 				'adv_search' => '',
 				'village_name' => '',
-				'client_name' =>-1,
-
+				'client_name' =>'',
+				'start_datestart_date'=>'',
+				'end_date'=>''
 			);
-
+			//print_r($search);exit();
 		}
-
 		$this->view->rows =$db->userGetMoney($search);
 		$frm = new Loan_Form_FrmSearchLoan();
 		$frm = $frm->AdvanceSearch();
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_search = $frm;
+		$rs_rows= $db->getClientPayWithUser($search);
+		//print_r($rs_rows);exit();
+		$list = new Application_Form_Frmtable();
+		$collumns = array("លេខកូដអតិថិជន","CUSTOMER_NAME","SEX","VILLAGE","ប្រាក់ទទួល","អ្នកទទួល",
+			"CUS_START_DATE");
+		$link=array(
+			'module'=>'group','controller'=>'index','action'=>'edit',
+		);
+		$link1=array(
+			'module'=>'group','controller'=>'index','action'=>'view',
+		);
+		$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('View'=>$link1,'client_number'=>$link,'name_kh'=>$link));
+		//print_r($this->view->list);
 	}
   function rptLoanDisburseCoAction(){//realease by co
 	  $db  = new Report_Model_DbTable_DbLandreport();
@@ -358,20 +373,18 @@ class Report_LoanController extends Zend_Controller_Action {
   	if($this->getRequest()->isPost()){
 		$data=$this->getRequest()->getPost();
 		$search=array(
+			'client_number'=>$data['client_number'],
 			'village_name'=>$data['village_name'],
-			'adv_search'=>$data['adv_search'],
 			'client_name'=>$data['client_name'],
 			'start_date'=>$data['start_date'],
 			'end_date'=>$data['end_date']
 		);
-		//print_r($data);exit();
+		
   	}else {
   		$search = array(
   				'adv_search' => '',
   				'village_name' => '',
   				'client_name' =>'',
-
-
   		);
 
   		//$this->view->rpt_income_permonth =$rs=$db->getAllCustomuse($search);
@@ -387,8 +400,6 @@ class Report_LoanController extends Zend_Controller_Action {
 
   
   }
-
-
   public  function  rptOfMonthVillageAction(){
   	
   	
@@ -413,6 +424,28 @@ class Report_LoanController extends Zend_Controller_Action {
   	Application_Model_Decorator::removeAllDecorator($frm);
   	$this->view->frm_search = $frm;
   }
+
+   public  function  rptAmountMonthAction(){
+    $db = new Report_Model_DbTable_DbLandreport();
+    if($this->getRequest()->isPost()){
+      $search = $this->getRequest()->getPost();
+      
+    }else {
+      $search = array(
+          //'adv_search' => '',
+          'village_name' => '',
+          //'client_name' =>-1,
+      );
+      
+    }
+    
+    $this->view->rows =$db->getAllAmountMonth($search);
+    $frm = new Loan_Form_FrmSearchLoan();
+    $frm = $frm->AdvanceSearch();
+    Application_Model_Decorator::removeAllDecorator($frm);
+    $this->view->frm_search = $frm;
+  }
+  
   
   /*end of my code*/
   

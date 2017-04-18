@@ -35,6 +35,8 @@ $repay_schedule=$this->url(array('module'=>'loan','controller'=>'repaymentschedu
 $quickpayment=$this->url(array('module'=>'loan','controller'=>'ilquickpayment','action'=>'index'), null, true);
 $co=$this->url(array('module'=>'group','controller'=>'co','action'=>'index'), null, true);
 $bad_loan=$this->url(array('module'=>'loan','controller'=>'cancel','action'=>'index'), null, true);
+$paymnet_water=$this->url(array('module'=>'payment','controller'=>'index','action'=>'add'), null, true);
+$settingprice=$this->url(array('module'=>'group','controller'=>'settingprice','action'=>'index'), null, true);
 // report
 $rpt_loanrelease=$this->url(array('module'=>'report','controller'=>'paramater','action'=>'rpt-properties'), null, true);
 $rpt_loanoustading=$this->url(array('module'=>'report','controller'=>'loan','action'=>'rpt-loan-outstanding'), null, true);
@@ -199,7 +201,21 @@ $rpt_exchangemoney=$this->url(array('module'=>'report','controller'=>'loan','act
                             <div class="info"></div>
                             <div class="status"><?php echo $tr->translate('PROFIT');?></div>
                         </a>
-                    </div>  
+                    </div>
+					 <div class="metro-nav-block nav-block-blue double">
+                        <a href="<?php echo $paymnet_water ;?>" data-original-title="">
+                            <i class="fa fa-money"></i>
+                            <div class="info"></div>
+                            <div class="status"><?php echo $tr->translate('CLIENT_PAYMENT');?></div>
+                        </a>
+                    </div>
+					<div class="metro-nav-block nav-block-green double">
+                        <a href="<?php echo $settingprice;?>" data-original-title="">
+                            <i class="fa fa-money"></i>
+                            <div class="info"></div>
+                            <div class="status"><?php echo $tr->translate('SETTINGPRICE');?></div>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="space10"></div>

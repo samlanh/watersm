@@ -110,71 +110,27 @@ class Group_indexController extends Zend_Controller_Action {
 	}
 
 	public function editAction(){
-		try{
-			$db = new Group_Model_DbTable_DbClient();
-			if($this->getRequest()->isPost()){
-				$formdata=$this->getRequest()->getPost();
-				$search = array(
-					'branch_id'=>$formdata['branch_id'],
-					'adv_search' => $formdata['adv_search'],
-					'province_id'=>$formdata['province'],
-					'comm_id'=>$formdata['commune'],
-					'district_id'=>$formdata['district'],
-					'village'=>$formdata['village'],
-					'status'=>$formdata['status'],
-					'start_date'=> $formdata['start_date'],
-					'end_date'=>$formdata['end_date'],
-					'customer_id'=>$formdata['customer_id']
-				);
-			}
-			else{
-				$search = array(
-					'branch_id'=>-1,
-					'adv_search' => '',
-					'status' => -1,
-					'province_id'=>0,
-					'district_id'=>'',
-					'comm_id'=>'',
-					'village'=>'',
-					'start_date'=> date('Y-m-d'),
-					'customer_id'=>-1,
-					'end_date'=>date('Y-m-d'));
-			}
+		$id = $this->getRequest()->getParam("id");
+		$db = new Group_Model_DbTable_DbClient();
+		$row = $db->getEditClientById($id);
+		if($this->getRequest()->isPost()){
+			$_data = $this->getRequest()->getPost();
 
-			$rs_rows= $db->getAllClients($search);
-			$glClass = new Application_Model_GlobalClass();
-			$rs_rows = $glClass->getImgActive($rs_rows, BASE_URL, true);
-			$list = new Application_Form_Frmtable();
-			$collumns = array("BRANCH_NAME","CUSTOMER_CODE","CUSTOMER_NAME","SEX","PHONE","HOUSE","STREET","VILLAGE",
-				"DATE","BY_USER","STATUS","VIEW");
-			$link=array(
-				'module'=>'group','controller'=>'index','action'=>'edit',
-			);
-			$link1=array(
-				'module'=>'group','controller'=>'index','action'=>'view',
-			);
-			$this->view->list=$list->getCheckList(0, $collumns, $rs_rows,array('View'=>$link1,'branch_name'=>$link1,'client_number'=>$link,'name_kh'=>$link,'name_en'=>$link1));
-		}catch (Exception $e){
-			Application_Form_FrmMessage::message("Application Error");
-			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+			try{
+				$_data['id']= $id;
+				$db->updateClient($_data);
+				$this->_redirect('group/index');
+				//Application_Form_FrmMessage::Sucessfull("ការ​បញ្ចូល​ជោគ​ជ័យ !",'/group/index');
+			}catch(Exception $e){
+				Application_Form_FrmMessage::message("ការ​បញ្ចូល​មិន​ជោគ​ជ័យ");
+				$err =$e->getMessage();
+				Application_Model_DbTable_DbUserLog::writeMessageError($err);
+			}
 		}
-
-		$frm = new Application_Form_FrmAdvanceSearch();
-		$frm = $frm->AdvanceSearch();
-		Application_Model_Decorator::removeAllDecorator($frm);
-		$this->view->frm_search = $frm;
-
 		$fm = new Group_Form_FrmClient();
-		$frm = $fm->FrmAddClient();
+		$frm = $fm->FrmAddClient($row);
 		Application_Model_Decorator::removeAllDecorator($frm);
 		$this->view->frm_client = $frm;
-
-		//$db= new Application_Model_DbTable_DbGlobal();
-// 		$this->view->district = $db->getAllDistricts();
-// 		$this->view->commune_name = $db->getCommune();
-// 		$this->view->village_name = $db->getVillage();
-
-		$this->view->result=$search;
 
 	}
 	function viewAction(){

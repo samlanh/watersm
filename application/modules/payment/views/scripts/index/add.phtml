@@ -16,7 +16,7 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 	<table width="45%">
 		<tr>
 			<td ><?php echo $frm_pay->getElement("search_option_number");?></td>
-			<td ><?php echo $frm_pay->getElement("code_search");?></td>
+			
 
 			<td><input type="submit" value="search" name="search" label="Search"  id="search_id" dojoType="dijit.form.Button" iconClass="dijitIconSearch" /></td>
 
@@ -172,7 +172,7 @@ echo $this->headTitle($tr->translate('SETTINGPRICE'));
 				var total_price=data.total_price;
 				var maintanance_service= data.maintanance_service;
 				total_full_pay=parseFloat(total_price)+parseFloat(old_owed)+parseFloat(maintanance_service);
-				new_owed=parseFloat(total_price)+parseFloat(old_owed);
+				new_owed=parseFloat(total_price)+parseFloat(old_owed)+parseFloat(maintanance_service);
 
 
 				//dijit.byId('client_no').attr('value',data.code);

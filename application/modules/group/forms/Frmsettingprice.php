@@ -50,13 +50,11 @@ Class Group_Form_Frmsettingprice extends Zend_Dojo_Form {
 		$label=$this->tr->translate("SEARCH");
 		$_btn_search->setLabel("SEARCh");
 		
-	
-		
 		$Date=new Zend_Dojo_Form_Element_DateTextBox('date_start');
 		$Date->setAttribs(array(
 				'dojoType'=>'dijit.form.DateTextBox',
 				'class'=>'fullside',
-				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'constraints'=>"{datePattern:'dd/MMM/yyyy'}",
 				));
 		$Date->setValue(date('Y-m-d'));
 		
@@ -64,9 +62,28 @@ Class Group_Form_Frmsettingprice extends Zend_Dojo_Form {
 		$date_stop->setAttribs(array(
 				'dojoType'=>'dijit.form.DateTextBox',
 				'class'=>'fullside',
-				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'constraints'=>"{datePattern:'dd/MMM/yyyy'}",
+				'style'=>'color:red'
 		));
 		$date_stop->setValue(date('Y-m-d'));
+
+		$earning_stop=new Zend_Dojo_Form_Element_DateTextBox('earning_stop');
+		$earning_stop->setAttribs(array(
+			'dojoType'=>'dijit.form.DateTextBox',
+			'class'=>'fullside',
+			'constraints'=>"{datePattern:'dd/MMM/yyyy'}",
+			'style'=>'color:red'
+		));
+		$earning_stop->setValue(date('Y-m-d'));
+
+		$earning_start=new Zend_Dojo_Form_Element_DateTextBox('earning_start');
+		$earning_start->setAttribs(array(
+			'dojoType'=>'dijit.form.DateTextBox',
+			'class'=>'fullside',
+			'constraints'=>"{datePattern:'dd/MMM/yyyy'}",
+		));
+		$earning_start->setValue(date('Y-m-d'));
+
 		
 		$price=new Zend_Dojo_Form_Element_NumberTextBox('price');
 		$price->setAttribs(array(
@@ -80,6 +97,14 @@ Class Group_Form_Frmsettingprice extends Zend_Dojo_Form {
 				'class'=>'fullside',
 				'required'=>true
 		));
+		$maintanance_service=new Zend_Dojo_Form_Element_NumberTextBox('maintanance_service');
+		$maintanance_service->setAttribs(array(
+			'dojoType'=>'dijit.form.NumberTextBox',
+			'class'=>'fullside',
+			'required'=>true
+		));
+			
+		
 	
 	
 		$note=new Zend_Dojo_Form_Element_TextBox('note');
@@ -101,7 +126,8 @@ Class Group_Form_Frmsettingprice extends Zend_Dojo_Form {
 		$Dateline->setAttribs(array(
 				'dojoType'=>'dijit.form.DateTextBox',
 				'class'=>'fullside',
-				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'constraints'=>"{datePattern:'dd/MMM/yyyy'}",
+			'style'=>'color:blue;font-weight:bold'
 		));
 		$Dateline->setValue(date('Y-m-d'));
 		
@@ -116,7 +142,7 @@ Class Group_Form_Frmsettingprice extends Zend_Dojo_Form {
 		$Datesearch_start = new Zend_Dojo_Form_Element_DateTextBox('Datesearch_start');
 		$Datesearch_start->setAttribs(array('dojoType'=>'dijit.form.DateTextBox',
 				'class'=>'fullside',
-				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'constraints'=>"{datePattern:'dd/MMM/yyyy'}",
 				'onchange'=>'CalculateDate();'));
 		$_date = $request->getParam("Datesearch_start");
 		
@@ -143,7 +169,7 @@ Class Group_Form_Frmsettingprice extends Zend_Dojo_Form {
 		$Datesearch_stop = new Zend_Dojo_Form_Element_DateTextBox('Datesearch_stop');
 		$Datesearch_stop->setAttribs(array('dojoType'=>'dijit.form.DateTextBox',
 				'class'=>'fullside',
-				'constraints'=>"{datePattern:'dd/MM/yyyy'}",
+				'constraints'=>"{datePattern:'dd/MMM/yyyy'}",
 				'onchange'=>'CalculateDate();'));
 		$_date = $request->getParam("Datesearch_stop");
 		
@@ -171,11 +197,14 @@ Class Group_Form_Frmsettingprice extends Zend_Dojo_Form {
 			$status->setValue($data['status']);
 			$Dateline->setValue($data['deadline']);
 			$service_price->setValue($data['service_price']);
+			$earning_start->setValue($data['earning_start']);
+			$earning_stop->setValue($data['earning_stop']);
+			$maintanance_service->setValue($data['maintanance_service']);
 		}
 		
 		
 		/*	this place for all set value can use in index add or edi so we dont need to write html direc */
-		$this->addElements(array($_title,$price,$service_price,$note,$Date,$status,$_btn_search,$_status_search,$Dateline,$date_stop,$Datesearch_start,$Datesearch_stop));
+		$this->addElements(array($maintanance_service,$earning_start,$earning_stop,$_title,$price,$service_price,$note,$Date,$status,$_btn_search,$_status_search,$Dateline,$date_stop,$Datesearch_start,$Datesearch_stop));
 		return $this;
 		
 	}	

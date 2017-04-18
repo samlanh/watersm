@@ -66,8 +66,10 @@ dojo.require("dijit.layout.TabContainer");
 										
 
 									<td><?php echo $tr->translate("ប្រាក់បង់សេវា")?></td>
-									<td><input type="text" style="width:110px"  required="true"  onkeyup="calculate()"  name="price_service" id="price_service" dojoType="dijit.form.ValidationTextBox"/></td>
+								
+									<td><?php  echo $frm->getElement('price_service');?></td>
 
+									
 								</tr>
 
 
@@ -78,17 +80,14 @@ dojo.require("dijit.layout.TabContainer");
 									<td valign="top"><?php echo $tr->translate("តម្លៃក្នុងមួយឯកត្តា")?></td>
 									<td><?php  echo $frm->getElement('price_per_use');?><?php  echo $frm->getElement('price_per_use_id');?></td>
 									<td><?php echo $tr->translate("ប្រាក់ជំពាក់ថ្លៃសេវា")?></td>
-									<td><input type="text" style="width:110px;color:red;"  required="true" value="0$"  readonly="true"   name="total_service" id="total_service" dojoType="dijit.form.ValidationTextBox"/></td>
+									<td><?php  echo $frm->getElement('total_service');?></td>
 								</tr>
 								<tr>
 									<td valign="top"><?php echo $tr->translate("STATUS")?></td>
 									<td valign="top"><?php  echo $frm->getElement('status');?></td>
 									<td valign="top"><?php echo $tr->translate("NOTE")?></td>
 									<td><?php  echo $frm->getElement('desc');?></td>
-
-
 								</tr>
-
 							</table>
 					</fieldset>
 				</div>
@@ -300,7 +299,7 @@ function getvillagecode(){
 		},
 		handleAs:"json",
 		load: function(data) {
-			alert(data.village_namekh);
+		//	alert(data.village_namekh);
 			//dijit.byId('client_no').attr('value',data.code);
 			//district_store  = getDataStorefromJSON('id','name', data);
 		    dijit.byId('village_code').set('value',data.code);
@@ -310,109 +309,6 @@ function getvillagecode(){
 		}
 	});
 }
-url_getdistrict = '<?php echo $this->url(array('module'=>'other','controller'=>'district','action'=>'get-district'));?>';
-function filterDistrict(){
-	pro_id = dijit.byId('province').get('value');
-	if(pro_id==0){
-		return false;}
-	dojo.xhrPost({
-		url:url_getdistrict,
-		content:{
-			'pro_id': pro_id
-		},
-		handleAs:"json",
-		load: function(data) {
-			district_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('district').set('store', district_store);
-		},
-		error: function(err) {
-			alert(err);
-		}
-	});
-}
-url_getcommune = '<?php echo $this->url(array('module'=>'other','controller'=>'commune','action'=>'get-commune'));?>';
-function filterCommune(){
-	distict_id = dijit.byId('district').get('value');
-	if(distict_id==0){
-		return false;}
-	dojo.xhrPost({
-		url:url_getcommune,
-		content:{
-			'district_id': distict_id
-		},
-		handleAs:"json",
-		load: function(data) {
-			commune_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('commune').set('store', commune_store);
-		},
-		error: function(err) {
-			alert(err);
-		}
-	});
-}
-url_getvillage = '<?php echo $this->url(array('module'=>'other','controller'=>'village','action'=>'get-allvillage'));?>';
-function filterVillage(){
-	commune_id = dijit.byId('commune').get('value');
-	if(commune_id==0){
-		return false;}
-	dojo.xhrPost({
-		url:url_getvillage,
-		content:{
-			'commune_id': commune_id
-		},
-		handleAs:"json",
-		load: function(data) {
-			village_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('village').set('store', village_store);
-		},
-		error: function(err) {
-			alert(err);
-		}
-	});
-}
-url_getdistrict = '<?php echo $this->url(array('module'=>'other','controller'=>'district','action'=>'get-district'));?>';
-function dfilterDistrict(){
-	cpro_id = dijit.byId('cprovince').get('value');
-	if(cpro_id==0){
-		return false;}
-	dojo.xhrPost({
-		url:url_getdistrict,
-		content:{
-			'pro_id': cpro_id
-		},
-		handleAs:"json",
-		load: function(data) {
-			adistrict_store  = getDataStorefromJSON('id','name', data);
-		    dijit.byId('adistrict').set('store', adistrict_store);
-		},
-		error: function(err) {
-			alert(err);
-		}
-	});
-}
-
-//url_getvillage = '<?php echo $this->url(array('module'=>'other','controller'=>'village','action'=>'get-allvillage'));?>';
-//function dfilterVillage(){
-//	dcommune_id = dijit.byId('dcommune').get('value');
-//	if(dcommune_id==0){
-	//	return false;}
-//	dojo.xhrPost({
-	//	url:url_getvillage,
-		//content:{
-			//'commune_id': dcommune_id
-	//	},
-	//	handleAs:"json",
-	//	load: function(data) {
-	//		qvillage_store  = getDataStorefromJSON('id','name', data);
-	//	    dijit.byId('qvillage').set('store', qvillage_store);
-	//	},
-	//	error: function(err) {
-	//		alert(err);
-	//	}
-	//});
-//}
-
-
 function calculate(){
 	/*total_service_price=parseFloat(dijit.byId('total_service').get('value'));*/
 	unit_price=parseFloat(dijit.byId('unit_price').get('value'));
@@ -426,20 +322,12 @@ total_service=unit_price-pay_service;
 	}else{
 		dijit.byId('total_service').attr('value',total_service);
 	}
-
-
-
-
-
 }
 
 function hideDialog1(){
 	dijit.byId('popup_doc_type').hide();
 }
 </script>
-
-
-
 <div class="dijitHidden">
 	<div data-dojo-type="dijit.Dialog" style="width:30%;" id="popup_doc_type" >
 		<form style="background-color: buttonface; width:100%;" id='frm_client_doc_type' dojoType="dijit.form.Form" method="post" enctype="application/x-www-form-urlencoded">

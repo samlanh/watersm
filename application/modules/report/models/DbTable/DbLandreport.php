@@ -227,8 +227,7 @@ function getAllrtpclient($search=null){
 	AND 
 	u.create_date<=(SELECT s.date_stop FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id AND STATUS=1 ORDER BY setId DESC LIMIT 1)
 	AND u.new=1 ORDER BY village_id DESC
-      
-		  ";
+    ";
       	$sql="
        
 SELECT 
@@ -243,20 +242,41 @@ u.new,
 	(SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) AS date_start,
 	(SELECT s.deadline FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) AS deadline
  FROM tb_used AS u
+ 
 	";
-$where="WHERE 1";
+
+		  if ( empty($search['village_name']) AND empty($search['client_name'])){
+			  $where="
+						WHERE  
+						 u.create_date>(SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1)
+						 AND u.create_date<(SELECT s.deadline FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1)
+						 ";
+		  }else{
+			  $where=" WHERE 1 ";
+			 // print_r($search);exit();
+			 
+		  }
+
 		  if (!empty($search['adv_search'])){
+
 			  $s_where=array();
 			  $s_search=addslashes(trim($search['adv_search']));
-			  $s_where[] = " client_num LIKE '%{$s_search}%'";
+			 $s_where[]="(SELECT l.name_kh FROM ln_client AS l WHERE l.client_id=u.client_id LIMIT 1) LIKE '%{.$search.}%'";
 			 $s_where[]=" village_id LIKE '%{$s_search}%'";
 			  $where .=' AND ('.implode(' OR ',$s_where).')';
+		  }
+		  if (!empty($search['client_name'])){
+			  $where.=" AND (SELECT l.client_id FROM ln_client AS l WHERE l.client_id=u.client_id LIMIT 1) = ".$search['client_name'];
+		 }
+		  if (!empty($search['client_number'])){
+			  $where.=" AND (SELECT l.client_id FROM ln_client AS l WHERE l.client_id=u.client_id LIMIT 1) = ".$search['client_number'];
 		  }
 		  if(!empty($search['village_name'])){
 			  $where.=" AND u.village_id= ".$search['village_name'];
 		  }
 		  if(!empty($search['start_date'])){
-			  $where.=" AND (SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) >= ".$search['start_date'];
+
+			  $where.=" AND (SELECT s.date_start FROM tb_settingprice AS s   WHERE s.setId=u.seting_price_id  ORDER BY setId DESC LIMIT 1) >=".$search['start_date'];
 		  }
 
 		 
@@ -302,6 +322,38 @@ u.new,
       	} */
        	return $db->fetchAll($sql.$where);
       }
+
+function  getAllAmountMonth($search=null){
+     /* if(!empty($search['sdfsa'])){
+            test=asdfad[];
+      }else{
+              
+      }*/
+      $_where="(SELECT SUM(total_price) FROM `tbl_expense`) AS total_price ";
+    
+       $db=$this->getAdapter();
+       $sql="SELECT 
+                  SUM(total_payment) AS total_pay ,
+                        $_where
+            FROM tbl_payment 
+            WHERE date_input>=(SELECT  s.`date_start` FROM `tb_settingprice` AS s 
+            WHERE STATUS=1 LIMIT 1 ) AND date_input<=(SELECT  s.`deadline` FROM `tb_settingprice` AS s 
+            WHERE STATUS=1 ORDER BY setId DESC LIMIT 1) ";
+      $where="";          
+      /*if(!empty($search['adv_search'])){
+            $s_where=array();
+            $s_search=$search['adv_search'];
+            $s_where[]=" name_kh  LIKE '%{$s_search}%'";
+            $where .=' AND ('.implode(' OR ',$s_where).')';
+      }*/
+               
+          if($search['village_name']>0){
+                  $where.=" AND village_id= ".$search['village_name'];
+            } 
+            return $db->fetchAll($sql.$where);
+      }
+
+
       
       /*end my code*/
 

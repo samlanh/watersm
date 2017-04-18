@@ -227,15 +227,8 @@ village_id,phone,status,date_cus_start FROM ln_client";
 			WHERE u.client_id=c.client_id AND u.seting_price_id=s.setId 
 		';
 		$where="   ";
-		/*$from_date =(!empty($search['Datesearch_start']))? '1': " date_start >= '".$search['Datesearch_start']." 00:00:00'";
-			$to_date = (!empty($search['Datesearch_stop']))? '1': " date_stop <= '".$search['Datesearch_stop']." 23:59:59'";
-		$where = " AND ".$from_date." AND ".$to_date;  */
-	 
-		/*  if($search['client_id']){
-			$where.=" AND client_id=".$search['code'];
-		}   */
 
-		$where = "  ";
+		
 		//echo $sql.$where;
 		return $db->fetchAll($sql.$where);
 	

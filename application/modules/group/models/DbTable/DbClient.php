@@ -8,13 +8,43 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
     public function getUserId(){
     	$session_user=new Zend_Session_Namespace('auth');
     	return $session_user->user_id;
-
     }
+	public function updateClient($_data){
+
+
+		//	print_r($_data);exit();
+		try{
+			//print_r($_data['id']);exit();
+			//	$client_code = $this->getClientCode();
+			$_arr=array(
+				'client_number'=>$_data['client_no'],
+				'name_kh'	  => $_data['name_kh'],
+				'sex'	      => $_data['sex'],
+				'phone'	      => $_data['phone'],
+				'price_service'=>$_data['price_service'],
+				'village_id'  => $_data['village_1'],
+				'remark'	  => $_data['desc'],
+				'status'      => $_data['status'],
+				'date_cus_start'=>$_data['date_cus_start'],
+				'unit_price'=>$_data['unit_price'],
+				'total_service'=>$_data['total_service'],
+				'user_id'=>$this->getUserId(),
+
+			);
+				$where = 'client_id = '.$_data['id'];
+				$this->update($_arr, $where);
+				return $_data['id'];
+
+		}catch(Exception $e){
+			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+		}
+	}
 	public function addClient($_data){
 
 
 	//	print_r($_data);exit();
 		try{
+			//print_r($_data['id']);exit();
 		//	$client_code = $this->getClientCode();
 			$_arr=array(
 				'client_number'=>$_data['client_no'],
@@ -32,12 +62,16 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 				'user_id'=>$this->getUserId(),
 
 		);
+
+
 		if(!empty($_data['id'])){
+
 			$where = 'client_id = '.$_data['id'];
 			$this->update($_arr, $where);
 			return $_data['id'];
 
 		}else{
+
 			return  $this->insert($_arr);
 		}
 		}catch(Exception $e){
@@ -51,6 +85,9 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 		$row=$db->fetchRow($sql);
 		return $row;
 	}*/
+	public function getUserById($id){
+	
+	}
 
 	public function getLastClient(){
 		$db = $this->getAdapter();
@@ -80,7 +117,26 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 			
 		}catch(Exception $e){
 			Application_Model_DbTable_DbUserLog::writeMessageError($e->getMessage());
+
 		}
+	}
+	public function getEditClientById($id){
+		$db = $this->getAdapter();
+		$sql = "
+		SELECT ln.client_id,ln.client_number,ln.name_kh,ln.sex,
+		ln.remark,ln.create_date,ln.user_id,
+		ln.village_id,ln.phone,
+		ln.remark,
+		ln.status,
+		(SELECT v.vill_id FROM ln_village AS v WHERE ln.village_id=v.vill_id LIMIT 1) AS vill_id,
+		(SELECT v.code FROM ln_village AS v WHERE ln.village_id=v.vill_id LIMIT 1) AS vill_code,
+		ln.unit_price,ln.total_service,ln.total_service,ln.price_service 
+		
+		FROM $this->_name as ln WHERE client_id = 
+				".$db->quote($id);
+		$sql.=" LIMIT 1 ";
+		$row=$db->fetchRow($sql);
+		return $row;
 	}
 	public function getClientById($id){
 		$db = $this->getAdapter();
@@ -130,7 +186,7 @@ class Group_Model_DbTable_DbClient extends Zend_Db_Table_Abstract
 			$db = $this->getAdapter();
 			$sql="SELECT l.client_id,l.client_number,l.name_kh,l.sex,
 	(SELECT  v.village_name FROM ln_village AS v WHERE v.vill_id = l.village_id LIMIT 1) AS village,
-l.village_id,l.phone,l.status,l.date_cus_start FROM ln_client AS l";
+l.phone,l.status,l.date_cus_start FROM ln_client AS l";
 			$where=" where 1";
 			if(!empty($search['adv_search'])){
 				$s_where = array();
@@ -182,7 +238,6 @@ l.village_id,l.phone,l.status,l.date_cus_start FROM ln_client AS l";
 		return $db->fetchOne($sql);
 
 	}
-
 	public function get_setting_id(){
 		$db=$this->getAdapter();
 		$sql="SELECT setId FROM tb_settingprice WHERE status='1' order by setId desc limit 1";
