@@ -1,0 +1,85 @@
+<?php
+	$tr = Application_Form_FrmLanguages::getCurrentlanguage();
+	echo $this->headTitle($tr->translate('Expent'));
+?>	
+<?php  $frm_expen= $this->frm_expen;?>
+<script>
+	dojo.require("dijit/form/DateTextBox");
+	dojo.require("dijit/form/NumberTextBox");
+	dojo.ready(function(){
+		//getStaffCode();
+		});
+</script>
+<form  id='add_techer' action="<?php echo $this->url(array('module'=>'group','controller'=>'expen','action'=>'add')); ?>" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data">
+<script type="dojo/method" event="onSubmit">			
+			if(this.validate()) {
+				return true;
+			} else {
+				return false;
+	}
+</script>		
+<table width="40%" style="margin: 0 auto;">
+	<tr>
+		<td>
+		<fieldset style="margin-top: -10px;">
+					<legend><strong><?php echo $tr->translate("Expen");?></strong></legend>
+					
+					<table style="margin: 0 auto; width: 100%;" cellspacing="10">
+						<tr>
+							<td><?php echo $tr->translate("PAYFOR")?></td>
+							<td><?php  echo $frm_expen->getElement('payfor');?></td>
+						</tr>
+
+						<tr>
+							<td><?php echo $tr->translate("UNITPRICE")?></td>
+							<td><?php  echo $frm_expen->getElement('unit');?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("PRICE_PER_UNIT")?></td>
+							<td><?php  echo $frm_expen->getElement('priceperunit');?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("TOTAL_MONNEY")?></td>
+							<td style="color:red;"><?php  echo $frm_expen->getElement('total_Money');?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("village_name")?></td>
+							<td><?php  echo $frm_expen->getElement('village_name');?></td>
+						</tr>
+						
+						<tr>
+							<td><?php echo $tr->translate("PAID_DAY")?></td>
+							<td><?php  echo $frm_expen->getElement('paid_day');?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("NOTE")?></td>
+							<td><?php  echo $frm_expen->getElement('note');?></td>
+						</tr>
+						<tr>
+							<td><?php echo $tr->translate("STATUS")?></td>
+							<td><?php  echo $frm_expen->getElement('status');?></td>
+						</tr>
+		
+				</table>
+						<div style="text-align: center; margin: 10px 0px;">
+								<input type="hidden" name="exchangefrom" value="2" />
+								<input type="reset" value="សំអាត" label="សំអាត"dojoType="dijit.form.Button"/>
+								<input type="submit" value="save_close" name="save_close" label="រក្សាទុក+បិត" dojoType="dijit.form.Button" 
+										iconClass="dijitEditorIcon dijitEditorIconSave" />
+								<input type="submit" value="save_new" name="save_new" label="រក្សាទុក+ថ្មី" dojoType="dijit.form.Button" 
+										iconClass="dijitEditorIcon dijitEditorIconSave" />
+						</div>
+			</fieldset>	
+		</td>
+	</tr>
+</table>	
+</form>
+
+<script type="text/javascript">
+	function calExpense(){
+		unit=parseFloat(dijit.byId('unit').get('value'));
+		priceperunit=parseFloat(dijit.byId('priceperunit').get('value'));
+		total_Money =priceperunit*unit;
+		dijit.byId('total_Money').attr('value',total_Money);
+	}
+</script>
